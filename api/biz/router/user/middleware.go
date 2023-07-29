@@ -3,6 +3,8 @@
 package user
 
 import (
+	mw "simple-douyin/api/biz/middleware"
+
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -22,8 +24,8 @@ func _userMw() []app.HandlerFunc {
 }
 
 func _userinfoMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	// 该接口需要登录态
+	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
 }
 
 func _loginMw() []app.HandlerFunc {

@@ -4,7 +4,7 @@ package handler
 
 import (
 	"context"
-	"simple-douyin/api/biz/client"
+	client "simple-douyin/api/biz/client"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/utils"

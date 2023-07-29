@@ -4,10 +4,14 @@ package user
 
 import (
 	"context"
+	"fmt"
+
+	client "simple-douyin/api/biz/client"
+	mw "simple-douyin/api/biz/middleware"
+	user "simple-douyin/api/biz/model/user"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	user "simple-douyin/api/biz/model/user"
 )
 
 // UserRegister .
@@ -15,15 +19,31 @@ import (
 func UserRegister(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req user.UserRegisterRequest
+	resp := new(user.UserRegisterResponse)
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp.StatusCode = 57001
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
 		return
 	}
 
-	resp := new(user.UserRegisterResponse)
+	err = client.UserRegister(ctx, &req, resp)
+	if err != nil {
+		resp.StatusCode = 57001
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	// 业务端注册流程通过，执行登录流程，下发token
+	mw.JwtMiddleware.LoginHandler(ctx, c)
 }
 
 // UserLogin .
@@ -33,13 +53,18 @@ func UserLogin(ctx context.Context, c *app.RequestContext) {
 	var req user.UserLoginRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := new(user.UserLoginResponse)
+		resp.StatusCode = 57001
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
 		return
 	}
 
-	resp := new(user.UserLoginResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	// 执行登录流程，下发token
+	mw.JwtMiddleware.LoginHandler(ctx, c)
 }
 
 // UserInfo .
@@ -47,13 +72,31 @@ func UserLogin(ctx context.Context, c *app.RequestContext) {
 func UserInfo(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req user.UserInfoRequest
+	resp := new(user.UserInfoResponse)
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp.StatusCode = 57001
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
 		return
 	}
 
-	resp := new(user.UserInfoResponse)
-
+	// 该接口需要登录态，但不需要确认具体身份，仅在路由时鉴权即可
+	// 通过中间件获取用户id
+	// loggedClaims, exist := c.Get("JWT_PAYLOAD")
+	// if !exist {
+	// 	resp.StatusCode = 57001
+	// 	if resp.StatusMsg == nil {
+	// 		resp.StatusMsg = new(string)
+	// 	}
+	// 	*resp.StatusMsg = "Unauthorized"
+	// 	c.JSON(consts.StatusOK, resp)
+	// 	return
+	// }
+	// userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
+	fmt.Println("Requested userID: ", req.UserID)
 	c.JSON(consts.StatusOK, resp)
 }

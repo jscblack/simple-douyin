@@ -2,27 +2,52 @@ package client
 
 import (
 	"context"
-	"log"
+
 	"simple-douyin/kitex_gen/pong"
 	"simple-douyin/kitex_gen/pong/pongservice"
+	"simple-douyin/pkg/constant"
 	"time"
+
+	apiLog "github.com/prometheus/common/log"
 
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
+
+	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
-func PingClient() string {
-	c, err := pongservice.NewClient("example-server", client.WithHostPorts("127.0.0.1:8889"))
+var pingClient pongservice.Client // interface from RPC IDL
+
+func InitPingClient() {
+	r, err := etcd.NewEtcdResolver([]string{constant.EtcdAddressWithPort})
 	if err != nil {
-		log.Fatal(err)
+		apiLog.Fatal(err)
 	}
+	c, err := pongservice.NewClient(
+		constant.PingServiceName,
+		// client.WithMiddleware(middleware.CommonMiddleware),
+		// client.WithInstanceMW(middleware.ClientMiddleware),
+		client.WithMuxConnection(1),                    // mux
+		client.WithRPCTimeout(3*time.Second),           // rpc timeout
+		client.WithConnectTimeout(50*time.Millisecond), // conn timeout
+		// client.WithFailureRetry(retry.NewFailurePolicy()), // retry
+		// client.WithSuite(trace.NewDefaultClientSuite()),   // tracer
+		client.WithResolver(r), // resolver
+	)
+	if err != nil {
+		apiLog.Fatal(err)
+	}
+	pingClient = c
+	apiLog.Info("Ping client initialized")
+}
+
+func PingClient() string {
 	req := &pong.PingReq{
 		PingTime: time.Now().String(),
 	}
-	resp, err := c.Pong(context.Background(), req, callopt.WithRPCTimeout(3*time.Second))
+	resp, err := pingClient.Pong(context.Background(), req, callopt.WithRPCTimeout(3*time.Second))
 	if err != nil {
-		log.Fatal(err)
+		apiLog.Error(err)
 	}
-	log.Println(resp)
 	return resp.PongTime
 }

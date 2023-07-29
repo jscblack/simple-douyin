@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: simple-douyin-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: simple_douyin
+      POSTGRES_PASSWORD: 1qaz0plm
+      POSTGRES_DB: simple_douyin_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    container_name: simple-douyin-redis
+    restart: always
+    environment:
+      REDIS_PASSWORD: 1qaz0plm
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  mongodb:
+    image: mongo:latest
+    container_name: simple-douyin-mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: simple_douyin
+      MONGO_INITDB_ROOT_PASSWORD: 1qaz0plm
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  etcd:
+    image: bitnami/etcd:latest
+    container_name: simple-douyin-etcd
+    restart: always
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+    ports:
+      - "2379:2379" 
+      - "2380:2380"
+    volumes: 
+      - etcd_data:/bitnami
+
+volumes:
+  postgres_data:
+  redis_data:
+  mongodb_data:
+  etcd_data:

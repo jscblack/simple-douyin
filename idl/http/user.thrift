@@ -34,14 +34,14 @@ struct UserLoginResponse {
 
 // 用户信息
 struct UserInfoRequest {
-    1: i64 user_id (api.query = "user_id"), // 用户id
-    2: string token (api.query = "token"),  // 用户鉴权token
+    1: required i64 user_id (api.query = "user_id"), // 用户id
+    2: required string token (api.query = "token"),  // 用户鉴权token
 }
 
 struct UserInfoResponse {
     1: required i32 status_code,   // 状态码，0-成功，其他值-失败
     2: optional string status_msg, // 返回状态描述
-    3: common.User user,           // 用户信息
+    3: required common.User user,  // 用户信息
 }
 
 service UserService {

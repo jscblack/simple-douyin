@@ -6,19 +6,21 @@ import (
 	"context"
 	"fmt"
 	"github.com/apache/thrift/lib/go/thrift"
-	"simple-douyin/api/biz/model/common"
+	"simple-douyin/kitex_gen/common"
+	"strings"
 )
 
-// 用户注册
 type UserRegisterRequest struct {
-	// 注册用户名，最长32个字符
-	Username string `thrift:"username,1,required" json:"username,required" query:"username,required"`
-	// 密码，最长32个字符
-	Password string `thrift:"password,2,required" json:"password,required" query:"password,required"`
+	Username string `thrift:"username,1,required" frugal:"1,required,string" json:"username"`
+	Password string `thrift:"password,2,required" frugal:"2,required,string" json:"password"`
 }
 
 func NewUserRegisterRequest() *UserRegisterRequest {
 	return &UserRegisterRequest{}
+}
+
+func (p *UserRegisterRequest) InitDefault() {
+	*p = UserRegisterRequest{}
 }
 
 func (p *UserRegisterRequest) GetUsername() (v string) {
@@ -27,6 +29,12 @@ func (p *UserRegisterRequest) GetUsername() (v string) {
 
 func (p *UserRegisterRequest) GetPassword() (v string) {
 	return p.Password
+}
+func (p *UserRegisterRequest) SetUsername(val string) {
+	p.Username = val
+}
+func (p *UserRegisterRequest) SetPassword(val string) {
+	p.Password = val
 }
 
 var fieldIDToName_UserRegisterRequest = map[int16]string{
@@ -210,19 +218,48 @@ func (p *UserRegisterRequest) String() string {
 	return fmt.Sprintf("UserRegisterRequest(%+v)", *p)
 }
 
+func (p *UserRegisterRequest) DeepEqual(ano *UserRegisterRequest) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.Username) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Password) {
+		return false
+	}
+	return true
+}
+
+func (p *UserRegisterRequest) Field1DeepEqual(src string) bool {
+
+	if strings.Compare(p.Username, src) != 0 {
+		return false
+	}
+	return true
+}
+func (p *UserRegisterRequest) Field2DeepEqual(src string) bool {
+
+	if strings.Compare(p.Password, src) != 0 {
+		return false
+	}
+	return true
+}
+
 type UserRegisterResponse struct {
-	// 状态码，0-成功，其他值-失败
-	StatusCode int32 `thrift:"status_code,1,required" form:"status_code,required" json:"status_code,required" query:"status_code,required"`
-	// 返回状态描述
-	StatusMsg *string `thrift:"status_msg,2,optional" form:"status_msg" json:"status_msg,omitempty" query:"status_msg"`
-	// 用户id
-	UserID int64 `thrift:"user_id,3,required" form:"user_id,required" json:"user_id,required" query:"user_id,required"`
-	// 用户鉴权token
-	Token string `thrift:"token,4,required" form:"token,required" json:"token,required" query:"token,required"`
+	StatusCode int32   `thrift:"status_code,1,required" frugal:"1,required,i32" json:"status_code"`
+	StatusMsg  *string `thrift:"status_msg,2,optional" frugal:"2,optional,string" json:"status_msg,omitempty"`
+	UserId     int64   `thrift:"user_id,3,required" frugal:"3,required,i64" json:"user_id"`
 }
 
 func NewUserRegisterResponse() *UserRegisterResponse {
 	return &UserRegisterResponse{}
+}
+
+func (p *UserRegisterResponse) InitDefault() {
+	*p = UserRegisterResponse{}
 }
 
 func (p *UserRegisterResponse) GetStatusCode() (v int32) {
@@ -238,19 +275,23 @@ func (p *UserRegisterResponse) GetStatusMsg() (v string) {
 	return *p.StatusMsg
 }
 
-func (p *UserRegisterResponse) GetUserID() (v int64) {
-	return p.UserID
+func (p *UserRegisterResponse) GetUserId() (v int64) {
+	return p.UserId
 }
-
-func (p *UserRegisterResponse) GetToken() (v string) {
-	return p.Token
+func (p *UserRegisterResponse) SetStatusCode(val int32) {
+	p.StatusCode = val
+}
+func (p *UserRegisterResponse) SetStatusMsg(val *string) {
+	p.StatusMsg = val
+}
+func (p *UserRegisterResponse) SetUserId(val int64) {
+	p.UserId = val
 }
 
 var fieldIDToName_UserRegisterResponse = map[int16]string{
 	1: "status_code",
 	2: "status_msg",
 	3: "user_id",
-	4: "token",
 }
 
 func (p *UserRegisterResponse) IsSetStatusMsg() bool {
@@ -262,8 +303,7 @@ func (p *UserRegisterResponse) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetStatusCode bool = false
-	var issetUserID bool = false
-	var issetToken bool = false
+	var issetUserId bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -305,18 +345,7 @@ func (p *UserRegisterResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetUserID = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 4:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField4(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetToken = true
+				issetUserId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -341,13 +370,8 @@ func (p *UserRegisterResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetUserID {
+	if !issetUserId {
 		fieldId = 3
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetToken {
-		fieldId = 4
 		goto RequiredFieldNotSetError
 	}
 	return nil
@@ -390,16 +414,7 @@ func (p *UserRegisterResponse) ReadField3(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.UserID = v
-	}
-	return nil
-}
-
-func (p *UserRegisterResponse) ReadField4(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.Token = v
+		p.UserId = v
 	}
 	return nil
 }
@@ -420,10 +435,6 @@ func (p *UserRegisterResponse) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
-			goto WriteFieldError
-		}
-		if err = p.writeField4(oprot); err != nil {
-			fieldId = 4
 			goto WriteFieldError
 		}
 
@@ -485,7 +496,7 @@ func (p *UserRegisterResponse) writeField3(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("user_id", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.UserID); err != nil {
+	if err := oprot.WriteI64(p.UserId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -498,23 +509,6 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
-func (p *UserRegisterResponse) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("token", thrift.STRING, 4); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Token); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
-}
-
 func (p *UserRegisterResponse) String() string {
 	if p == nil {
 		return "<nil>"
@@ -522,16 +516,62 @@ func (p *UserRegisterResponse) String() string {
 	return fmt.Sprintf("UserRegisterResponse(%+v)", *p)
 }
 
-// 用户登录
+func (p *UserRegisterResponse) DeepEqual(ano *UserRegisterResponse) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.StatusCode) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.StatusMsg) {
+		return false
+	}
+	if !p.Field3DeepEqual(ano.UserId) {
+		return false
+	}
+	return true
+}
+
+func (p *UserRegisterResponse) Field1DeepEqual(src int32) bool {
+
+	if p.StatusCode != src {
+		return false
+	}
+	return true
+}
+func (p *UserRegisterResponse) Field2DeepEqual(src *string) bool {
+
+	if p.StatusMsg == src {
+		return true
+	} else if p.StatusMsg == nil || src == nil {
+		return false
+	}
+	if strings.Compare(*p.StatusMsg, *src) != 0 {
+		return false
+	}
+	return true
+}
+func (p *UserRegisterResponse) Field3DeepEqual(src int64) bool {
+
+	if p.UserId != src {
+		return false
+	}
+	return true
+}
+
 type UserLoginRequest struct {
-	// 登录用户名
-	Username string `thrift:"username,1,required" json:"username,required" query:"username,required"`
-	// 登录密码
-	Password string `thrift:"password,2,required" json:"password,required" query:"password,required"`
+	Username string `thrift:"username,1,required" frugal:"1,required,string" json:"username"`
+	Password string `thrift:"password,2,required" frugal:"2,required,string" json:"password"`
 }
 
 func NewUserLoginRequest() *UserLoginRequest {
 	return &UserLoginRequest{}
+}
+
+func (p *UserLoginRequest) InitDefault() {
+	*p = UserLoginRequest{}
 }
 
 func (p *UserLoginRequest) GetUsername() (v string) {
@@ -540,6 +580,12 @@ func (p *UserLoginRequest) GetUsername() (v string) {
 
 func (p *UserLoginRequest) GetPassword() (v string) {
 	return p.Password
+}
+func (p *UserLoginRequest) SetUsername(val string) {
+	p.Username = val
+}
+func (p *UserLoginRequest) SetPassword(val string) {
+	p.Password = val
 }
 
 var fieldIDToName_UserLoginRequest = map[int16]string{
@@ -723,19 +769,48 @@ func (p *UserLoginRequest) String() string {
 	return fmt.Sprintf("UserLoginRequest(%+v)", *p)
 }
 
+func (p *UserLoginRequest) DeepEqual(ano *UserLoginRequest) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.Username) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Password) {
+		return false
+	}
+	return true
+}
+
+func (p *UserLoginRequest) Field1DeepEqual(src string) bool {
+
+	if strings.Compare(p.Username, src) != 0 {
+		return false
+	}
+	return true
+}
+func (p *UserLoginRequest) Field2DeepEqual(src string) bool {
+
+	if strings.Compare(p.Password, src) != 0 {
+		return false
+	}
+	return true
+}
+
 type UserLoginResponse struct {
-	// 状态码，0-成功，其他值-失败
-	StatusCode int32 `thrift:"status_code,1,required" form:"status_code,required" json:"status_code,required" query:"status_code,required"`
-	// 返回状态描述
-	StatusMsg *string `thrift:"status_msg,2,optional" form:"status_msg" json:"status_msg,omitempty" query:"status_msg"`
-	// 用户id
-	UserID int64 `thrift:"user_id,3,required" form:"user_id,required" json:"user_id,required" query:"user_id,required"`
-	// 用户鉴权token
-	Token string `thrift:"token,4,required" form:"token,required" json:"token,required" query:"token,required"`
+	StatusCode int32   `thrift:"status_code,1,required" frugal:"1,required,i32" json:"status_code"`
+	StatusMsg  *string `thrift:"status_msg,2,optional" frugal:"2,optional,string" json:"status_msg,omitempty"`
+	UserId     int64   `thrift:"user_id,3,required" frugal:"3,required,i64" json:"user_id"`
 }
 
 func NewUserLoginResponse() *UserLoginResponse {
 	return &UserLoginResponse{}
+}
+
+func (p *UserLoginResponse) InitDefault() {
+	*p = UserLoginResponse{}
 }
 
 func (p *UserLoginResponse) GetStatusCode() (v int32) {
@@ -751,19 +826,23 @@ func (p *UserLoginResponse) GetStatusMsg() (v string) {
 	return *p.StatusMsg
 }
 
-func (p *UserLoginResponse) GetUserID() (v int64) {
-	return p.UserID
+func (p *UserLoginResponse) GetUserId() (v int64) {
+	return p.UserId
 }
-
-func (p *UserLoginResponse) GetToken() (v string) {
-	return p.Token
+func (p *UserLoginResponse) SetStatusCode(val int32) {
+	p.StatusCode = val
+}
+func (p *UserLoginResponse) SetStatusMsg(val *string) {
+	p.StatusMsg = val
+}
+func (p *UserLoginResponse) SetUserId(val int64) {
+	p.UserId = val
 }
 
 var fieldIDToName_UserLoginResponse = map[int16]string{
 	1: "status_code",
 	2: "status_msg",
 	3: "user_id",
-	4: "token",
 }
 
 func (p *UserLoginResponse) IsSetStatusMsg() bool {
@@ -775,8 +854,7 @@ func (p *UserLoginResponse) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetStatusCode bool = false
-	var issetUserID bool = false
-	var issetToken bool = false
+	var issetUserId bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -818,18 +896,7 @@ func (p *UserLoginResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetUserID = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 4:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField4(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetToken = true
+				issetUserId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -854,13 +921,8 @@ func (p *UserLoginResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetUserID {
+	if !issetUserId {
 		fieldId = 3
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetToken {
-		fieldId = 4
 		goto RequiredFieldNotSetError
 	}
 	return nil
@@ -903,16 +965,7 @@ func (p *UserLoginResponse) ReadField3(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.UserID = v
-	}
-	return nil
-}
-
-func (p *UserLoginResponse) ReadField4(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.Token = v
+		p.UserId = v
 	}
 	return nil
 }
@@ -933,10 +986,6 @@ func (p *UserLoginResponse) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
-			goto WriteFieldError
-		}
-		if err = p.writeField4(oprot); err != nil {
-			fieldId = 4
 			goto WriteFieldError
 		}
 
@@ -998,7 +1047,7 @@ func (p *UserLoginResponse) writeField3(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("user_id", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.UserID); err != nil {
+	if err := oprot.WriteI64(p.UserId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1011,23 +1060,6 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
-func (p *UserLoginResponse) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("token", thrift.STRING, 4); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Token); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
-}
-
 func (p *UserLoginResponse) String() string {
 	if p == nil {
 		return "<nil>"
@@ -1035,24 +1067,76 @@ func (p *UserLoginResponse) String() string {
 	return fmt.Sprintf("UserLoginResponse(%+v)", *p)
 }
 
-// 用户信息
+func (p *UserLoginResponse) DeepEqual(ano *UserLoginResponse) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.StatusCode) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.StatusMsg) {
+		return false
+	}
+	if !p.Field3DeepEqual(ano.UserId) {
+		return false
+	}
+	return true
+}
+
+func (p *UserLoginResponse) Field1DeepEqual(src int32) bool {
+
+	if p.StatusCode != src {
+		return false
+	}
+	return true
+}
+func (p *UserLoginResponse) Field2DeepEqual(src *string) bool {
+
+	if p.StatusMsg == src {
+		return true
+	} else if p.StatusMsg == nil || src == nil {
+		return false
+	}
+	if strings.Compare(*p.StatusMsg, *src) != 0 {
+		return false
+	}
+	return true
+}
+func (p *UserLoginResponse) Field3DeepEqual(src int64) bool {
+
+	if p.UserId != src {
+		return false
+	}
+	return true
+}
+
 type UserInfoRequest struct {
-	// 用户id
-	UserID int64 `thrift:"user_id,1,required" json:"user_id,required" query:"user_id,required"`
-	// 用户鉴权token
-	Token string `thrift:"token,2,required" json:"token,required" query:"token,required"`
+	UserId int64  `thrift:"user_id,1,required" frugal:"1,required,i64" json:"user_id"`
+	Token  string `thrift:"token,2,required" frugal:"2,required,string" json:"token"`
 }
 
 func NewUserInfoRequest() *UserInfoRequest {
 	return &UserInfoRequest{}
 }
 
-func (p *UserInfoRequest) GetUserID() (v int64) {
-	return p.UserID
+func (p *UserInfoRequest) InitDefault() {
+	*p = UserInfoRequest{}
+}
+
+func (p *UserInfoRequest) GetUserId() (v int64) {
+	return p.UserId
 }
 
 func (p *UserInfoRequest) GetToken() (v string) {
 	return p.Token
+}
+func (p *UserInfoRequest) SetUserId(val int64) {
+	p.UserId = val
+}
+func (p *UserInfoRequest) SetToken(val string) {
+	p.Token = val
 }
 
 var fieldIDToName_UserInfoRequest = map[int16]string{
@@ -1064,7 +1148,7 @@ func (p *UserInfoRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetUserID bool = false
+	var issetUserId bool = false
 	var issetToken bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
@@ -1086,7 +1170,7 @@ func (p *UserInfoRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetUserID = true
+				issetUserId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1117,7 +1201,7 @@ func (p *UserInfoRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetUserID {
+	if !issetUserId {
 		fieldId = 1
 		goto RequiredFieldNotSetError
 	}
@@ -1148,7 +1232,7 @@ func (p *UserInfoRequest) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.UserID = v
+		p.UserId = v
 	}
 	return nil
 }
@@ -1199,7 +1283,7 @@ func (p *UserInfoRequest) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("user_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.UserID); err != nil {
+	if err := oprot.WriteI64(p.UserId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1236,17 +1320,48 @@ func (p *UserInfoRequest) String() string {
 	return fmt.Sprintf("UserInfoRequest(%+v)", *p)
 }
 
+func (p *UserInfoRequest) DeepEqual(ano *UserInfoRequest) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.UserId) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.Token) {
+		return false
+	}
+	return true
+}
+
+func (p *UserInfoRequest) Field1DeepEqual(src int64) bool {
+
+	if p.UserId != src {
+		return false
+	}
+	return true
+}
+func (p *UserInfoRequest) Field2DeepEqual(src string) bool {
+
+	if strings.Compare(p.Token, src) != 0 {
+		return false
+	}
+	return true
+}
+
 type UserInfoResponse struct {
-	// 状态码，0-成功，其他值-失败
-	StatusCode int32 `thrift:"status_code,1,required" form:"status_code,required" json:"status_code,required" query:"status_code,required"`
-	// 返回状态描述
-	StatusMsg *string `thrift:"status_msg,2,optional" form:"status_msg" json:"status_msg,omitempty" query:"status_msg"`
-	// 用户信息
-	User *common.User `thrift:"user,3,required" form:"user,required" json:"user,required" query:"user,required"`
+	StatusCode int32        `thrift:"status_code,1,required" frugal:"1,required,i32" json:"status_code"`
+	StatusMsg  *string      `thrift:"status_msg,2,optional" frugal:"2,optional,string" json:"status_msg,omitempty"`
+	User       *common.User `thrift:"user,3,required" frugal:"3,required,common.User" json:"user"`
 }
 
 func NewUserInfoResponse() *UserInfoResponse {
 	return &UserInfoResponse{}
+}
+
+func (p *UserInfoResponse) InitDefault() {
+	*p = UserInfoResponse{}
 }
 
 func (p *UserInfoResponse) GetStatusCode() (v int32) {
@@ -1269,6 +1384,15 @@ func (p *UserInfoResponse) GetUser() (v *common.User) {
 		return UserInfoResponse_User_DEFAULT
 	}
 	return p.User
+}
+func (p *UserInfoResponse) SetStatusCode(val int32) {
+	p.StatusCode = val
+}
+func (p *UserInfoResponse) SetStatusMsg(val *string) {
+	p.StatusMsg = val
+}
+func (p *UserInfoResponse) SetUser(val *common.User) {
+	p.User = val
 }
 
 var fieldIDToName_UserInfoResponse = map[int16]string{
@@ -1500,6 +1624,51 @@ func (p *UserInfoResponse) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserInfoResponse(%+v)", *p)
+}
+
+func (p *UserInfoResponse) DeepEqual(ano *UserInfoResponse) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.StatusCode) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.StatusMsg) {
+		return false
+	}
+	if !p.Field3DeepEqual(ano.User) {
+		return false
+	}
+	return true
+}
+
+func (p *UserInfoResponse) Field1DeepEqual(src int32) bool {
+
+	if p.StatusCode != src {
+		return false
+	}
+	return true
+}
+func (p *UserInfoResponse) Field2DeepEqual(src *string) bool {
+
+	if p.StatusMsg == src {
+		return true
+	} else if p.StatusMsg == nil || src == nil {
+		return false
+	}
+	if strings.Compare(*p.StatusMsg, *src) != 0 {
+		return false
+	}
+	return true
+}
+func (p *UserInfoResponse) Field3DeepEqual(src *common.User) bool {
+
+	if !p.User.DeepEqual(src) {
+		return false
+	}
+	return true
 }
 
 type UserService interface {
@@ -1752,11 +1921,15 @@ func (p *userServiceProcessorUserInfo) Process(ctx context.Context, seqId int32,
 }
 
 type UserServiceUserRegisterArgs struct {
-	Req *UserRegisterRequest `thrift:"req,1"`
+	Req *UserRegisterRequest `thrift:"req,1" frugal:"1,default,UserRegisterRequest" json:"req"`
 }
 
 func NewUserServiceUserRegisterArgs() *UserServiceUserRegisterArgs {
 	return &UserServiceUserRegisterArgs{}
+}
+
+func (p *UserServiceUserRegisterArgs) InitDefault() {
+	*p = UserServiceUserRegisterArgs{}
 }
 
 var UserServiceUserRegisterArgs_Req_DEFAULT *UserRegisterRequest
@@ -1766,6 +1939,9 @@ func (p *UserServiceUserRegisterArgs) GetReq() (v *UserRegisterRequest) {
 		return UserServiceUserRegisterArgs_Req_DEFAULT
 	}
 	return p.Req
+}
+func (p *UserServiceUserRegisterArgs) SetReq(val *UserRegisterRequest) {
+	p.Req = val
 }
 
 var fieldIDToName_UserServiceUserRegisterArgs = map[int16]string{
@@ -1896,12 +2072,36 @@ func (p *UserServiceUserRegisterArgs) String() string {
 	return fmt.Sprintf("UserServiceUserRegisterArgs(%+v)", *p)
 }
 
+func (p *UserServiceUserRegisterArgs) DeepEqual(ano *UserServiceUserRegisterArgs) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.Req) {
+		return false
+	}
+	return true
+}
+
+func (p *UserServiceUserRegisterArgs) Field1DeepEqual(src *UserRegisterRequest) bool {
+
+	if !p.Req.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
 type UserServiceUserRegisterResult struct {
-	Success *UserRegisterResponse `thrift:"success,0,optional"`
+	Success *UserRegisterResponse `thrift:"success,0,optional" frugal:"0,optional,UserRegisterResponse" json:"success,omitempty"`
 }
 
 func NewUserServiceUserRegisterResult() *UserServiceUserRegisterResult {
 	return &UserServiceUserRegisterResult{}
+}
+
+func (p *UserServiceUserRegisterResult) InitDefault() {
+	*p = UserServiceUserRegisterResult{}
 }
 
 var UserServiceUserRegisterResult_Success_DEFAULT *UserRegisterResponse
@@ -1911,6 +2111,9 @@ func (p *UserServiceUserRegisterResult) GetSuccess() (v *UserRegisterResponse) {
 		return UserServiceUserRegisterResult_Success_DEFAULT
 	}
 	return p.Success
+}
+func (p *UserServiceUserRegisterResult) SetSuccess(x interface{}) {
+	p.Success = x.(*UserRegisterResponse)
 }
 
 var fieldIDToName_UserServiceUserRegisterResult = map[int16]string{
@@ -2043,12 +2246,36 @@ func (p *UserServiceUserRegisterResult) String() string {
 	return fmt.Sprintf("UserServiceUserRegisterResult(%+v)", *p)
 }
 
+func (p *UserServiceUserRegisterResult) DeepEqual(ano *UserServiceUserRegisterResult) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field0DeepEqual(ano.Success) {
+		return false
+	}
+	return true
+}
+
+func (p *UserServiceUserRegisterResult) Field0DeepEqual(src *UserRegisterResponse) bool {
+
+	if !p.Success.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
 type UserServiceUserLoginArgs struct {
-	Req *UserLoginRequest `thrift:"req,1"`
+	Req *UserLoginRequest `thrift:"req,1" frugal:"1,default,UserLoginRequest" json:"req"`
 }
 
 func NewUserServiceUserLoginArgs() *UserServiceUserLoginArgs {
 	return &UserServiceUserLoginArgs{}
+}
+
+func (p *UserServiceUserLoginArgs) InitDefault() {
+	*p = UserServiceUserLoginArgs{}
 }
 
 var UserServiceUserLoginArgs_Req_DEFAULT *UserLoginRequest
@@ -2058,6 +2285,9 @@ func (p *UserServiceUserLoginArgs) GetReq() (v *UserLoginRequest) {
 		return UserServiceUserLoginArgs_Req_DEFAULT
 	}
 	return p.Req
+}
+func (p *UserServiceUserLoginArgs) SetReq(val *UserLoginRequest) {
+	p.Req = val
 }
 
 var fieldIDToName_UserServiceUserLoginArgs = map[int16]string{
@@ -2188,12 +2418,36 @@ func (p *UserServiceUserLoginArgs) String() string {
 	return fmt.Sprintf("UserServiceUserLoginArgs(%+v)", *p)
 }
 
+func (p *UserServiceUserLoginArgs) DeepEqual(ano *UserServiceUserLoginArgs) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.Req) {
+		return false
+	}
+	return true
+}
+
+func (p *UserServiceUserLoginArgs) Field1DeepEqual(src *UserLoginRequest) bool {
+
+	if !p.Req.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
 type UserServiceUserLoginResult struct {
-	Success *UserLoginResponse `thrift:"success,0,optional"`
+	Success *UserLoginResponse `thrift:"success,0,optional" frugal:"0,optional,UserLoginResponse" json:"success,omitempty"`
 }
 
 func NewUserServiceUserLoginResult() *UserServiceUserLoginResult {
 	return &UserServiceUserLoginResult{}
+}
+
+func (p *UserServiceUserLoginResult) InitDefault() {
+	*p = UserServiceUserLoginResult{}
 }
 
 var UserServiceUserLoginResult_Success_DEFAULT *UserLoginResponse
@@ -2203,6 +2457,9 @@ func (p *UserServiceUserLoginResult) GetSuccess() (v *UserLoginResponse) {
 		return UserServiceUserLoginResult_Success_DEFAULT
 	}
 	return p.Success
+}
+func (p *UserServiceUserLoginResult) SetSuccess(x interface{}) {
+	p.Success = x.(*UserLoginResponse)
 }
 
 var fieldIDToName_UserServiceUserLoginResult = map[int16]string{
@@ -2335,12 +2592,36 @@ func (p *UserServiceUserLoginResult) String() string {
 	return fmt.Sprintf("UserServiceUserLoginResult(%+v)", *p)
 }
 
+func (p *UserServiceUserLoginResult) DeepEqual(ano *UserServiceUserLoginResult) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field0DeepEqual(ano.Success) {
+		return false
+	}
+	return true
+}
+
+func (p *UserServiceUserLoginResult) Field0DeepEqual(src *UserLoginResponse) bool {
+
+	if !p.Success.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
 type UserServiceUserInfoArgs struct {
-	Req *UserInfoRequest `thrift:"req,1"`
+	Req *UserInfoRequest `thrift:"req,1" frugal:"1,default,UserInfoRequest" json:"req"`
 }
 
 func NewUserServiceUserInfoArgs() *UserServiceUserInfoArgs {
 	return &UserServiceUserInfoArgs{}
+}
+
+func (p *UserServiceUserInfoArgs) InitDefault() {
+	*p = UserServiceUserInfoArgs{}
 }
 
 var UserServiceUserInfoArgs_Req_DEFAULT *UserInfoRequest
@@ -2350,6 +2631,9 @@ func (p *UserServiceUserInfoArgs) GetReq() (v *UserInfoRequest) {
 		return UserServiceUserInfoArgs_Req_DEFAULT
 	}
 	return p.Req
+}
+func (p *UserServiceUserInfoArgs) SetReq(val *UserInfoRequest) {
+	p.Req = val
 }
 
 var fieldIDToName_UserServiceUserInfoArgs = map[int16]string{
@@ -2480,12 +2764,36 @@ func (p *UserServiceUserInfoArgs) String() string {
 	return fmt.Sprintf("UserServiceUserInfoArgs(%+v)", *p)
 }
 
+func (p *UserServiceUserInfoArgs) DeepEqual(ano *UserServiceUserInfoArgs) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.Req) {
+		return false
+	}
+	return true
+}
+
+func (p *UserServiceUserInfoArgs) Field1DeepEqual(src *UserInfoRequest) bool {
+
+	if !p.Req.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
 type UserServiceUserInfoResult struct {
-	Success *UserInfoResponse `thrift:"success,0,optional"`
+	Success *UserInfoResponse `thrift:"success,0,optional" frugal:"0,optional,UserInfoResponse" json:"success,omitempty"`
 }
 
 func NewUserServiceUserInfoResult() *UserServiceUserInfoResult {
 	return &UserServiceUserInfoResult{}
+}
+
+func (p *UserServiceUserInfoResult) InitDefault() {
+	*p = UserServiceUserInfoResult{}
 }
 
 var UserServiceUserInfoResult_Success_DEFAULT *UserInfoResponse
@@ -2495,6 +2803,9 @@ func (p *UserServiceUserInfoResult) GetSuccess() (v *UserInfoResponse) {
 		return UserServiceUserInfoResult_Success_DEFAULT
 	}
 	return p.Success
+}
+func (p *UserServiceUserInfoResult) SetSuccess(x interface{}) {
+	p.Success = x.(*UserInfoResponse)
 }
 
 var fieldIDToName_UserServiceUserInfoResult = map[int16]string{
@@ -2625,4 +2936,24 @@ func (p *UserServiceUserInfoResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("UserServiceUserInfoResult(%+v)", *p)
+}
+
+func (p *UserServiceUserInfoResult) DeepEqual(ano *UserServiceUserInfoResult) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field0DeepEqual(ano.Success) {
+		return false
+	}
+	return true
+}
+
+func (p *UserServiceUserInfoResult) Field0DeepEqual(src *UserInfoResponse) bool {
+
+	if !p.Success.DeepEqual(src) {
+		return false
+	}
+	return true
 }
