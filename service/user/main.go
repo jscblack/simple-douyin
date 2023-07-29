@@ -2,8 +2,7 @@ package main
 
 import (
 	"net"
-	pong "simple-douyin/kitex_gen/pong/pongservice"
-
+	user "simple-douyin/kitex_gen/user/userservice"
 	"simple-douyin/pkg/constant"
 
 	"github.com/cloudwego/kitex/pkg/limit"
@@ -19,14 +18,13 @@ func main() {
 		servLog.Fatal(err)
 	}
 
-	addr, err := net.ResolveTCPAddr("tcp",
-		constant.ServiceAddress+":"+constant.PingServicePort)
+	addr, err := net.ResolveTCPAddr("tcp", constant.ServiceAddress+":"+constant.UserServicePort)
 	if err != nil {
 		servLog.Fatal(err)
 		return
 	}
-	svr := pong.NewServer(new(PongServiceImpl),
-		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: constant.PingServiceName}), // server name
+	svr := user.NewServer(new(UserServiceImpl),
+		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: constant.UserServiceName}), // server name
 		// server.WithMiddleware(middleware.CommonMiddleware),                                            // middleWare
 		// server.WithMiddleware(middleware.ServerMiddleware),
 		server.WithServiceAddr(addr),                                       // address
