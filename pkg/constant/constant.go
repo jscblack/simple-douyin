@@ -13,11 +13,13 @@ const (
 	// UserServiceName         = "demouser"
 	// CPURateLimit    float64 = 80.0
 	// DefaultLimit            = 10
-	EtcdAddressWithPort = "172.19.0.1" + ":2379"
+	EtcdAddressWithPort = "103.91.211.138" + ":20163"
 	ServiceAddress      = "127.0.0.1"
 
 	PingServiceName = "ping_pong"
 	PingServicePort = "7000"
 	UserServiceName = "user"
 	UserServicePort = "7001"
+	FeedServiceName = "feed"
+	FeedServicePort = "7002"
 )
