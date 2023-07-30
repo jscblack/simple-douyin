@@ -29,7 +29,6 @@ struct UserLoginResponse {
 // 用户信息
 struct UserInfoRequest {
     1: required i64 user_id, // 用户id
-    2: required string token,  // 用户鉴权token
 }
 
 struct UserInfoResponse {
