@@ -7,25 +7,27 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	apiLog "github.com/prometheus/common/log"
-	client "simple-douyin/api/biz/client"
+	"simple-douyin/api/biz/client"
 	mw "simple-douyin/api/biz/middleware"
 	bizFeed "simple-douyin/api/biz/model/feed"
+	"simple-douyin/kitex_gen/feed"
 )
 
 // Feed .
 // @router /douyin/feed/ [GET]
 func Feed(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req bizFeed.FeedRequest
-	err = c.BindAndValidate(&req)
+	var bizReq bizFeed.FeedRequest
+	err = c.BindAndValidate(&bizReq)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
+	var userId int64
 	// 这里对token进行校验
-	if req.Token != nil {
-		_, err := mw.JwtMiddleware.ParseTokenString(*req.Token)
+	if bizReq.Token != nil {
+		_, err := mw.JwtMiddleware.ParseTokenString(*bizReq.Token)
 		if err != nil {
 			apiLog.Fatal(err)
 		}
@@ -33,17 +35,17 @@ func Feed(ctx context.Context, c *app.RequestContext) {
 		if err != nil {
 			apiLog.Fatal(err)
 		}
+		claims, err := mw.JwtMiddleware.GetClaimsFromJWT(ctx, c)
+		if err != nil {
+			apiLog.Fatal(err)
+		}
+		userId = claims[mw.IdentityKey].(int64)
 	}
 
-	//latestTime, err := strconv.ParseInt(c.Query("latest_time"), 10, 64)
-	//if err != nil {
-	//	c.String(consts.StatusBadRequest, "Wrong time!")
-	//}
-	//token := c.Query("token")
-	//req = bizFeed.FeedRequest{
-	//	LatestTime: &latestTime,
-	//	Token:      &token,
-	//}
+	req := feed.FeedRequest{
+		UserId:     &userId,
+		LatestTime: bizReq.LatestTime,
+	}
 
 	resp, err := client.Feed(ctx, &req)
 

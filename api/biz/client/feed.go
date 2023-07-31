@@ -7,7 +7,7 @@ import (
 	apiLog "github.com/prometheus/common/log"
 	bizCommon "simple-douyin/api/biz/model/common"
 	bizFeed "simple-douyin/api/biz/model/feed"
-	common "simple-douyin/kitex_gen/common"
+	"simple-douyin/kitex_gen/common"
 	"simple-douyin/kitex_gen/feed"
 	"simple-douyin/kitex_gen/feed/feedservice"
 	"simple-douyin/pkg/constant"
@@ -39,17 +39,11 @@ func InitFeedClient() {
 	apiLog.Info("Feed client initialized")
 }
 
-func Feed(ctx context.Context, bizReq *bizFeed.FeedRequest) (*bizFeed.FeedResponse, error) {
-	req := feed.FeedRequest{
-		LatestTime: bizReq.LatestTime,
-		Token:      bizReq.Token,
-	}
-
-	resp, err := feedClient.Feed(ctx, &req)
+func Feed(ctx context.Context, req *feed.FeedRequest) (*bizFeed.FeedResponse, error) {
+	resp, err := feedClient.Feed(ctx, req)
 	if err != nil {
 		apiLog.Fatal(err)
 	}
-
 	return &bizFeed.FeedResponse{
 		StatusCode: resp.StatusCode,
 		StatusMsg:  resp.StatusMsg,

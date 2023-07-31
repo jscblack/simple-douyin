@@ -223,7 +223,7 @@ type FeedResponse struct {
 	// 返回状态描述
 	StatusMsg *string `thrift:"status_msg,2,optional" form:"status_msg" json:"status_msg,omitempty" query:"status_msg"`
 	// 视频列表
-	VideoList []*common.Video `thrift:"video_list,3" form:"video_list" json:"video_list" query:"video_list"`
+	VideoList []*common.Video `thrift:"video_list,3,optional" form:"video_list" json:"video_list,omitempty" query:"video_list"`
 	// 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time
 	NextTime *int64 `thrift:"next_time,4,optional" form:"next_time" json:"next_time,omitempty" query:"next_time"`
 }
@@ -245,7 +245,12 @@ func (p *FeedResponse) GetStatusMsg() (v string) {
 	return *p.StatusMsg
 }
 
+var FeedResponse_VideoList_DEFAULT []*common.Video
+
 func (p *FeedResponse) GetVideoList() (v []*common.Video) {
+	if !p.IsSetVideoList() {
+		return FeedResponse_VideoList_DEFAULT
+	}
 	return p.VideoList
 }
 
@@ -267,6 +272,10 @@ var fieldIDToName_FeedResponse = map[int16]string{
 
 func (p *FeedResponse) IsSetStatusMsg() bool {
 	return p.StatusMsg != nil
+}
+
+func (p *FeedResponse) IsSetVideoList() bool {
+	return p.VideoList != nil
 }
 
 func (p *FeedResponse) IsSetNextTime() bool {
@@ -495,22 +504,24 @@ WriteFieldEndError:
 }
 
 func (p *FeedResponse) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("video_list", thrift.LIST, 3); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.VideoList)); err != nil {
-		return err
-	}
-	for _, v := range p.VideoList {
-		if err := v.Write(oprot); err != nil {
+	if p.IsSetVideoList() {
+		if err = oprot.WriteFieldBegin("video_list", thrift.LIST, 3); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteListBegin(thrift.STRUCT, len(p.VideoList)); err != nil {
 			return err
 		}
-	}
-	if err := oprot.WriteListEnd(); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
+		for _, v := range p.VideoList {
+			if err := v.Write(oprot); err != nil {
+				return err
+			}
+		}
+		if err := oprot.WriteListEnd(); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
 	}
 	return nil
 WriteFieldBeginError:

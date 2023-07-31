@@ -15,6 +15,8 @@ type FeedServiceImpl struct{}
 func (s *FeedServiceImpl) Feed(ctx context.Context, req *feed.FeedRequest) (*feed.FeedResponse, error) {
 	// TODO: Your code here...
 
+	// 返回时间小于latestTime的最多30个视频
+	// 可以根据req.userId推荐个性化视频
 	if req.LatestTime == nil {
 		timeStamp := time.Now().Unix()
 		req.LatestTime = &timeStamp
