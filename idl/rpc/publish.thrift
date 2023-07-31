@@ -7,7 +7,7 @@ namespace go publish
 include "./common.thrift"
 
 struct PublishActionRequest {
-    1: required string token, // 用户鉴权token
+    1: required i64 user_id,  // 用户id
     2: required binary data,  // 视频数据
     3: required string title, // 视频标题
 }
@@ -18,8 +18,7 @@ struct PublishActionResponse {
 }
 
 struct PublishListRequest {
-    1: required i64 user_id (api.query = "user_id"), // 用户id
-    2: required string token (api.query = "token"),  // 用户鉴权token
+    1: required i64 user_id, // 用户id
 }
 
 struct PublishListResponse {
@@ -29,6 +28,6 @@ struct PublishListResponse {
 }
 
 service PublishService {
-    PublishActionResponse PublishAction(1: PublishActionRequest req) (api.post = "/douyin/publish/action/"),
-    PublishListResponse PublishList(1: PublishListRequest req) (api.get = "/douyin/publish/list/"),
+    PublishActionResponse PublishAction(1: PublishActionRequest req), // 处理登录用户视频上传
+    PublishListResponse PublishList(1: PublishListRequest req),       // 列出登录用户上传视频
 }
