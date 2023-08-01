@@ -4,24 +4,63 @@ package publish
 
 import (
 	"context"
-
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	publish "simple-douyin/api/biz/model/publish"
+	apiLog "github.com/prometheus/common/log"
+	"simple-douyin/api/biz/client"
+	bizPublish "simple-douyin/api/biz/model/publish"
+	kitexPublish "simple-douyin/kitex_gen/publish"
 )
 
 // PublishAction .
 // @router /douyin/publish/action/ [POST]
 func PublishAction(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req publish.PublishActionRequest
-	err = c.BindAndValidate(&req)
+	var bizReq bizPublish.PublishActionRequest
+	err = c.BindAndValidate(&bizReq)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(publish.PublishActionResponse)
+	var userId int64
+	// 从token中得到userId
+	// 这里对token进行校验
+	//if len(bizReq.Token) > 0 {
+	//	_, err := mw.JwtMiddleware.ParseTokenString(bizReq.Token)
+	//	if err != nil {
+	//		apiLog.Fatal(err)
+	//	}
+	//	_, err = mw.JwtMiddleware.CheckIfTokenExpire(ctx, c)
+	//	if err != nil {
+	//		apiLog.Fatal(err)
+	//	}
+	//	claims, err := mw.JwtMiddleware.GetClaimsFromJWT(ctx, c)
+	//	if err != nil {
+	//		apiLog.Fatal(err)
+	//	}
+	//	userId = claims[mw.IdentityKey].(int64)
+	//}
+
+	bizReq.Data = []byte("123")
+	bizReq.Title = "bear"
+	req := kitexPublish.PublishActionRequest{
+		UserId: userId,
+		Data:   bizReq.Data,
+		Title:  bizReq.Title,
+	}
+
+	resp, err := client.PublishAction(ctx, &req)
+	if err != nil {
+		apiLog.Fatal(err)
+		resp.StatusCode = 57003
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
 
 	c.JSON(consts.StatusOK, resp)
 }
@@ -30,14 +69,39 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 // @router /douyin/publish/list/ [GET]
 func PublishList(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req publish.PublishListRequest
-	err = c.BindAndValidate(&req)
+	var bizReq bizPublish.PublishListRequest
+	err = c.BindAndValidate(&bizReq)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(publish.PublishListResponse)
+	// var userId int64
+	// 这里对token进行校验
+	//if len(bizReq.Token) > 0 {
+	//	_, err := mw.JwtMiddleware.ParseTokenString(bizReq.Token)
+	//	if err != nil {
+	//		apiLog.Fatal(err)
+	//	}
+	//	_, err = mw.JwtMiddleware.CheckIfTokenExpire(ctx, c)
+	//	if err != nil {
+	//		apiLog.Fatal(err)
+	//	}
+	//	claims, err := mw.JwtMiddleware.GetClaimsFromJWT(ctx, c)
+	//	if err != nil {
+	//		apiLog.Fatal(err)
+	//	}
+	//	userId = claims[mw.IdentityKey].(int64)
+	//}
+
+	req := kitexPublish.PublishListRequest{
+		UserId: bizReq.UserID,
+	}
+
+	resp, err := client.PublishList(ctx, &req)
+	if err != nil {
+		apiLog.Fatal(err)
+	}
 
 	c.JSON(consts.StatusOK, resp)
 }
