@@ -16,8 +16,12 @@ const (
 	EtcdAddressWithPort = "172.19.0.1" + ":2379"
 	ServiceAddress      = "127.0.0.1"
 
-	PingServiceName = "ping_pong"
-	PingServicePort = "7000"
-	UserServiceName = "user"
-	UserServicePort = "7001"
+	PingServiceName     = "ping_pong"
+	PingServicePort     = "7000"
+	UserServiceName     = "user"
+	UserServicePort     = "7001"
+	RelationServiceName = "relation"
+	RelationServicePort = "7030"
+	MessageServiceName  = "message"
+	MessageServicePort  = "7031"
 )
