@@ -22,7 +22,6 @@ func (s *UserServiceImpl) UserRegister(ctx context.Context, req *user.UserRegist
 			resp.StatusMsg = new(string)
 		}
 		*resp.StatusMsg = "用户名不能为空"
-
 		return resp, nil
 	}
 	if len(req.Password) == 0 {
@@ -77,7 +76,6 @@ func (s *UserServiceImpl) UserLogin(ctx context.Context, req *user.UserLoginRequ
 			resp.StatusMsg = new(string)
 		}
 		*resp.StatusMsg = "用户名不能为空"
-
 		return resp, nil
 	}
 	if len(req.Password) == 0 {
@@ -106,6 +104,42 @@ func (s *UserServiceImpl) UserLogin(ctx context.Context, req *user.UserLoginRequ
 
 // UserInfo implements the UserServiceImpl interface.
 func (s *UserServiceImpl) UserInfo(ctx context.Context, req *user.UserInfoRequest) (resp *user.UserInfoResponse, err error) {
-	// TODO: Your code here...
-	return
+	resp = new(user.UserInfoResponse)
+	// 前处理校验请求
+	// ...
+	// 实际业务
+	err = service.UserInfo(ctx, req, resp)
+	if err != nil {
+		resp.StatusCode = 57001
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		servLog.Error(err)
+		return resp, nil
+	}
+	// 后处理返回结果
+	// ...
+	return resp, nil
+}
+
+// UpdateUserCounter implements the UserServiceImpl interface.
+func (s *UserServiceImpl) UpdateUserCounter(ctx context.Context, req *user.UpdateUserCounterRequest) (resp *user.UpdateUserCounterResponse, err error) {
+	resp = new(user.UpdateUserCounterResponse)
+	// 前处理校验请求
+	// ...
+	// 实际业务
+	err = service.UpdateUserCounter(ctx, req, resp)
+	if err != nil {
+		resp.StatusCode = 57001
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		servLog.Error(err)
+		return resp, nil
+	}
+	// 后处理返回结果
+	// ...
+	return resp, nil
 }

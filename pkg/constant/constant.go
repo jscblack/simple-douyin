@@ -14,6 +14,9 @@ const (
 	// CPURateLimit    float64 = 80.0
 	// DefaultLimit            = 10
 	EtcdAddressWithPort = "172.19.0.1" + ":2379"
+	PostgresDSN         = "host=172.19.0.1 user=simple_douyin password=1qaz0plm dbname=simple_douyin_db port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	RedisAddress        = "172.19.0.1" + ":6379"
+	RedisPassword       = "1qaz0plm"
 	ServiceAddress      = "127.0.0.1"
 
 	PingServiceName = "ping_pong"
