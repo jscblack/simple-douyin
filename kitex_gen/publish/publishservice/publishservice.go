@@ -19,8 +19,9 @@ func NewServiceInfo() *kitex.ServiceInfo {
 	serviceName := "PublishService"
 	handlerType := (*publish.PublishService)(nil)
 	methods := map[string]kitex.MethodInfo{
-		"PublishAction": kitex.NewMethodInfo(publishActionHandler, newPublishServicePublishActionArgs, newPublishServicePublishActionResult, false),
-		"PublishList":   kitex.NewMethodInfo(publishListHandler, newPublishServicePublishListArgs, newPublishServicePublishListResult, false),
+		"PublishAction":    kitex.NewMethodInfo(publishActionHandler, newPublishServicePublishActionArgs, newPublishServicePublishActionResult, false),
+		"PublishList":      kitex.NewMethodInfo(publishListHandler, newPublishServicePublishListArgs, newPublishServicePublishListResult, false),
+		"PublishVideoInfo": kitex.NewMethodInfo(publishVideoInfoHandler, newPublishServicePublishVideoInfoArgs, newPublishServicePublishVideoInfoResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "publish",
@@ -72,6 +73,24 @@ func newPublishServicePublishListResult() interface{} {
 	return publish.NewPublishServicePublishListResult()
 }
 
+func publishVideoInfoHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*publish.PublishServicePublishVideoInfoArgs)
+	realResult := result.(*publish.PublishServicePublishVideoInfoResult)
+	success, err := handler.(publish.PublishService).PublishVideoInfo(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newPublishServicePublishVideoInfoArgs() interface{} {
+	return publish.NewPublishServicePublishVideoInfoArgs()
+}
+
+func newPublishServicePublishVideoInfoResult() interface{} {
+	return publish.NewPublishServicePublishVideoInfoResult()
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -97,6 +116,16 @@ func (p *kClient) PublishList(ctx context.Context, req *publish.PublishListReque
 	_args.Req = req
 	var _result publish.PublishServicePublishListResult
 	if err = p.c.Call(ctx, "PublishList", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) PublishVideoInfo(ctx context.Context, req *publish.PublishVideoInfoRequest) (r *publish.PublishVideoInfoResponse, err error) {
+	var _args publish.PublishServicePublishVideoInfoArgs
+	_args.Req = req
+	var _result publish.PublishServicePublishVideoInfoResult
+	if err = p.c.Call(ctx, "PublishVideoInfo", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

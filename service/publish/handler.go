@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	servLog "github.com/prometheus/common/log"
 	publish "simple-douyin/kitex_gen/publish"
 	"simple-douyin/service/publish/service"
@@ -16,7 +15,6 @@ func (s *PublishServiceImpl) PublishAction(ctx context.Context, req *publish.Pub
 	resp, err = service.PublishAction(ctx, req)
 	if err != nil {
 		servLog.Fatal(err)
-		return nil, err
 	}
 	return
 }
@@ -24,10 +22,17 @@ func (s *PublishServiceImpl) PublishAction(ctx context.Context, req *publish.Pub
 // PublishList implements the PublishServiceImpl interface.
 func (s *PublishServiceImpl) PublishList(ctx context.Context, req *publish.PublishListRequest) (resp *publish.PublishListResponse, err error) {
 	resp, err = service.PublishList(ctx, req)
-	fmt.Println(resp.VideoList)
 	if err != nil {
 		servLog.Fatal(err)
-		return nil, err
 	}
-	return resp, nil
+	return
+}
+
+// PublishVideoInfo implements the PublishServiceImpl interface.
+func (s *PublishServiceImpl) PublishVideoInfo(ctx context.Context, req *publish.PublishVideoInfoRequest) (resp *publish.PublishVideoInfoResponse, err error) {
+	resp, err = service.PublishVideoInfo(ctx, req)
+	if err != nil {
+		servLog.Fatal(err)
+	}
+	return
 }
