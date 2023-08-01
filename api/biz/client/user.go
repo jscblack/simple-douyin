@@ -3,7 +3,8 @@ package client
 import (
 	"context"
 	bizUser "simple-douyin/api/biz/model/user"
-	"simple-douyin/kitex_gen/user"
+	"simple-douyin/api/biz/pack"
+	kiteUser "simple-douyin/kitex_gen/user"
 	"simple-douyin/kitex_gen/user/userservice"
 	"simple-douyin/pkg/constant"
 	"time"
@@ -11,7 +12,6 @@ import (
 	apiLog "github.com/prometheus/common/log"
 
 	"github.com/cloudwego/kitex/client"
-	"github.com/cloudwego/kitex/client/callopt"
 
 	etcd "github.com/kitex-contrib/registry-etcd"
 )
@@ -42,33 +42,64 @@ func InitUserClient() {
 }
 
 func UserRegister(ctx context.Context, bizReq *bizUser.UserRegisterRequest, bizResp *bizUser.UserRegisterResponse) error {
-	req := user.UserRegisterRequest{
-		Username: bizReq.Username,
-		Password: bizReq.Password,
-	}
-	resp, err := userClient.UserRegister(ctx, &req, callopt.WithRPCTimeout(3*time.Second))
+	var err error
+	kiteReq := new(kiteUser.UserRegisterRequest)
+	err = pack.UserRegisterUnpack(ctx, bizReq, kiteReq)
 	if err != nil {
 		apiLog.Error(err)
 		return err
 	}
-	bizResp.StatusCode = resp.StatusCode
-	bizResp.StatusMsg = resp.StatusMsg
-	bizResp.UserID = resp.UserId
+	kiteResp, err := userClient.UserRegister(ctx, kiteReq)
+	if err != nil {
+		apiLog.Error(err)
+		return err
+	}
+	err = pack.UserRegisterPack(ctx, kiteResp, bizResp)
+	if err != nil {
+		apiLog.Error(err)
+		return err
+	}
 	return nil
 }
 
 func UserLogin(ctx context.Context, bizReq *bizUser.UserLoginRequest, bizResp *bizUser.UserLoginResponse) error {
-	req := user.UserLoginRequest{
-		Username: bizReq.Username,
-		Password: bizReq.Password,
-	}
-	resp, err := userClient.UserLogin(ctx, &req, callopt.WithRPCTimeout(3*time.Second))
+	var err error
+	kiteReq := new(kiteUser.UserLoginRequest)
+	err = pack.UserLoginUnpack(ctx, bizReq, kiteReq)
 	if err != nil {
 		apiLog.Error(err)
 		return err
 	}
-	bizResp.StatusCode = resp.StatusCode
-	bizResp.StatusMsg = resp.StatusMsg
-	bizResp.UserID = resp.UserId
+	kiteResp, err := userClient.UserLogin(ctx, kiteReq)
+	if err != nil {
+		apiLog.Error(err)
+		return err
+	}
+	err = pack.UserLoginPack(ctx, kiteResp, bizResp)
+	if err != nil {
+		apiLog.Error(err)
+		return err
+	}
+	return nil
+}
+
+func UserInfo(ctx context.Context, bizReq *bizUser.UserInfoRequest, bizResp *bizUser.UserInfoResponse) error {
+	var err error
+	kiteReq := new(kiteUser.UserInfoRequest)
+	err = pack.UserInfoUnpack(ctx, bizReq, kiteReq)
+	if err != nil {
+		apiLog.Error(err)
+		return err
+	}
+	kiteResp, err := userClient.UserInfo(ctx, kiteReq)
+	if err != nil {
+		apiLog.Error(err)
+		return err
+	}
+	err = pack.UserInfoPack(ctx, kiteResp, bizResp)
+	if err != nil {
+		apiLog.Error(err)
+		return err
+	}
 	return nil
 }

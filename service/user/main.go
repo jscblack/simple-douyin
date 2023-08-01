@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"net"
 	user "simple-douyin/kitex_gen/user/userservice"
 	"simple-douyin/pkg/constant"
+	"simple-douyin/service/user/dal"
 
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -13,6 +15,8 @@ import (
 )
 
 func main() {
+	// init db
+	dal.Init(context.Background())
 	r, err := etcd.NewEtcdRegistry([]string{constant.EtcdAddressWithPort})
 	if err != nil {
 		servLog.Fatal(err)
