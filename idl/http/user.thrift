@@ -13,6 +13,10 @@ struct UserRegisterRequest {
 }
 
 struct UserRegisterResponse {
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     1: required i32 status_code,   // 状态码，0-成功，其他值-失败
     2: optional string status_msg, // 返回状态描述
     3: required i64 user_id,       // 用户id
