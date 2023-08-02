@@ -1557,7 +1557,7 @@ func (p *Video) Field8DeepEqual(src string) bool {
 type Message struct {
 	Id         int64   `thrift:"id,1,required" frugal:"1,required,i64" json:"id"`
 	ToUserId   int64   `thrift:"to_user_id,2,required" frugal:"2,required,i64" json:"to_user_id"`
-	FromUserId int64   `thrift:"from_user_id,3,required" frugal:"3,required,i64" json:"from_user_id"`
+	UserId     int64   `thrift:"user_id,3,required" frugal:"3,required,i64" json:"user_id"`
 	Content    string  `thrift:"content,4,required" frugal:"4,required,string" json:"content"`
 	CreateTime *string `thrift:"create_time,5,optional" frugal:"5,optional,string" json:"create_time,omitempty"`
 }
@@ -1578,8 +1578,8 @@ func (p *Message) GetToUserId() (v int64) {
 	return p.ToUserId
 }
 
-func (p *Message) GetFromUserId() (v int64) {
-	return p.FromUserId
+func (p *Message) GetUserId() (v int64) {
+	return p.UserId
 }
 
 func (p *Message) GetContent() (v string) {
@@ -1600,8 +1600,8 @@ func (p *Message) SetId(val int64) {
 func (p *Message) SetToUserId(val int64) {
 	p.ToUserId = val
 }
-func (p *Message) SetFromUserId(val int64) {
-	p.FromUserId = val
+func (p *Message) SetUserId(val int64) {
+	p.UserId = val
 }
 func (p *Message) SetContent(val string) {
 	p.Content = val
@@ -1613,7 +1613,7 @@ func (p *Message) SetCreateTime(val *string) {
 var fieldIDToName_Message = map[int16]string{
 	1: "id",
 	2: "to_user_id",
-	3: "from_user_id",
+	3: "user_id",
 	4: "content",
 	5: "create_time",
 }
@@ -1628,7 +1628,7 @@ func (p *Message) Read(iprot thrift.TProtocol) (err error) {
 	var fieldId int16
 	var issetId bool = false
 	var issetToUserId bool = false
-	var issetFromUserId bool = false
+	var issetUserId bool = false
 	var issetContent bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
@@ -1672,7 +1672,7 @@ func (p *Message) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetFromUserId = true
+				issetUserId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1723,7 +1723,7 @@ func (p *Message) Read(iprot thrift.TProtocol) (err error) {
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetFromUserId {
+	if !issetUserId {
 		fieldId = 3
 		goto RequiredFieldNotSetError
 	}
@@ -1772,7 +1772,7 @@ func (p *Message) ReadField3(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.FromUserId = v
+		p.UserId = v
 	}
 	return nil
 }
@@ -1875,10 +1875,10 @@ WriteFieldEndError:
 }
 
 func (p *Message) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("from_user_id", thrift.I64, 3); err != nil {
+	if err = oprot.WriteFieldBegin("user_id", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.FromUserId); err != nil {
+	if err := oprot.WriteI64(p.UserId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1946,7 +1946,7 @@ func (p *Message) DeepEqual(ano *Message) bool {
 	if !p.Field2DeepEqual(ano.ToUserId) {
 		return false
 	}
-	if !p.Field3DeepEqual(ano.FromUserId) {
+	if !p.Field3DeepEqual(ano.UserId) {
 		return false
 	}
 	if !p.Field4DeepEqual(ano.Content) {
@@ -1974,7 +1974,7 @@ func (p *Message) Field2DeepEqual(src int64) bool {
 }
 func (p *Message) Field3DeepEqual(src int64) bool {
 
-	if p.FromUserId != src {
+	if p.UserId != src {
 		return false
 	}
 	return true
