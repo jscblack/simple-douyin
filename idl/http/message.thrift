@@ -1,4 +1,4 @@
-namespace go relation
+namespace go message
 
 include "./common.thrift"
 //引入Message
