@@ -32,3 +32,10 @@ struct Message {
     4: required string content,     // 消息内容
     5: optional string create_time, // 消息创建时间?
 }
+
+struct Comment {
+    1: required i64 id,             // 视频评论id
+    2: required User user,          // 评论用户信息
+    3: required string content,     // 评论内容
+    4: required string create_date, // 评论发布日期，格式 mm-dd
+}
