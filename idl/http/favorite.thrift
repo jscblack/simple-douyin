@@ -23,10 +23,10 @@ struct FavoriteListRequest {
 struct FavoriteListResponse {
     1: required i32 status_code,               // 0-成功，1-失败
     2: optional string status_msg,             // 错误信息
-    3: required list<common.Video> video_list, // 视频列表
+    3: optional list<common.Video> video_list, // 视频列表
 }
 
 service FavoriteService {
-    FavoriteActionResponse FavoriteAction(1: FavoriteActionRequest req) (api.post = "/douyin/favorite/action"),
-    FavoriteListResponse FavoriteList(1: FavoriteListRequest req) (api.post = "/douyin/favorite/list"),
+    FavoriteActionResponse FavoriteAction(1: FavoriteActionRequest req) (api.post = "/douyin/favorite/action/"),
+    FavoriteListResponse FavoriteList(1: FavoriteListRequest req) (api.post = "/douyin/favorite/list/"),
 }

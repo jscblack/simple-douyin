@@ -24,12 +24,12 @@ struct CommentListRequest {
 }
 
 struct CommentListResponse {
-    1: required i32 status_code,             // 状态码，0-成功，其他值-失败
-    2: optional string status_msg,           // 返回状态描述
-    3: required list<common.Comment> comment_list, // 评论列表
+    1: required i32 status_code,                   // 状态码，0-成功，其他值-失败
+    2: optional string status_msg,                 // 返回状态描述
+    3: optional list<common.Comment> comment_list, // 评论列表
 }
 
 service CommentService {
-    CommentActionResponse CommentAction(1: CommentActionRequest req) (api.post = "/douyin/comment/action"),
-    CommentListResponse CommentList(1: CommentListRequest req) (api.post = "/douyin/comment/list"),
+    CommentActionResponse CommentAction(1: CommentActionRequest req) (api.post = "/douyin/comment/action/"),
+    CommentListResponse CommentList(1: CommentListRequest req) (api.post = "/douyin/comment/list/"),
 }
