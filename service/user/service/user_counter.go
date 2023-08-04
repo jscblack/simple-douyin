@@ -44,14 +44,12 @@ func UpdateUserCounter(ctx context.Context, req *user.UpdateUserCounterRequest, 
 		} else {
 			*comUser.FavoriteCount--
 		}
-
 	} else if req.Counter == "TotalFavorited" {
 		if req.Increment {
 			*comUser.TotalFavorited++
 		} else {
 			*comUser.TotalFavorited--
 		}
-
 	} else if req.Counter == "WorkCount" {
 		if req.Increment {
 			*comUser.WorkCount++

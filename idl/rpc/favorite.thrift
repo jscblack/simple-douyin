@@ -69,16 +69,16 @@ struct UserFavoredCountResponse {
     3: optional i64 favored_count, //被赞数
 }
 
-// 获取点赞关系(user_id是否点赞vedio_id)
+// 获取点赞关系(user_id是否点赞video_id)
 struct IsFavorRequest {
     1: required i64 user_id,
-    2: required i64 vedio_id,
+    2: required i64 video_id,
 }
 
 struct IsFavorResponse {
     1: required i32 status_code,   // 0:成功 other:失败
     2: optional string status_msg,
-    3: optional bool is_favor,     //是否点赞
+    3: required bool is_favorite,     //是否点赞
 }
 
 service FavoriteService {
