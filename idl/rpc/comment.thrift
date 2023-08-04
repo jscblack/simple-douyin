@@ -37,8 +37,21 @@ struct CommentListResponse {
     3: required list<common.Comment> comment_list, // 评论列表
 }
 
+//内部rpc
+// 获取被评论数
+struct CommentCountRequest {
+    1: required i64 video_id, // 视频id
+}
+
+struct CommentCountResponse {
+    1: required i32 status_code,   // 0:成功 other:失败
+    2: optional string status_msg,
+    3: optional i64 comment_count,   //被评论数
+}
+
 service CommentService {
     AddCommentActionResponse AddCommentAction(1: AddCommentActionRequest req),
     DelCommentActionResponse DelCommentAction(1: DelCommentActionRequest req),
     CommentListResponse CommentList(1: CommentListRequest req),
+    CommentCountResponse CommentCount(1: CommentCountRequest req),
 }
