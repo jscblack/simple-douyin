@@ -12,6 +12,7 @@ require (
 	github.com/kitex-contrib/registry-etcd v0.1.0
 	github.com/prometheus/common v0.26.0
 	github.com/redis/go-redis/v9 v9.0.5
+	golang.org/x/crypto v0.8.0
 	gorm.io/driver/postgres v1.5.2
 	gorm.io/gorm v1.25.2
 )

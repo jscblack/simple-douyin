@@ -5,6 +5,10 @@ package router
 import (
 	"github.com/cloudwego/hertz/pkg/app/server"
 	feed "simple-douyin/api/biz/router/feed"
+	comment "simple-douyin/api/biz/router/comment"
+	favorite "simple-douyin/api/biz/router/favorite"
+	message "simple-douyin/api/biz/router/message"
+	relation "simple-douyin/api/biz/router/relation"
 	user "simple-douyin/api/biz/router/user"
 )
 
@@ -12,6 +16,14 @@ import (
 func GeneratedRegister(r *server.Hertz) {
 	//INSERT_POINT: DO NOT DELETE THIS LINE!
 	feed.Register(r)
+
+	favorite.Register(r)
+
+	comment.Register(r)
+
+	relation.Register(r)
+
+	message.Register(r)
 
 	user.Register(r)
 }

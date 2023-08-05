@@ -28,7 +28,14 @@ struct Video {
 struct Message {
     1: required i64 id,             // 消息id
     2: required i64 to_user_id,     // 该消息接收者的id
-    3: required i64 from_user_id,   // 该消息发送者的id
+    3: required i64 user_id,        // 该消息发送者的id
     4: required string content,     // 消息内容
     5: optional string create_time, // 消息创建时间
+}
+
+struct Comment {
+    1: required i64 id,             // 视频评论id
+    2: required User user,          // 评论用户信息
+    3: required string content,     // 评论内容
+    4: required string create_date, // 评论发布日期，格式 mm-dd
 }

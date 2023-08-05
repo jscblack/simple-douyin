@@ -4,7 +4,7 @@ package user
 
 import (
 	"context"
-	"fmt"
+	"strconv"
 
 	client "simple-douyin/api/biz/client"
 	mw "simple-douyin/api/biz/middleware"
@@ -12,6 +12,7 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"github.com/hertz-contrib/jwt"
 )
 
 // UserRegister .
@@ -41,7 +42,10 @@ func UserRegister(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, resp)
 		return
 	}
-
+	if resp.StatusCode != 0 {
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
 	// 业务端注册流程通过，执行登录流程，下发token
 	mw.JwtMiddleware.LoginHandler(ctx, c)
 }
@@ -86,17 +90,27 @@ func UserInfo(ctx context.Context, c *app.RequestContext) {
 
 	// 该接口需要登录态，但不需要确认具体身份，仅在路由时鉴权即可
 	// 通过中间件获取用户id
-	// loggedClaims, exist := c.Get("JWT_PAYLOAD")
-	// if !exist {
-	// 	resp.StatusCode = 57001
-	// 	if resp.StatusMsg == nil {
-	// 		resp.StatusMsg = new(string)
-	// 	}
-	// 	*resp.StatusMsg = "Unauthorized"
-	// 	c.JSON(consts.StatusOK, resp)
-	// 	return
-	// }
-	// userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
-	fmt.Println("Requested userID: ", req.UserID)
+	loggedClaims, exist := c.Get("JWT_PAYLOAD")
+	if !exist {
+		resp.StatusCode = 57001
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "Unauthorized"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
+	userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
+	req.Token = strconv.FormatInt(userID, 10)
+	err = client.UserInfo(ctx, &req, resp)
+	if err != nil {
+		resp.StatusCode = 57001
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
 	c.JSON(consts.StatusOK, resp)
 }
