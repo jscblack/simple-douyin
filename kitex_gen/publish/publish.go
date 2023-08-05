@@ -1326,7 +1326,7 @@ func (p *PublishVideoInfoRequest) Field2DeepEqual(src int64) bool {
 type PublishVideoInfoResponse struct {
 	StatusCode int32         `thrift:"status_code,1,required" frugal:"1,required,i32" json:"status_code"`
 	StatusMsg  *string       `thrift:"status_msg,2,optional" frugal:"2,optional,string" json:"status_msg,omitempty"`
-	VideoList  *common.Video `thrift:"video_list,3,required" frugal:"3,required,common.Video" json:"video_list"`
+	Video      *common.Video `thrift:"video,3,required" frugal:"3,required,common.Video" json:"video"`
 }
 
 func NewPublishVideoInfoResponse() *PublishVideoInfoResponse {
@@ -1350,13 +1350,13 @@ func (p *PublishVideoInfoResponse) GetStatusMsg() (v string) {
 	return *p.StatusMsg
 }
 
-var PublishVideoInfoResponse_VideoList_DEFAULT *common.Video
+var PublishVideoInfoResponse_Video_DEFAULT *common.Video
 
-func (p *PublishVideoInfoResponse) GetVideoList() (v *common.Video) {
-	if !p.IsSetVideoList() {
-		return PublishVideoInfoResponse_VideoList_DEFAULT
+func (p *PublishVideoInfoResponse) GetVideo() (v *common.Video) {
+	if !p.IsSetVideo() {
+		return PublishVideoInfoResponse_Video_DEFAULT
 	}
-	return p.VideoList
+	return p.Video
 }
 func (p *PublishVideoInfoResponse) SetStatusCode(val int32) {
 	p.StatusCode = val
@@ -1364,22 +1364,22 @@ func (p *PublishVideoInfoResponse) SetStatusCode(val int32) {
 func (p *PublishVideoInfoResponse) SetStatusMsg(val *string) {
 	p.StatusMsg = val
 }
-func (p *PublishVideoInfoResponse) SetVideoList(val *common.Video) {
-	p.VideoList = val
+func (p *PublishVideoInfoResponse) SetVideo(val *common.Video) {
+	p.Video = val
 }
 
 var fieldIDToName_PublishVideoInfoResponse = map[int16]string{
 	1: "status_code",
 	2: "status_msg",
-	3: "video_list",
+	3: "video",
 }
 
 func (p *PublishVideoInfoResponse) IsSetStatusMsg() bool {
 	return p.StatusMsg != nil
 }
 
-func (p *PublishVideoInfoResponse) IsSetVideoList() bool {
-	return p.VideoList != nil
+func (p *PublishVideoInfoResponse) IsSetVideo() bool {
+	return p.Video != nil
 }
 
 func (p *PublishVideoInfoResponse) Read(iprot thrift.TProtocol) (err error) {
@@ -1387,7 +1387,7 @@ func (p *PublishVideoInfoResponse) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetStatusCode bool = false
-	var issetVideoList bool = false
+	var issetVideo bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -1429,7 +1429,7 @@ func (p *PublishVideoInfoResponse) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetVideoList = true
+				issetVideo = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1454,7 +1454,7 @@ func (p *PublishVideoInfoResponse) Read(iprot thrift.TProtocol) (err error) {
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetVideoList {
+	if !issetVideo {
 		fieldId = 3
 		goto RequiredFieldNotSetError
 	}
@@ -1495,8 +1495,8 @@ func (p *PublishVideoInfoResponse) ReadField2(iprot thrift.TProtocol) error {
 }
 
 func (p *PublishVideoInfoResponse) ReadField3(iprot thrift.TProtocol) error {
-	p.VideoList = common.NewVideo()
-	if err := p.VideoList.Read(iprot); err != nil {
+	p.Video = common.NewVideo()
+	if err := p.Video.Read(iprot); err != nil {
 		return err
 	}
 	return nil
@@ -1576,10 +1576,10 @@ WriteFieldEndError:
 }
 
 func (p *PublishVideoInfoResponse) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("video_list", thrift.STRUCT, 3); err != nil {
+	if err = oprot.WriteFieldBegin("video", thrift.STRUCT, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := p.VideoList.Write(oprot); err != nil {
+	if err := p.Video.Write(oprot); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1611,7 +1611,7 @@ func (p *PublishVideoInfoResponse) DeepEqual(ano *PublishVideoInfoResponse) bool
 	if !p.Field2DeepEqual(ano.StatusMsg) {
 		return false
 	}
-	if !p.Field3DeepEqual(ano.VideoList) {
+	if !p.Field3DeepEqual(ano.Video) {
 		return false
 	}
 	return true
@@ -1638,7 +1638,7 @@ func (p *PublishVideoInfoResponse) Field2DeepEqual(src *string) bool {
 }
 func (p *PublishVideoInfoResponse) Field3DeepEqual(src *common.Video) bool {
 
-	if !p.VideoList.DeepEqual(src) {
+	if !p.Video.DeepEqual(src) {
 		return false
 	}
 	return true

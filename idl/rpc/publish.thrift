@@ -33,9 +33,9 @@ struct PublishVideoInfoRequest {
 }
 
 struct PublishVideoInfoResponse {
-    1: required i32 status_code,         // 状态码，0-成功，其他值-失败
-    2: optional string status_msg,       // 返回状态描述
-    3: required common.Video video_list, // 视频信息
+    1: required i32 status_code,    // 状态码，0-成功，其他值-失败
+    2: optional string status_msg,  // 返回状态描述
+    3: required common.Video video, // 视频信息
 }
 
 service PublishService {
