@@ -37,4 +37,5 @@ const (
 	MessageServicePort  = "7007"
 
 	MaxFeedNum = 30
+	MaxListNum = 30
 )
