@@ -9,7 +9,7 @@ import (
 func QueryVideoFromVideoId(ctx context.Context, videoId int64) (*Video, error) {
 	var video *Video
 	if videoId < 0 {
-		servLog.Error("latestTime < 0!")
+		servLog.Error("videoId < 0!")
 		return video, nil
 	}
 	if err := DB.Find(&video).Where("id = ?", videoId).Error; err != nil {
@@ -23,7 +23,7 @@ func QueryVideoFromVideoId(ctx context.Context, videoId int64) (*Video, error) {
 func QueryVideoFromUserId(ctx context.Context, userId int64) ([]*Video, error) {
 	var videoList []*Video
 	if userId < 0 {
-		servLog.Error("latestTime < 0!")
+		servLog.Error("userId < 0!")
 		return videoList, nil
 	}
 	if err := DB.Find(&videoList).Where("user_id = ?", userId).Order("id desc").Limit(constant.MaxListNum).Error; err != nil {
