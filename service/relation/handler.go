@@ -14,16 +14,20 @@ type RelationServiceImpl struct{}
 // RelationAdd implements the RelationServiceImpl interface.
 func (s *RelationServiceImpl) RelationAdd(ctx context.Context, request *relation.RelationAddRequest) (resp *relation.RelationAddResponse, err error) {
 	// TODO: Your code here...
-	// 不要忘记更新调用user服务的UpdateUserCounter
-	// 更新关注者的FollowCount，被关注者的FollowerCount
+	// 不要忘记更新redis中的FollowCount和FollowerCount
+	// 取出redis的dal.RelationCounter，更新FollowCount和FollowerCount
+	// 如果redis中没有对应的counter，处理逻辑参见./service/relation_count.go
+	// 先更新mysql，再更新redis，特别需要RelationCounter中有两个量，可能值为-1，表示未初始化
 	return
 }
 
 // RelationRemove implements the RelationServiceImpl interface.
 func (s *RelationServiceImpl) RelationRemove(ctx context.Context, request *relation.RelationRemoveRequest) (resp *relation.RelationRemoveResponse, err error) {
 	// TODO: Your code here...
-	// 不要忘记更新调用user服务的UpdateUserCounter
-	// 更新关注者的FollowCount，被关注者的FollowerCount
+	// 不要忘记更新redis中的FollowCount和FollowerCount
+	// 取出redis的dal.RelationCounter，更新FollowCount和FollowerCount
+	// 如果redis中没有对应的counter，处理逻辑参见./service/relation_count.go
+	// 先更新mysql，再更新redis，特别需要RelationCounter中有两个量，可能值为-1，表示未初始化
 	return
 }
 

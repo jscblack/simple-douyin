@@ -35,4 +35,10 @@ const (
 	RelationServicePort = "7006"
 	MessageServiceName  = "message"
 	MessageServicePort  = "7007"
+
+	UserRDB     = 0
+	PublishRDB  = 1
+	FavoriteRDB = 2
+	VideoRDB    = 3
+	RelationRDB = 4
 )

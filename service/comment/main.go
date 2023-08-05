@@ -5,7 +5,7 @@ import (
 	"net"
 	comment "simple-douyin/kitex_gen/comment/commentservice"
 	"simple-douyin/pkg/constant"
-	"simple-douyin/service/favorite/dal"
+	"simple-douyin/service/comment/dal"
 
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"

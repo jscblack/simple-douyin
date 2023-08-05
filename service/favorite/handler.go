@@ -14,20 +14,22 @@ type FavoriteServiceImpl struct{}
 // FavoriteAddAction implements the FavoriteServiceImpl interface.
 func (s *FavoriteServiceImpl) FavoriteAddAction(ctx context.Context, req *favorite.FavoriteAddActionRequest) (resp *favorite.FavoriteAddActionResponse, err error) {
 	// TODO: Your code here...
-	// 不要忘记更新调用user服务的UpdateUserCounter
-	// 更新点赞者的FavoriteCount，被点赞视频作者的TotalFavorited
-	// 不要忘记更新调用publish服务的UpdateVideoCounter
-	// 更新视频的被点赞总数FavoriteCount
+	// 不要忘记更新redis中的数据
+	// 取出redis的dal.UserCounter，更新FavorCount和FavoredCount
+	// 取出redis的dal.VideoCounter，更新FavoredCount
+	// 如果redis中没有对应的counter，处理逻辑参见./service/favorite_count.go
+	// 先更新mysql，再更新redis，特别需要UserCounter中有两个量，可能值为-1，表示未初始化
 	return
 }
 
 // FavoriteDelAction implements the FavoriteServiceImpl interface.
 func (s *FavoriteServiceImpl) FavoriteDelAction(ctx context.Context, req *favorite.FavoriteDelActionRequest) (resp *favorite.FavoriteDelActionResponse, err error) {
 	// TODO: Your code here...
-	// 不要忘记更新调用user服务的UpdateUserCounter
-	// 更新点赞者的FavoriteCount，被点赞视频作者的TotalFavorited
-	// 不要忘记更新调用publish服务的UpdateVideoCounter
-	// 更新视频的被点赞总数FavoriteCount
+	// 不要忘记更新redis中的数据
+	// 取出redis的dal.UserCounter，更新FavorCount和FavoredCount
+	// 取出redis的dal.VideoCounter，更新FavoredCount
+	// 如果redis中没有对应的counter，处理逻辑参见./service/favorite_count.go
+	// 先更新mysql，再更新redis，特别需要UserCounter中有两个量，可能值为-1，表示未初始化
 	return
 }
 
@@ -64,7 +66,7 @@ func (s *FavoriteServiceImpl) VideoFavoredCount(ctx context.Context, req *favori
 	// 前处理校验请求
 	// ...
 	// 实际业务
-	err = service.VideoFavorCount(ctx, req, resp)
+	err = service.VideoFavoredCount(ctx, req, resp)
 	if err != nil {
 		resp.StatusCode = 57004
 		if resp.StatusMsg == nil {
