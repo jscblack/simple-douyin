@@ -9,6 +9,7 @@ import (
 	favorite "simple-douyin/api/biz/router/favorite"
 	message "simple-douyin/api/biz/router/message"
 	relation "simple-douyin/api/biz/router/relation"
+	publish "simple-douyin/api/biz/router/publish"
 	user "simple-douyin/api/biz/router/user"
 )
 
@@ -24,6 +25,8 @@ func GeneratedRegister(r *server.Hertz) {
 	relation.Register(r)
 
 	message.Register(r)
+
+	publish.Register(r)
 
 	user.Register(r)
 }

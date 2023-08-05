@@ -6,5 +6,6 @@ func InitClient() {
 	InitPingClient()
 	InitUserClient()
 	InitFeedClient()
+	InitPublishClient()
 	apiLog.Info("All RPC client initialized")
 }
