@@ -5,9 +5,8 @@ import (
 	"github.com/cloudwego/kitex/client"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	apiLog "github.com/prometheus/common/log"
-	bizCommon "simple-douyin/api/biz/model/common"
 	bizFeed "simple-douyin/api/biz/model/feed"
-	"simple-douyin/kitex_gen/common"
+	"simple-douyin/api/biz/pack"
 	"simple-douyin/kitex_gen/feed"
 	"simple-douyin/kitex_gen/feed/feedservice"
 	"simple-douyin/pkg/constant"
@@ -42,50 +41,8 @@ func InitFeedClient() {
 func Feed(ctx context.Context, req *feed.FeedRequest) (*bizFeed.FeedResponse, error) {
 	resp, err := feedClient.Feed(ctx, req)
 	if err != nil {
-		apiLog.Fatal(err)
+		apiLog.Info(err)
+		return nil, err
 	}
-	return &bizFeed.FeedResponse{
-		StatusCode: resp.StatusCode,
-		StatusMsg:  resp.StatusMsg,
-		VideoList:  ToVideos(resp.VideoList),
-		NextTime:   resp.NextTime,
-	}, nil
-}
-
-func ToVideo(video *common.Video) *bizCommon.Video {
-	if video == nil {
-		return nil
-	}
-
-	author := video.Author
-	user := &bizCommon.User{
-		ID:            author.Id,
-		Name:          author.Name,
-		FollowCount:   author.FollowerCount,
-		FollowerCount: author.FollowerCount,
-		IsFollow:      author.IsFollow,
-	}
-
-	return &bizCommon.Video{
-		ID:            video.Id,
-		Author:        user,
-		PlayURL:       video.PlayUrl,
-		CoverURL:      video.CoverUrl,
-		FavoriteCount: video.FavoriteCount,
-		CommentCount:  video.CommentCount,
-		IsFavorite:    video.IsFavorite,
-		Title:         video.Title,
-	}
-}
-
-func ToVideos(videos []*common.Video) []*bizCommon.Video {
-	videoList := make([]*bizCommon.Video, 0)
-	for _, video := range videos {
-		if v := ToVideo(video); v != nil {
-			videoList = append(videoList, v)
-		} else {
-			apiLog.Fatal("video is nil!")
-		}
-	}
-	return videoList
+	return pack.FeedPack(resp)
 }

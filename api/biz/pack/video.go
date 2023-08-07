@@ -3,9 +3,7 @@ package pack
 import (
 	apiLog "github.com/prometheus/common/log"
 	bizCommon "simple-douyin/api/biz/model/common"
-	bizPublish "simple-douyin/api/biz/model/publish"
 	"simple-douyin/kitex_gen/common"
-	kitexPublish "simple-douyin/kitex_gen/publish"
 )
 
 func ToVideo(video *common.Video) *bizCommon.Video {
@@ -44,21 +42,4 @@ func ToVideos(videos []*common.Video) []*bizCommon.Video {
 		}
 	}
 	return videoList
-}
-
-// PublishActionPack kitexReq -> bizReq
-func PublishActionPack(kitexReq *kitexPublish.PublishActionResponse) (*bizPublish.PublishActionResponse, error) {
-	return &bizPublish.PublishActionResponse{
-		StatusCode: kitexReq.StatusCode,
-		StatusMsg:  kitexReq.StatusMsg,
-	}, nil
-}
-
-// PublishListPack kitexReq -> bizReq
-func PublishListPack(kitexReq *kitexPublish.PublishListResponse) (*bizPublish.PublishListResponse, error) {
-	return &bizPublish.PublishListResponse{
-		StatusCode: kitexReq.StatusCode,
-		StatusMsg:  kitexReq.StatusMsg,
-		VideoList:  ToVideos(kitexReq.VideoList),
-	}, nil
 }

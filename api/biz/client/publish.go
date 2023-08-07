@@ -4,7 +4,7 @@ import (
 	"context"
 	apiLog "github.com/prometheus/common/log"
 	bizPublish "simple-douyin/api/biz/model/publish"
-	"simple-douyin/api/pack"
+	"simple-douyin/api/biz/pack"
 	kitexPublish "simple-douyin/kitex_gen/publish"
 	"simple-douyin/kitex_gen/publish/publishservice"
 	"simple-douyin/pkg/constant"
