@@ -38,4 +38,10 @@ const (
 
 	MaxFeedNum = 30
 	MaxListNum = 30
+
+	UserRDB     = 0
+	PublishRDB  = 1
+	FavoriteRDB = 2
+	VideoRDB    = 3
+	RelationRDB = 4
 )

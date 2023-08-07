@@ -5,7 +5,7 @@ import (
 	"net"
 	relation "simple-douyin/kitex_gen/relation/relationservice"
 	"simple-douyin/pkg/constant"
-	"simple-douyin/service/user/dal"
+	"simple-douyin/service/relation/dal"
 
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
