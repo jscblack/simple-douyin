@@ -4,6 +4,7 @@ package publish
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
+	mw "simple-douyin/api/biz/middleware"
 )
 
 func rootMw() []app.HandlerFunc {
@@ -27,8 +28,8 @@ func _actionMw() []app.HandlerFunc {
 }
 
 func _publishactionMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	// token未找到，但是客户端发送了...?
+	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
 }
 
 func _listMw() []app.HandlerFunc {
@@ -37,6 +38,5 @@ func _listMw() []app.HandlerFunc {
 }
 
 func _publishlistMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
 }

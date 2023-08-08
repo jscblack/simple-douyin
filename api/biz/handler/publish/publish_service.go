@@ -6,8 +6,10 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"github.com/hertz-contrib/jwt"
 	apiLog "github.com/prometheus/common/log"
 	"simple-douyin/api/biz/client"
+	mw "simple-douyin/api/biz/middleware"
 	bizPublish "simple-douyin/api/biz/model/publish"
 	kitexPublish "simple-douyin/kitex_gen/publish"
 )
@@ -17,40 +19,39 @@ import (
 func PublishAction(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var bizReq bizPublish.PublishActionRequest
+	resp := new(bizPublish.PublishActionResponse)
 	err = c.BindAndValidate(&bizReq)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	var userId int64
-	// 从token中得到userId
-	// 这里对token进行校验
-	//if len(bizReq.Token) > 0 {
-	//	_, err := mw.JwtMiddleware.ParseTokenString(bizReq.Token)
-	//	if err != nil {
-	//		apiLog.Fatal(err)
-	//	}
-	//	_, err = mw.JwtMiddleware.CheckIfTokenExpire(ctx, c)
-	//	if err != nil {
-	//		apiLog.Fatal(err)
-	//	}
-	//	claims, err := mw.JwtMiddleware.GetClaimsFromJWT(ctx, c)
-	//	if err != nil {
-	//		apiLog.Fatal(err)
-	//	}
-	//	userId = claims[mw.IdentityKey].(int64)
-	//}
+	// 该接口需要登录态，需要确认具体身份，仅在路由时鉴权即可
+	// 通过中间件获取用户id
+	apiLog.Info("Getting userId")
+	loggedClaims, exist := c.Get("JWT_PAYLOAD")
+	if !exist {
+		resp.StatusCode = 57003
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "Unauthorized"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
+	userId := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
+	apiLog.Info(userId)
 
-	bizReq.Data = []byte("123")
-	bizReq.Title = "bear"
 	req := kitexPublish.PublishActionRequest{
 		UserId: userId,
 		Data:   bizReq.Data,
 		Title:  bizReq.Title,
 	}
 
-	resp, err := client.PublishAction(ctx, &req)
+	apiLog.Info("Publish Action.")
+	resp, err = client.PublishAction(ctx, &req)
+	apiLog.Info("After Publish Action.")
+
 	if err != nil {
 		apiLog.Fatal(err)
 		resp.StatusCode = 57003
@@ -76,24 +77,7 @@ func PublishList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	// var userId int64
-	// 这里对token进行校验
-	//if len(bizReq.Token) > 0 {
-	//	_, err := mw.JwtMiddleware.ParseTokenString(bizReq.Token)
-	//	if err != nil {
-	//		apiLog.Fatal(err)
-	//	}
-	//	_, err = mw.JwtMiddleware.CheckIfTokenExpire(ctx, c)
-	//	if err != nil {
-	//		apiLog.Fatal(err)
-	//	}
-	//	claims, err := mw.JwtMiddleware.GetClaimsFromJWT(ctx, c)
-	//	if err != nil {
-	//		apiLog.Fatal(err)
-	//	}
-	//	userId = claims[mw.IdentityKey].(int64)
-	//}
-
+	// 该接口需要登录态，需要确认具体身份，仅在路由时鉴权即可
 	req := kitexPublish.PublishListRequest{
 		UserId: bizReq.UserID,
 	}

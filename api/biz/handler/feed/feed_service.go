@@ -18,36 +18,76 @@ import (
 func Feed(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var bizReq bizFeed.FeedRequest
+	resp := new(bizFeed.FeedResponse)
 	err = c.BindAndValidate(&bizReq)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	var userId int64
+	var userId = new(int64)
+	apiLog.Info("Token: ", bizReq.GetToken())
 	// 这里对token进行校验
+
+	// 这里token是nil时，在路由时鉴权会报错
+	//loggedClaims, exist := c.Get("JWT_PAYLOAD")
+	//if !exist {
+	//	resp.StatusCode = 57002
+	//	if resp.StatusMsg == nil {
+	//		resp.StatusMsg = new(string)
+	//	}
+	//	*resp.StatusMsg = "Unauthorized"
+	//	c.JSON(consts.StatusOK, resp)
+	//	return
+	//}
+	//userId = int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
+
 	if bizReq.Token != nil {
 		_, err := mw.JwtMiddleware.ParseTokenString(*bizReq.Token)
 		if err != nil {
-			apiLog.Fatal(err)
+			apiLog.Info(err)
+			resp.StatusCode = 57002
+			if resp.StatusMsg == nil {
+				resp.StatusMsg = new(string)
+			}
+			*resp.StatusMsg = "Unauthorized"
+			c.JSON(consts.StatusOK, resp)
+			return
 		}
-		_, err = mw.JwtMiddleware.CheckIfTokenExpire(ctx, c)
-		if err != nil {
-			apiLog.Fatal(err)
-		}
+		// 用户token失效了也能用feed
+		//_, err = mw.JwtMiddleware.CheckIfTokenExpire(ctx, c)
+		//if err != nil {
+		//	apiLog.Info(err)
+		//	resp.StatusCode = 57002
+		//	if resp.StatusMsg == nil {
+		//		resp.StatusMsg = new(string)
+		//	}
+		//	*resp.StatusMsg = "token expired"
+		//	c.JSON(consts.StatusOK, resp)
+		//	return
+		//}
 		claims, err := mw.JwtMiddleware.GetClaimsFromJWT(ctx, c)
 		if err != nil {
-			apiLog.Fatal(err)
+			apiLog.Info(err)
+			resp.StatusCode = 57002
+			if resp.StatusMsg == nil {
+				resp.StatusMsg = new(string)
+			}
+			*resp.StatusMsg = "Unauthorized"
+			c.JSON(consts.StatusOK, resp)
+			return
 		}
-		userId = claims[mw.IdentityKey].(int64)
+		*userId = int64(claims[mw.IdentityKey].(float64))
 	}
 
+	apiLog.Info("userId: ", userId)
+	apiLog.Info("latestTime: ", bizReq.GetLatestTime())
 	req := feed.FeedRequest{
-		UserId:     &userId,
+		UserId:     userId,
 		LatestTime: bizReq.LatestTime,
 	}
 
-	resp, err := client.Feed(ctx, &req)
+	resp, err = client.Feed(ctx, &req)
 
 	if err != nil {
 		apiLog.Fatal(err)

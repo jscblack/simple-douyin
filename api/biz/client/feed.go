@@ -41,7 +41,7 @@ func InitFeedClient() {
 func Feed(ctx context.Context, req *feed.FeedRequest) (*bizFeed.FeedResponse, error) {
 	resp, err := feedClient.Feed(ctx, req)
 	if err != nil {
-		apiLog.Info(err)
+		apiLog.Error(err)
 		return nil, err
 	}
 	return pack.FeedPack(resp)

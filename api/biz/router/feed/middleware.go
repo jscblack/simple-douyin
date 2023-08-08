@@ -22,6 +22,6 @@ func _feedMw() []app.HandlerFunc {
 }
 
 func _feed0Mw() []app.HandlerFunc {
-	// your code...
+	// 在token不为nil时鉴权
 	return nil
 }
