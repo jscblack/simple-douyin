@@ -22,6 +22,7 @@ func NewServiceInfo() *kitex.ServiceInfo {
 		"PublishAction":    kitex.NewMethodInfo(publishActionHandler, newPublishServicePublishActionArgs, newPublishServicePublishActionResult, false),
 		"PublishList":      kitex.NewMethodInfo(publishListHandler, newPublishServicePublishListArgs, newPublishServicePublishListResult, false),
 		"PublishVideoInfo": kitex.NewMethodInfo(publishVideoInfoHandler, newPublishServicePublishVideoInfoArgs, newPublishServicePublishVideoInfoResult, false),
+		"PublishWorkCount": kitex.NewMethodInfo(publishWorkCountHandler, newPublishServicePublishWorkCountArgs, newPublishServicePublishWorkCountResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "publish",
@@ -91,6 +92,24 @@ func newPublishServicePublishVideoInfoResult() interface{} {
 	return publish.NewPublishServicePublishVideoInfoResult()
 }
 
+func publishWorkCountHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*publish.PublishServicePublishWorkCountArgs)
+	realResult := result.(*publish.PublishServicePublishWorkCountResult)
+	success, err := handler.(publish.PublishService).PublishWorkCount(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newPublishServicePublishWorkCountArgs() interface{} {
+	return publish.NewPublishServicePublishWorkCountArgs()
+}
+
+func newPublishServicePublishWorkCountResult() interface{} {
+	return publish.NewPublishServicePublishWorkCountResult()
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -126,6 +145,16 @@ func (p *kClient) PublishVideoInfo(ctx context.Context, req *publish.PublishVide
 	_args.Req = req
 	var _result publish.PublishServicePublishVideoInfoResult
 	if err = p.c.Call(ctx, "PublishVideoInfo", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) PublishWorkCount(ctx context.Context, req *publish.PublishWorkCountRequest) (r *publish.PublishWorkCountResponse, err error) {
+	var _args publish.PublishServicePublishWorkCountArgs
+	_args.Req = req
+	var _result publish.PublishServicePublishWorkCountResult
+	if err = p.c.Call(ctx, "PublishWorkCount", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

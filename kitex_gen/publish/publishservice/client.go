@@ -14,6 +14,7 @@ type Client interface {
 	PublishAction(ctx context.Context, req *publish.PublishActionRequest, callOptions ...callopt.Option) (r *publish.PublishActionResponse, err error)
 	PublishList(ctx context.Context, req *publish.PublishListRequest, callOptions ...callopt.Option) (r *publish.PublishListResponse, err error)
 	PublishVideoInfo(ctx context.Context, req *publish.PublishVideoInfoRequest, callOptions ...callopt.Option) (r *publish.PublishVideoInfoResponse, err error)
+	PublishWorkCount(ctx context.Context, req *publish.PublishWorkCountRequest, callOptions ...callopt.Option) (r *publish.PublishWorkCountResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -58,4 +59,9 @@ func (p *kPublishServiceClient) PublishList(ctx context.Context, req *publish.Pu
 func (p *kPublishServiceClient) PublishVideoInfo(ctx context.Context, req *publish.PublishVideoInfoRequest, callOptions ...callopt.Option) (r *publish.PublishVideoInfoResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.PublishVideoInfo(ctx, req)
+}
+
+func (p *kPublishServiceClient) PublishWorkCount(ctx context.Context, req *publish.PublishWorkCountRequest, callOptions ...callopt.Option) (r *publish.PublishWorkCountResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.PublishWorkCount(ctx, req)
 }

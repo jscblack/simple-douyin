@@ -1644,12 +1644,508 @@ func (p *PublishVideoInfoResponse) Field3DeepEqual(src *common.Video) bool {
 	return true
 }
 
+type PublishWorkCountRequest struct {
+	UserId int64 `thrift:"user_id,1,required" frugal:"1,required,i64" json:"user_id"`
+}
+
+func NewPublishWorkCountRequest() *PublishWorkCountRequest {
+	return &PublishWorkCountRequest{}
+}
+
+func (p *PublishWorkCountRequest) InitDefault() {
+	*p = PublishWorkCountRequest{}
+}
+
+func (p *PublishWorkCountRequest) GetUserId() (v int64) {
+	return p.UserId
+}
+func (p *PublishWorkCountRequest) SetUserId(val int64) {
+	p.UserId = val
+}
+
+var fieldIDToName_PublishWorkCountRequest = map[int16]string{
+	1: "user_id",
+}
+
+func (p *PublishWorkCountRequest) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+	var issetUserId bool = false
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetUserId = true
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	if !issetUserId {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_PublishWorkCountRequest[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_PublishWorkCountRequest[fieldId]))
+}
+
+func (p *PublishWorkCountRequest) ReadField1(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		p.UserId = v
+	}
+	return nil
+}
+
+func (p *PublishWorkCountRequest) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("PublishWorkCountRequest"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *PublishWorkCountRequest) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("user_id", thrift.I64, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.UserId); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *PublishWorkCountRequest) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("PublishWorkCountRequest(%+v)", *p)
+}
+
+func (p *PublishWorkCountRequest) DeepEqual(ano *PublishWorkCountRequest) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.UserId) {
+		return false
+	}
+	return true
+}
+
+func (p *PublishWorkCountRequest) Field1DeepEqual(src int64) bool {
+
+	if p.UserId != src {
+		return false
+	}
+	return true
+}
+
+type PublishWorkCountResponse struct {
+	StatusCode int32   `thrift:"status_code,1,required" frugal:"1,required,i32" json:"status_code"`
+	StatusMsg  *string `thrift:"status_msg,2,optional" frugal:"2,optional,string" json:"status_msg,omitempty"`
+	WorkCount  *int64  `thrift:"work_count,3,optional" frugal:"3,optional,i64" json:"work_count,omitempty"`
+}
+
+func NewPublishWorkCountResponse() *PublishWorkCountResponse {
+	return &PublishWorkCountResponse{}
+}
+
+func (p *PublishWorkCountResponse) InitDefault() {
+	*p = PublishWorkCountResponse{}
+}
+
+func (p *PublishWorkCountResponse) GetStatusCode() (v int32) {
+	return p.StatusCode
+}
+
+var PublishWorkCountResponse_StatusMsg_DEFAULT string
+
+func (p *PublishWorkCountResponse) GetStatusMsg() (v string) {
+	if !p.IsSetStatusMsg() {
+		return PublishWorkCountResponse_StatusMsg_DEFAULT
+	}
+	return *p.StatusMsg
+}
+
+var PublishWorkCountResponse_WorkCount_DEFAULT int64
+
+func (p *PublishWorkCountResponse) GetWorkCount() (v int64) {
+	if !p.IsSetWorkCount() {
+		return PublishWorkCountResponse_WorkCount_DEFAULT
+	}
+	return *p.WorkCount
+}
+func (p *PublishWorkCountResponse) SetStatusCode(val int32) {
+	p.StatusCode = val
+}
+func (p *PublishWorkCountResponse) SetStatusMsg(val *string) {
+	p.StatusMsg = val
+}
+func (p *PublishWorkCountResponse) SetWorkCount(val *int64) {
+	p.WorkCount = val
+}
+
+var fieldIDToName_PublishWorkCountResponse = map[int16]string{
+	1: "status_code",
+	2: "status_msg",
+	3: "work_count",
+}
+
+func (p *PublishWorkCountResponse) IsSetStatusMsg() bool {
+	return p.StatusMsg != nil
+}
+
+func (p *PublishWorkCountResponse) IsSetWorkCount() bool {
+	return p.WorkCount != nil
+}
+
+func (p *PublishWorkCountResponse) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+	var issetStatusCode bool = false
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.I32 {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetStatusCode = true
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 3:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	if !issetStatusCode {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_PublishWorkCountResponse[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+RequiredFieldNotSetError:
+	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_PublishWorkCountResponse[fieldId]))
+}
+
+func (p *PublishWorkCountResponse) ReadField1(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return err
+	} else {
+		p.StatusCode = v
+	}
+	return nil
+}
+
+func (p *PublishWorkCountResponse) ReadField2(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.StatusMsg = &v
+	}
+	return nil
+}
+
+func (p *PublishWorkCountResponse) ReadField3(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		p.WorkCount = &v
+	}
+	return nil
+}
+
+func (p *PublishWorkCountResponse) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("PublishWorkCountResponse"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField3(oprot); err != nil {
+			fieldId = 3
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *PublishWorkCountResponse) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("status_code", thrift.I32, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI32(p.StatusCode); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *PublishWorkCountResponse) writeField2(oprot thrift.TProtocol) (err error) {
+	if p.IsSetStatusMsg() {
+		if err = oprot.WriteFieldBegin("status_msg", thrift.STRING, 2); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteString(*p.StatusMsg); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *PublishWorkCountResponse) writeField3(oprot thrift.TProtocol) (err error) {
+	if p.IsSetWorkCount() {
+		if err = oprot.WriteFieldBegin("work_count", thrift.I64, 3); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := oprot.WriteI64(*p.WorkCount); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *PublishWorkCountResponse) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("PublishWorkCountResponse(%+v)", *p)
+}
+
+func (p *PublishWorkCountResponse) DeepEqual(ano *PublishWorkCountResponse) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.StatusCode) {
+		return false
+	}
+	if !p.Field2DeepEqual(ano.StatusMsg) {
+		return false
+	}
+	if !p.Field3DeepEqual(ano.WorkCount) {
+		return false
+	}
+	return true
+}
+
+func (p *PublishWorkCountResponse) Field1DeepEqual(src int32) bool {
+
+	if p.StatusCode != src {
+		return false
+	}
+	return true
+}
+func (p *PublishWorkCountResponse) Field2DeepEqual(src *string) bool {
+
+	if p.StatusMsg == src {
+		return true
+	} else if p.StatusMsg == nil || src == nil {
+		return false
+	}
+	if strings.Compare(*p.StatusMsg, *src) != 0 {
+		return false
+	}
+	return true
+}
+func (p *PublishWorkCountResponse) Field3DeepEqual(src *int64) bool {
+
+	if p.WorkCount == src {
+		return true
+	} else if p.WorkCount == nil || src == nil {
+		return false
+	}
+	if *p.WorkCount != *src {
+		return false
+	}
+	return true
+}
+
 type PublishService interface {
 	PublishAction(ctx context.Context, req *PublishActionRequest) (r *PublishActionResponse, err error)
 
 	PublishList(ctx context.Context, req *PublishListRequest) (r *PublishListResponse, err error)
 
 	PublishVideoInfo(ctx context.Context, req *PublishVideoInfoRequest) (r *PublishVideoInfoResponse, err error)
+
+	PublishWorkCount(ctx context.Context, req *PublishWorkCountRequest) (r *PublishWorkCountResponse, err error)
 }
 
 type PublishServiceClient struct {
@@ -1705,6 +2201,15 @@ func (p *PublishServiceClient) PublishVideoInfo(ctx context.Context, req *Publis
 	}
 	return _result.GetSuccess(), nil
 }
+func (p *PublishServiceClient) PublishWorkCount(ctx context.Context, req *PublishWorkCountRequest) (r *PublishWorkCountResponse, err error) {
+	var _args PublishServicePublishWorkCountArgs
+	_args.Req = req
+	var _result PublishServicePublishWorkCountResult
+	if err = p.Client_().Call(ctx, "PublishWorkCount", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
 
 type PublishServiceProcessor struct {
 	processorMap map[string]thrift.TProcessorFunction
@@ -1729,6 +2234,7 @@ func NewPublishServiceProcessor(handler PublishService) *PublishServiceProcessor
 	self.AddToProcessorMap("PublishAction", &publishServiceProcessorPublishAction{handler: handler})
 	self.AddToProcessorMap("PublishList", &publishServiceProcessorPublishList{handler: handler})
 	self.AddToProcessorMap("PublishVideoInfo", &publishServiceProcessorPublishVideoInfo{handler: handler})
+	self.AddToProcessorMap("PublishWorkCount", &publishServiceProcessorPublishWorkCount{handler: handler})
 	return self
 }
 func (p *PublishServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -1876,6 +2382,54 @@ func (p *publishServiceProcessorPublishVideoInfo) Process(ctx context.Context, s
 		result.Success = retval
 	}
 	if err2 = oprot.WriteMessageBegin("PublishVideoInfo", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type publishServiceProcessorPublishWorkCount struct {
+	handler PublishService
+}
+
+func (p *publishServiceProcessorPublishWorkCount) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := PublishServicePublishWorkCountArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("PublishWorkCount", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := PublishServicePublishWorkCountResult{}
+	var retval *PublishWorkCountResponse
+	if retval, err2 = p.handler.PublishWorkCount(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing PublishWorkCount: "+err2.Error())
+		oprot.WriteMessageBegin("PublishWorkCount", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("PublishWorkCount", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -2924,6 +3478,352 @@ func (p *PublishServicePublishVideoInfoResult) DeepEqual(ano *PublishServicePubl
 }
 
 func (p *PublishServicePublishVideoInfoResult) Field0DeepEqual(src *PublishVideoInfoResponse) bool {
+
+	if !p.Success.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
+type PublishServicePublishWorkCountArgs struct {
+	Req *PublishWorkCountRequest `thrift:"req,1" frugal:"1,default,PublishWorkCountRequest" json:"req"`
+}
+
+func NewPublishServicePublishWorkCountArgs() *PublishServicePublishWorkCountArgs {
+	return &PublishServicePublishWorkCountArgs{}
+}
+
+func (p *PublishServicePublishWorkCountArgs) InitDefault() {
+	*p = PublishServicePublishWorkCountArgs{}
+}
+
+var PublishServicePublishWorkCountArgs_Req_DEFAULT *PublishWorkCountRequest
+
+func (p *PublishServicePublishWorkCountArgs) GetReq() (v *PublishWorkCountRequest) {
+	if !p.IsSetReq() {
+		return PublishServicePublishWorkCountArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *PublishServicePublishWorkCountArgs) SetReq(val *PublishWorkCountRequest) {
+	p.Req = val
+}
+
+var fieldIDToName_PublishServicePublishWorkCountArgs = map[int16]string{
+	1: "req",
+}
+
+func (p *PublishServicePublishWorkCountArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *PublishServicePublishWorkCountArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_PublishServicePublishWorkCountArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *PublishServicePublishWorkCountArgs) ReadField1(iprot thrift.TProtocol) error {
+	p.Req = NewPublishWorkCountRequest()
+	if err := p.Req.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PublishServicePublishWorkCountArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("PublishWorkCount_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *PublishServicePublishWorkCountArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Req.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *PublishServicePublishWorkCountArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("PublishServicePublishWorkCountArgs(%+v)", *p)
+}
+
+func (p *PublishServicePublishWorkCountArgs) DeepEqual(ano *PublishServicePublishWorkCountArgs) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field1DeepEqual(ano.Req) {
+		return false
+	}
+	return true
+}
+
+func (p *PublishServicePublishWorkCountArgs) Field1DeepEqual(src *PublishWorkCountRequest) bool {
+
+	if !p.Req.DeepEqual(src) {
+		return false
+	}
+	return true
+}
+
+type PublishServicePublishWorkCountResult struct {
+	Success *PublishWorkCountResponse `thrift:"success,0,optional" frugal:"0,optional,PublishWorkCountResponse" json:"success,omitempty"`
+}
+
+func NewPublishServicePublishWorkCountResult() *PublishServicePublishWorkCountResult {
+	return &PublishServicePublishWorkCountResult{}
+}
+
+func (p *PublishServicePublishWorkCountResult) InitDefault() {
+	*p = PublishServicePublishWorkCountResult{}
+}
+
+var PublishServicePublishWorkCountResult_Success_DEFAULT *PublishWorkCountResponse
+
+func (p *PublishServicePublishWorkCountResult) GetSuccess() (v *PublishWorkCountResponse) {
+	if !p.IsSetSuccess() {
+		return PublishServicePublishWorkCountResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *PublishServicePublishWorkCountResult) SetSuccess(x interface{}) {
+	p.Success = x.(*PublishWorkCountResponse)
+}
+
+var fieldIDToName_PublishServicePublishWorkCountResult = map[int16]string{
+	0: "success",
+}
+
+func (p *PublishServicePublishWorkCountResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *PublishServicePublishWorkCountResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_PublishServicePublishWorkCountResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *PublishServicePublishWorkCountResult) ReadField0(iprot thrift.TProtocol) error {
+	p.Success = NewPublishWorkCountResponse()
+	if err := p.Success.Read(iprot); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PublishServicePublishWorkCountResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("PublishWorkCount_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *PublishServicePublishWorkCountResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *PublishServicePublishWorkCountResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("PublishServicePublishWorkCountResult(%+v)", *p)
+}
+
+func (p *PublishServicePublishWorkCountResult) DeepEqual(ano *PublishServicePublishWorkCountResult) bool {
+	if p == ano {
+		return true
+	} else if p == nil || ano == nil {
+		return false
+	}
+	if !p.Field0DeepEqual(ano.Success) {
+		return false
+	}
+	return true
+}
+
+func (p *PublishServicePublishWorkCountResult) Field0DeepEqual(src *PublishWorkCountResponse) bool {
 
 	if !p.Success.DeepEqual(src) {
 		return false
