@@ -13,9 +13,9 @@ const (
 	// UserServiceName         = "demouser"
 	// CPURateLimit    float64 = 80.0
 	// DefaultLimit            = 10
-	EtcdAddressWithPort = "103.91.211.138" + ":20163"
-	PostgresDSN         = "host=172.19.0.1 user=simple_douyin password=1qaz0plm dbname=simple_douyin_db port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-	RedisAddress        = "172.19.0.1" + ":6379"
+	EtcdAddressWithPort = "127.0.0.1" + ":2379"
+	PostgresDSN         = "host=127.0.0.1 user=simple_douyin password=1qaz0plm dbname=simple_douyin_db port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	RedisAddress        = "127.0.0.1" + ":6379"
 	RedisPassword       = "1qaz0plm"
 	ServiceAddress      = "127.0.0.1"
 
@@ -36,8 +36,9 @@ const (
 	MessageServiceName  = "message"
 	MessageServicePort  = "7007"
 
-	MaxFeedNum = 30
-	MaxListNum = 30
+	MaxFeedNum   = 30
+	MaxListNum   = 30
+	MaxVideoSize = 52428800 // 50MB
 
 	UserRDB     = 0
 	PublishRDB  = 1
