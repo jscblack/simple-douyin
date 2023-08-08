@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
@@ -9,9 +10,15 @@ import (
 	"net"
 	feed "simple-douyin/kitex_gen/feed/feedservice"
 	"simple-douyin/pkg/constant"
+	"simple-douyin/service/feed/client"
+	"simple-douyin/service/feed/dal"
 )
 
 func main() {
+	// init db
+	dal.Init(context.Background())
+	// init rpc client
+	client.Init(context.Background())
 	r, err := etcd.NewEtcdRegistry([]string{constant.EtcdAddressWithPort})
 	if err != nil {
 		servLog.Fatal(err)

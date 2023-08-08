@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
@@ -9,9 +10,15 @@ import (
 	"net"
 	publish "simple-douyin/kitex_gen/publish/publishservice"
 	"simple-douyin/pkg/constant"
+	"simple-douyin/service/publish/client"
+	"simple-douyin/service/publish/dal"
 )
 
 func main() {
+	// init db
+	dal.Init(context.Background())
+	// init rpc client
+	client.Init(context.Background())
 	r, err := etcd.NewEtcdRegistry([]string{constant.EtcdAddressWithPort})
 	if err != nil {
 		servLog.Fatal(err)
