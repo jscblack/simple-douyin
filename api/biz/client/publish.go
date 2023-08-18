@@ -42,7 +42,7 @@ func InitPublishClient() {
 }
 
 func PublishAction(ctx context.Context, req *kitexPublish.PublishActionRequest) (*bizPublish.PublishActionResponse, error) {
-	resp, err := publishClient.PublishAction(ctx, req, callopt.WithRPCTimeout(3*time.Second))
+	resp, err := publishClient.PublishAction(ctx, req, callopt.WithRPCTimeout(time.Minute))
 	if err != nil {
 		apiLog.Error(err)
 		return nil, err
