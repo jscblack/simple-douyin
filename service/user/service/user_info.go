@@ -67,7 +67,7 @@ func fillUserInfo(ctx context.Context, comUser *common.User, req *user.UserInfoR
 
 func UserInfo(ctx context.Context, req *user.UserInfoRequest, resp *user.UserInfoResponse) error {
 	// 实际业务
-	servLog.Info("User Info Get: ", *req.UserId, req.ToUserId)
+	servLog.Info("User Info Get: ", req.UserId, req.ToUserId)
 
 	// 检查redis缓存
 	cacheUser, err := dal.RDB.Get(ctx, strconv.FormatInt(req.ToUserId, 10)).Result()
