@@ -33,7 +33,9 @@ func QueryEarliestTimeFromVideoList(ctx context.Context, videoList []*common.Vid
 	servLog.Info("QueryEarliestTimeFromVideoList begin.")
 	videoId := videoList[len(videoList)-1].Id
 	servLog.Info("video id: ", videoId)
-	cacheVideo, err := RDB.Get(ctx, strconv.FormatInt(videoId, 10)).Result()
+
+	videoKey := "v" + strconv.FormatInt(videoId, 10)
+	cacheVideo, err := RDB.Get(ctx, videoKey).Result()
 	servLog.Info(cacheVideo)
 	servLog.Info(err)
 	if err != nil {
@@ -50,7 +52,7 @@ func QueryEarliestTimeFromVideoList(ctx context.Context, videoList []*common.Vid
 		if err != nil {
 			return 0, err
 		}
-		err = RDB.Set(ctx, strconv.FormatInt(videoId, 10), videoJson, 0).Err()
+		err = RDB.Set(ctx, videoKey, videoJson, 0).Err()
 		if err != nil {
 			servLog.Error(err)
 			return 0, err

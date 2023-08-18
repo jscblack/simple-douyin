@@ -7,6 +7,7 @@ import (
 	"simple-douyin/kitex_gen/common"
 	"simple-douyin/kitex_gen/favorite"
 	"simple-douyin/kitex_gen/publish"
+	"simple-douyin/kitex_gen/user"
 	"simple-douyin/service/publish/client"
 	"simple-douyin/service/publish/dal"
 )
@@ -30,18 +31,10 @@ func PublishVideoInfo(ctx context.Context, req *publish.PublishVideoInfoRequest)
 }
 
 func fillVideoInfo(ctx context.Context, dbVideo *dal.Video) (*common.Video, error) {
-	// 这里调用会报空指针异常
-	// servLog.Info("Rpc userInfo.")
-	//userResp, err := client.UserClient.UserInfo(ctx, &user.UserInfoRequest{ToUserId: dbVideo.UserId})
-	//if err != nil {
-	//	return nil, err
-	//}
-	author := common.User{
-		Id:   1,
-		Name: "Koschei",
-		// FollowCount:   10022,
-		// FollowerCount: 3,
-		IsFollow: true,
+	servLog.Info("Rpc userInfo.")
+	userResp, err := client.UserClient.UserInfo(ctx, &user.UserInfoRequest{ToUserId: dbVideo.UserId})
+	if err != nil {
+		return nil, err
 	}
 
 	servLog.Info("Rpc favored_count.")
@@ -64,7 +57,7 @@ func fillVideoInfo(ctx context.Context, dbVideo *dal.Video) (*common.Video, erro
 
 	return &common.Video{
 		Id:            dbVideo.ID,
-		Author:        &author, // userResp.User,
+		Author:        userResp.User,
 		PlayUrl:       dbVideo.PlayUrl,
 		CoverUrl:      dbVideo.CoverUrl,
 		FavoriteCount: favResp.GetFavoredCount(),

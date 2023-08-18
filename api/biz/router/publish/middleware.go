@@ -30,6 +30,7 @@ func _actionMw() []app.HandlerFunc {
 func _publishactionMw() []app.HandlerFunc {
 	// token未找到，但是客户端发送了...?
 	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
+	// return nil
 }
 
 func _listMw() []app.HandlerFunc {
