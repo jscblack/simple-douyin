@@ -20,5 +20,5 @@ struct FeedResponse {
 }
 
 service FeedService {
-    FeedResponse Feed(1: FeedRequest req) (api.get = "/douyin/feed/"),
+    FeedResponse Feed(1: FeedRequest req) (api.get = "/douyin/feed"),
 }

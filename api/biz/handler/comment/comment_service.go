@@ -27,7 +27,7 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 }
 
 // CommentList .
-// @router /douyin/comment/list/ [POST]
+// @router /douyin/comment/list/ [GET]
 func CommentList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req comment.CommentListRequest

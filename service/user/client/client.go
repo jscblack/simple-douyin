@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"simple-douyin/kitex_gen/favorite/favoriteservice"
+	"simple-douyin/kitex_gen/publish/publishservice"
 	"simple-douyin/kitex_gen/relation/relationservice"
 	"simple-douyin/pkg/constant"
 	"time"
@@ -14,6 +15,7 @@ import (
 
 var FavoriteClient favoriteservice.Client // interface from RPC IDL
 var RelationClient relationservice.Client // interface from RPC IDL
+var PublishClient publishservice.Client   // interface from RPC IDL
 // 初始化，创建rpc client
 func Init(ctx context.Context) {
 	var err error
@@ -54,4 +56,21 @@ func Init(ctx context.Context) {
 	}
 	RelationClient = c2
 	servLog.Info("Relation client initialized")
+
+	c3, err := publishservice.NewClient(
+		constant.PublishServiceName,
+		// client.WithMiddleware(middleware.CommonMiddleware),
+		// client.WithInstanceMW(middleware.ClientMiddleware),
+		client.WithMuxConnection(1),                    // mux
+		client.WithRPCTimeout(3*time.Second),           // rpc timeout
+		client.WithConnectTimeout(50*time.Millisecond), // conn timeout
+		// client.WithFailureRetry(retry.NewFailurePolicy()), // retry
+		// client.WithSuite(trace.NewDefaultClientSuite()),   // tracer
+		client.WithResolver(r), // resolver
+	)
+	if err != nil {
+		servLog.Fatal(err)
+	}
+	PublishClient = c3
+	servLog.Info("Publish client initialized")
 }

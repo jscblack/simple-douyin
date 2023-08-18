@@ -2,10 +2,11 @@ package service
 
 import (
 	"context"
-	servLog "github.com/prometheus/common/log"
 	"simple-douyin/kitex_gen/common"
 	publish "simple-douyin/kitex_gen/publish"
 	"simple-douyin/service/publish/dal"
+
+	servLog "github.com/prometheus/common/log"
 )
 
 // PublishList implements the PublishServiceImpl interface.
@@ -21,7 +22,7 @@ func PublishList(ctx context.Context, req *publish.PublishListRequest) (resp *pu
 		return nil, err
 	}
 	for _, dbVideo := range dbVideoList {
-		video, err := fillVideoInfo(ctx, dbVideo)
+		video, err := fillVideoInfo(ctx, dbVideo, &req.FromUserId)
 		if err != nil {
 			return nil, err
 		}

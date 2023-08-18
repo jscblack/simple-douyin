@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	servLog "github.com/prometheus/common/log"
 	"simple-douyin/kitex_gen/comment"
 	"simple-douyin/kitex_gen/common"
 	"simple-douyin/kitex_gen/favorite"
@@ -10,6 +9,8 @@ import (
 	"simple-douyin/kitex_gen/user"
 	"simple-douyin/service/publish/client"
 	"simple-douyin/service/publish/dal"
+
+	servLog "github.com/prometheus/common/log"
 )
 
 func PublishVideoInfo(ctx context.Context, req *publish.PublishVideoInfoRequest) (resp *publish.PublishVideoInfoResponse, err error) {
@@ -23,34 +24,44 @@ func PublishVideoInfo(ctx context.Context, req *publish.PublishVideoInfoRequest)
 		return nil, err
 	}
 	resp = publish.NewPublishVideoInfoResponse()
-	resp.Video, err = fillVideoInfo(ctx, dbVideo)
+	resp.Video, err = fillVideoInfo(ctx, dbVideo, req.UserId)
 	if err != nil {
 		return nil, err
 	}
 	return
 }
 
-func fillVideoInfo(ctx context.Context, dbVideo *dal.Video) (*common.Video, error) {
+func fillVideoInfo(ctx context.Context, dbVideo *dal.Video, fromUserId *int64) (*common.Video, error) {
 	servLog.Info("Rpc userInfo.")
-	userResp, err := client.UserClient.UserInfo(ctx, &user.UserInfoRequest{ToUserId: dbVideo.UserId})
+	userResp, err := client.UserClient.UserInfo(ctx, &user.UserInfoRequest{
+		UserId:   fromUserId,
+		ToUserId: dbVideo.UserId,
+	})
 	if err != nil {
 		return nil, err
 	}
 
 	servLog.Info("Rpc favored_count.")
-	favResp, err := client.FavoriteClient.VideoFavoredCount(ctx, &favorite.VideoFavoredCountRequest{dbVideo.ID})
+	favResp, err := client.FavoriteClient.VideoFavoredCount(ctx, &favorite.VideoFavoredCountRequest{
+		VideoId: dbVideo.ID,
+	})
 	if err != nil {
 		return nil, err
 	}
 
 	servLog.Info("Rpc comment_count.")
-	comResp, err := client.CommentClient.CommentCount(ctx, &comment.CommentCountRequest{dbVideo.ID})
+	comResp, err := client.CommentClient.CommentCount(ctx, &comment.CommentCountRequest{
+		VideoId: dbVideo.ID,
+	})
 	if err != nil {
 		return nil, err
 	}
 
 	servLog.Info("Rpc is_favored.")
-	isFavResp, err := client.FavoriteClient.IsFavor(ctx, &favorite.IsFavorRequest{dbVideo.UserId, dbVideo.ID})
+	isFavResp, err := client.FavoriteClient.IsFavor(ctx, &favorite.IsFavorRequest{
+		UserId:  dbVideo.UserId,
+		VideoId: dbVideo.ID,
+	})
 	if err != nil {
 		return nil, err
 	}

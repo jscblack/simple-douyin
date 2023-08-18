@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	servLog "github.com/prometheus/common/log"
 	"simple-douyin/kitex_gen/comment"
 	"simple-douyin/kitex_gen/common"
 	"simple-douyin/kitex_gen/favorite"
@@ -10,6 +9,8 @@ import (
 	"simple-douyin/kitex_gen/user"
 	"simple-douyin/service/feed/client"
 	"simple-douyin/service/feed/dal"
+
+	servLog "github.com/prometheus/common/log"
 )
 
 func Feed(ctx context.Context, req *feed.FeedRequest) (*feed.FeedResponse, error) {
@@ -25,7 +26,7 @@ func Feed(ctx context.Context, req *feed.FeedRequest) (*feed.FeedResponse, error
 	}
 
 	for _, dbVideo := range dbVideoList {
-		video, err := fillVideoInfo(ctx, dbVideo)
+		video, err := fillVideoInfo(ctx, dbVideo, req.UserId)
 		if err != nil {
 			return nil, err
 		}
@@ -49,9 +50,12 @@ func Feed(ctx context.Context, req *feed.FeedRequest) (*feed.FeedResponse, error
 	}, nil
 }
 
-func fillVideoInfo(ctx context.Context, dbVideo *dal.Video) (*common.Video, error) {
+func fillVideoInfo(ctx context.Context, dbVideo *dal.Video, userId *int64) (*common.Video, error) {
 	servLog.Info("Rpc userInfo.")
-	userResp, err := client.UserClient.UserInfo(ctx, &user.UserInfoRequest{ToUserId: dbVideo.UserId})
+	userResp, err := client.UserClient.UserInfo(ctx, &user.UserInfoRequest{
+		UserId:   userId,
+		ToUserId: dbVideo.UserId,
+	})
 	servLog.Info(userResp)
 	if err != nil {
 		return nil, err

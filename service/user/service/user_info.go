@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"simple-douyin/kitex_gen/common"
 	"simple-douyin/kitex_gen/favorite"
+	"simple-douyin/kitex_gen/publish"
 	"simple-douyin/kitex_gen/relation"
 	"simple-douyin/kitex_gen/user"
 	"simple-douyin/service/user/client"
@@ -41,13 +42,17 @@ func fillUserInfo(ctx context.Context, comUser *common.User, req *user.UserInfoR
 	if err != nil {
 		return err
 	}
+	workCountResp, err := client.PublishClient.PublishWorkCount(ctx, &publish.PublishWorkCountRequest{
+		UserId: comUser.Id,
+	})
+	if err != nil {
+		return err
+	}
 	comUser.FollowCount = followCountResp.FollowCount
 	comUser.FollowerCount = followerCountResp.FollowerCount
 	comUser.FavoriteCount = favoriteCountResp.FavorCount
 	comUser.TotalFavorited = totalFavoritedResp.FavoredCount
-
-	// TODO: 获取作品数
-	comUser.WorkCount = new(int64)
+	comUser.WorkCount = workCountResp.WorkCount
 
 	// 获取关注信息
 	if req.UserId == nil {

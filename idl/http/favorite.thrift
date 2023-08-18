@@ -28,5 +28,5 @@ struct FavoriteListResponse {
 
 service FavoriteService {
     FavoriteActionResponse FavoriteAction(1: FavoriteActionRequest req) (api.post = "/douyin/favorite/action/"),
-    FavoriteListResponse FavoriteList(1: FavoriteListRequest req) (api.post = "/douyin/favorite/list/"),
+    FavoriteListResponse FavoriteList(1: FavoriteListRequest req) (api.get = "/douyin/favorite/list/"),
 }

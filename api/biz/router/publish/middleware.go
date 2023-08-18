@@ -3,8 +3,9 @@
 package publish
 
 import (
-	"github.com/cloudwego/hertz/pkg/app"
 	mw "simple-douyin/api/biz/middleware"
+
+	"github.com/cloudwego/hertz/pkg/app"
 )
 
 func rootMw() []app.HandlerFunc {

@@ -19,9 +19,6 @@ func Register(r *server.Hertz) {
 	root := r.Group("/", rootMw()...)
 	{
 		_douyin := root.Group("/douyin", _douyinMw()...)
-		{
-			_feed := _douyin.Group("/feed", _feedMw()...)
-			_feed.GET("/", append(_feed0Mw(), feed.Feed)...)
-		}
+		_douyin.GET("/feed", append(_feedMw(), feed.Feed)...)
 	}
 }

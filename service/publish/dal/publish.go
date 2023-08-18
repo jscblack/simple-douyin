@@ -3,10 +3,11 @@ package dal
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	servLog "github.com/prometheus/common/log"
 	"simple-douyin/pkg/constant"
+	"simple-douyin/service/feed/dal"
 	"strconv"
+
+	servLog "github.com/prometheus/common/log"
 )
 
 func QueryVideoFromVideoId(ctx context.Context, videoId int64) (*Video, error) {
@@ -22,7 +23,7 @@ func QueryVideoFromVideoId(ctx context.Context, videoId int64) (*Video, error) {
 		// 缓存不存在
 		servLog.Warn("Video Info Not Found In Cache: ", videoId)
 		// query from db.
-		if err := DB.Where("id = ?", videoId).Take(&video).Error; err != nil {
+		if err := DB.Model(&dal.Video{}).Where("id = ?", videoId).Take(&video).Error; err != nil {
 			servLog.Error("QueryVideoFromVideoId err", err)
 			return nil, err
 		}
@@ -58,7 +59,7 @@ func QueryVideoListFromUserId(ctx context.Context, userId int64) ([]*Video, erro
 		servLog.Error("userId < 0!")
 		return videoList, nil
 	}
-	if err := DB.Where("user_id = ?", userId).Order("id desc").Limit(constant.MaxListNum).Find(&videoList).Error; err != nil {
+	if err := DB.Model(&dal.Video{}).Where("user_id = ?", userId).Order("id desc").Limit(constant.MaxListNum).Find(&videoList).Error; err != nil {
 		servLog.Error("QueryVideoFromUserId err", err)
 		return videoList, err
 	}
@@ -80,7 +81,8 @@ func QueryWorkCountFromUserId(ctx context.Context, userId int64) (int64, error) 
 		// 缓存不存在
 		servLog.Warn("Work Count Not Found In Cache: ", userId)
 		// query from db.
-		if err := DB.Where("user_id = ?", userId).Count(&workCount).Error; err != nil {
+
+		if err := DB.Model(&dal.Video{}).Where("user_id = ?", userId).Count(&workCount).Error; err != nil {
 			servLog.Error("QueryWorkCountFromUserId err", err)
 			return workCount, err
 		}
@@ -109,11 +111,11 @@ func QueryWorkCountFromUserId(ctx context.Context, userId int64) (int64, error) 
 	return workCount, nil
 }
 
-func WriteVideoInfoIntoDB(ctx context.Context, userId int64, title string, path string) error {
+func WriteVideoInfoIntoDB(ctx context.Context, userId int64, title string, playUrl string, coverUrl string) error {
 	video := &Video{
 		UserId:   userId,
-		PlayUrl:  fmt.Sprintf("http://simple-douyin-oos.test.upcdn.net/%s", path),
-		CoverUrl: fmt.Sprintf("https://picsum.photos/seed/%s/500/200", title),
+		PlayUrl:  playUrl,
+		CoverUrl: coverUrl,
 		Title:    title,
 	}
 	result := DB.Create(&video)

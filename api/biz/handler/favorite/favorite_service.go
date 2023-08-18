@@ -27,7 +27,7 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 }
 
 // FavoriteList .
-// @router /douyin/favorite/list/ [POST]
+// @router /douyin/favorite/list/ [GET]
 func FavoriteList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req favorite.FavoriteListRequest

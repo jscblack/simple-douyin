@@ -15,9 +15,9 @@ type FavoriteServiceImpl struct{}
 func (s *FavoriteServiceImpl) FavoriteAddAction(ctx context.Context, req *favorite.FavoriteAddActionRequest) (resp *favorite.FavoriteAddActionResponse, err error) {
 	// TODO: Your code here...
 	// 不要忘记更新redis中的数据
-	// 取出redis的dal.UserCounter，更新FavorCount和FavoredCount
+	// 取出redis的dal.UserCounter，更新FavorCount和FavoredCount。如果对应的量为-1，请直接略过，如果不为-1，请+1
 	// 取出redis的dal.VideoCounter，更新FavoredCount
-	// 如果redis中没有对应的counter，处理逻辑参见./service/favorite_count.go
+	// 如果redis中没有对应的counter，直接略过更新redis的过程
 	// 先更新mysql，再更新redis，特别需要UserCounter中有两个量，可能值为-1，表示未初始化
 	return
 }
@@ -28,7 +28,7 @@ func (s *FavoriteServiceImpl) FavoriteDelAction(ctx context.Context, req *favori
 	// 不要忘记更新redis中的数据
 	// 取出redis的dal.UserCounter，更新FavorCount和FavoredCount
 	// 取出redis的dal.VideoCounter，更新FavoredCount
-	// 如果redis中没有对应的counter，处理逻辑参见./service/favorite_count.go
+	// 如果redis中没有对应的counter，直接略过更新redis的过程
 	// 先更新mysql，再更新redis，特别需要UserCounter中有两个量，可能值为-1，表示未初始化
 	return
 }

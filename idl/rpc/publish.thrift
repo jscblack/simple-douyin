@@ -18,7 +18,8 @@ struct PublishActionResponse {
 }
 
 struct PublishListRequest {
-    1: required i64 user_id, // 用户id
+    1: required i64 user_id,      // 被查询者用户id
+    2: required i64 from_user_id, // 发起查询者用户id
 }
 
 struct PublishListResponse {

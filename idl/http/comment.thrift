@@ -31,5 +31,5 @@ struct CommentListResponse {
 
 service CommentService {
     CommentActionResponse CommentAction(1: CommentActionRequest req) (api.post = "/douyin/comment/action/"),
-    CommentListResponse CommentList(1: CommentListRequest req) (api.post = "/douyin/comment/list/"),
+    CommentListResponse CommentList(1: CommentListRequest req) (api.get = "/douyin/comment/list/"),
 }

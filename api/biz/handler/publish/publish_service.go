@@ -4,15 +4,16 @@ package publish
 
 import (
 	"context"
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	"github.com/hertz-contrib/jwt"
-	apiLog "github.com/prometheus/common/log"
 	"io"
 	"simple-douyin/api/biz/client"
 	mw "simple-douyin/api/biz/middleware"
 	bizPublish "simple-douyin/api/biz/model/publish"
 	kitexPublish "simple-douyin/kitex_gen/publish"
+
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"github.com/hertz-contrib/jwt"
+	apiLog "github.com/prometheus/common/log"
 )
 
 // PublishAction .
@@ -150,10 +151,22 @@ func PublishList(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusBadRequest, resp)
 		return
 	}
-
+	// 通过中间件获取用户id
+	loggedClaims, exist := c.Get("JWT_PAYLOAD")
+	if !exist {
+		resp.StatusCode = 57001
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "Unauthorized"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
+	userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
 	// 该接口需要登录态，需要确认具体身份，仅在路由时鉴权即可
 	req := kitexPublish.PublishListRequest{
-		UserId: bizReq.UserID,
+		UserId:     bizReq.UserID,
+		FromUserId: userID,
 	}
 
 	resp, err = client.PublishList(ctx, &req)
