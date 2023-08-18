@@ -122,24 +122,3 @@ func (s *UserServiceImpl) UserInfo(ctx context.Context, req *user.UserInfoReques
 	// ...
 	return resp, nil
 }
-
-// UpdateUserCounter implements the UserServiceImpl interface.
-func (s *UserServiceImpl) UpdateUserCounter(ctx context.Context, req *user.UpdateUserCounterRequest) (resp *user.UpdateUserCounterResponse, err error) {
-	resp = new(user.UpdateUserCounterResponse)
-	// 前处理校验请求
-	// ...
-	// 实际业务
-	err = service.UpdateUserCounter(ctx, req, resp)
-	if err != nil {
-		resp.StatusCode = 57001
-		if resp.StatusMsg == nil {
-			resp.StatusMsg = new(string)
-		}
-		*resp.StatusMsg = err.Error()
-		servLog.Error(err)
-		return resp, nil
-	}
-	// 后处理返回结果
-	// ...
-	return resp, nil
-}

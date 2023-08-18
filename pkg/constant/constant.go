@@ -19,8 +19,26 @@ const (
 	RedisPassword       = "1qaz0plm"
 	ServiceAddress      = "127.0.0.1"
 
-	PingServiceName = "ping_pong"
-	PingServicePort = "7000"
-	UserServiceName = "user"
-	UserServicePort = "7001"
+	PingServiceName     = "ping_pong"
+	PingServicePort     = "7000"
+	UserServiceName     = "user"
+	UserServicePort     = "7001"
+	FeedServiceName     = "feed"
+	FeedServicePort     = "7002"
+	PublishServiceName  = "publish"
+	PublishServicePort  = "7003"
+	FavoriteServiceName = "favorite"
+	FavoriteServicePort = "7004"
+	CommentServiceName  = "comment"
+	CommentServicePort  = "7005"
+	RelationServiceName = "relation"
+	RelationServicePort = "7006"
+	MessageServiceName  = "message"
+	MessageServicePort  = "7007"
+
+	UserRDB     = 0
+	PublishRDB  = 1
+	FavoriteRDB = 2
+	VideoRDB    = 3
+	RelationRDB = 4
 )

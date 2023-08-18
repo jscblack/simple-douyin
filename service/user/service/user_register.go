@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"crypto/md5"
+	"fmt"
 	"simple-douyin/kitex_gen/user"
 	"simple-douyin/service/user/dal"
 
@@ -16,9 +18,15 @@ func UserRegister(ctx context.Context, req *user.UserRegisterRequest, resp *user
 	if err != nil {
 		return err
 	}
+	// 个性化头像和背景图
+	avatarUrl := fmt.Sprintf("https://api.multiavatar.com/%x.png", md5.Sum([]byte(bcryptPassword)))
+	backgroundUrl := fmt.Sprintf("https://picsum.photos/seed/%s/500/200", req.Username)
 	dalUser := &dal.User{
-		Name:     req.Username,
-		Password: string(bcryptPassword),
+		Name:            req.Username,
+		Password:        string(bcryptPassword),
+		Avatar:          avatarUrl,
+		BackgroundImage: backgroundUrl,
+		Signature:       "这个人很懒，什么都没有留下",
 	}
 
 	result := dal.DB.Create(&dalUser)

@@ -19,10 +19,9 @@ func NewServiceInfo() *kitex.ServiceInfo {
 	serviceName := "UserService"
 	handlerType := (*user.UserService)(nil)
 	methods := map[string]kitex.MethodInfo{
-		"UserRegister":      kitex.NewMethodInfo(userRegisterHandler, newUserServiceUserRegisterArgs, newUserServiceUserRegisterResult, false),
-		"UserLogin":         kitex.NewMethodInfo(userLoginHandler, newUserServiceUserLoginArgs, newUserServiceUserLoginResult, false),
-		"UserInfo":          kitex.NewMethodInfo(userInfoHandler, newUserServiceUserInfoArgs, newUserServiceUserInfoResult, false),
-		"UpdateUserCounter": kitex.NewMethodInfo(updateUserCounterHandler, newUserServiceUpdateUserCounterArgs, newUserServiceUpdateUserCounterResult, false),
+		"UserRegister": kitex.NewMethodInfo(userRegisterHandler, newUserServiceUserRegisterArgs, newUserServiceUserRegisterResult, false),
+		"UserLogin":    kitex.NewMethodInfo(userLoginHandler, newUserServiceUserLoginArgs, newUserServiceUserLoginResult, false),
+		"UserInfo":     kitex.NewMethodInfo(userInfoHandler, newUserServiceUserInfoArgs, newUserServiceUserInfoResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "user",
@@ -92,24 +91,6 @@ func newUserServiceUserInfoResult() interface{} {
 	return user.NewUserServiceUserInfoResult()
 }
 
-func updateUserCounterHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	realArg := arg.(*user.UserServiceUpdateUserCounterArgs)
-	realResult := result.(*user.UserServiceUpdateUserCounterResult)
-	success, err := handler.(user.UserService).UpdateUserCounter(ctx, realArg.Req)
-	if err != nil {
-		return err
-	}
-	realResult.Success = success
-	return nil
-}
-func newUserServiceUpdateUserCounterArgs() interface{} {
-	return user.NewUserServiceUpdateUserCounterArgs()
-}
-
-func newUserServiceUpdateUserCounterResult() interface{} {
-	return user.NewUserServiceUpdateUserCounterResult()
-}
-
 type kClient struct {
 	c client.Client
 }
@@ -145,16 +126,6 @@ func (p *kClient) UserInfo(ctx context.Context, req *user.UserInfoRequest) (r *u
 	_args.Req = req
 	var _result user.UserServiceUserInfoResult
 	if err = p.c.Call(ctx, "UserInfo", &_args, &_result); err != nil {
-		return
-	}
-	return _result.GetSuccess(), nil
-}
-
-func (p *kClient) UpdateUserCounter(ctx context.Context, req *user.UpdateUserCounterRequest) (r *user.UpdateUserCounterResponse, err error) {
-	var _args user.UserServiceUpdateUserCounterArgs
-	_args.Req = req
-	var _result user.UserServiceUpdateUserCounterResult
-	if err = p.c.Call(ctx, "UpdateUserCounter", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
