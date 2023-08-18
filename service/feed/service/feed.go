@@ -7,6 +7,7 @@ import (
 	"simple-douyin/kitex_gen/common"
 	"simple-douyin/kitex_gen/favorite"
 	"simple-douyin/kitex_gen/feed"
+	"simple-douyin/kitex_gen/user"
 	"simple-douyin/service/feed/client"
 	"simple-douyin/service/feed/dal"
 )
@@ -49,18 +50,11 @@ func Feed(ctx context.Context, req *feed.FeedRequest) (*feed.FeedResponse, error
 }
 
 func fillVideoInfo(ctx context.Context, dbVideo *dal.Video) (*common.Video, error) {
-	// 这里调用会报空指针异常
-	// servLog.Info("Rpc userInfo.")
-	//userResp, err := client.UserClient.UserInfo(ctx, &user.UserInfoRequest{ToUserId: dbVideo.UserId})
-	//if err != nil {
-	//	return nil, err
-	//}
-	author := common.User{
-		Id:   1,
-		Name: "Koschei",
-		// FollowCount:   10022,
-		// FollowerCount: 3,
-		IsFollow: true,
+	servLog.Info("Rpc userInfo.")
+	userResp, err := client.UserClient.UserInfo(ctx, &user.UserInfoRequest{ToUserId: dbVideo.UserId})
+	servLog.Info(userResp)
+	if err != nil {
+		return nil, err
 	}
 
 	servLog.Info("Rpc favored_count.")
@@ -83,7 +77,7 @@ func fillVideoInfo(ctx context.Context, dbVideo *dal.Video) (*common.Video, erro
 
 	return &common.Video{
 		Id:            dbVideo.ID,
-		Author:        &author, // userResp.User,
+		Author:        userResp.User,
 		PlayUrl:       dbVideo.PlayUrl,
 		CoverUrl:      dbVideo.CoverUrl,
 		FavoriteCount: favResp.GetFavoredCount(),

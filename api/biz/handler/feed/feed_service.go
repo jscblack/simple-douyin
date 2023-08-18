@@ -21,8 +21,13 @@ func Feed(ctx context.Context, c *app.RequestContext) {
 	resp := new(bizFeed.FeedResponse)
 	err = c.BindAndValidate(&bizReq)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
+		apiLog.Info(err)
+		resp.StatusCode = 57002
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusBadRequest, resp)
 	}
 
 	var userId = new(int64)
@@ -51,21 +56,20 @@ func Feed(ctx context.Context, c *app.RequestContext) {
 				resp.StatusMsg = new(string)
 			}
 			*resp.StatusMsg = "Unauthorized"
-			c.JSON(consts.StatusOK, resp)
+			c.JSON(consts.StatusBadRequest, resp)
 			return
 		}
 		// 用户token失效了也能用feed
-		//_, err = mw.JwtMiddleware.CheckIfTokenExpire(ctx, c)
-		//if err != nil {
-		//	apiLog.Info(err)
-		//	resp.StatusCode = 57002
-		//	if resp.StatusMsg == nil {
-		//		resp.StatusMsg = new(string)
-		//	}
-		//	*resp.StatusMsg = "token expired"
-		//	c.JSON(consts.StatusOK, resp)
-		//	return
-		//}
+		_, err = mw.JwtMiddleware.CheckIfTokenExpire(ctx, c)
+		if err != nil {
+			apiLog.Info(err)
+			resp.StatusCode = 0
+			if resp.StatusMsg == nil {
+				resp.StatusMsg = new(string)
+			}
+			*resp.StatusMsg = "token expired"
+			c.JSON(consts.StatusOK, resp)
+		}
 		claims, err := mw.JwtMiddleware.GetClaimsFromJWT(ctx, c)
 		if err != nil {
 			apiLog.Info(err)
@@ -74,7 +78,7 @@ func Feed(ctx context.Context, c *app.RequestContext) {
 				resp.StatusMsg = new(string)
 			}
 			*resp.StatusMsg = "Unauthorized"
-			c.JSON(consts.StatusOK, resp)
+			c.JSON(consts.StatusBadRequest, resp)
 			return
 		}
 		*userId = int64(claims[mw.IdentityKey].(float64))
@@ -90,7 +94,14 @@ func Feed(ctx context.Context, c *app.RequestContext) {
 	resp, err = client.Feed(ctx, &req)
 
 	if err != nil {
-		apiLog.Fatal(err)
+		apiLog.Info(err)
+		resp.StatusCode = 57002
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusBadRequest, resp)
+		return
 	}
 
 	c.JSON(consts.StatusOK, resp)
