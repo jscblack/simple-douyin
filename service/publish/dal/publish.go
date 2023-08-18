@@ -3,6 +3,7 @@ package dal
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	servLog "github.com/prometheus/common/log"
 	"simple-douyin/pkg/constant"
 	"strconv"
@@ -15,7 +16,8 @@ func QueryVideoFromVideoId(ctx context.Context, videoId int64) (*Video, error) {
 		return video, nil
 	}
 	// query from Redis.
-	cacheVideo, err := RDB.Get(ctx, strconv.FormatInt(videoId, 10)).Result()
+	videoKey := "v" + strconv.FormatInt(videoId, 10)
+	cacheVideo, err := RDB.Get(ctx, videoKey).Result()
 	if err != nil {
 		// 缓存不存在
 		servLog.Warn("Video Info Not Found In Cache: ", videoId)
@@ -29,9 +31,10 @@ func QueryVideoFromVideoId(ctx context.Context, videoId int64) (*Video, error) {
 		// 写入redis缓存
 		videoJson, err := json.Marshal(video)
 		if err != nil {
+			servLog.Error(err)
 			return nil, err
 		}
-		err = RDB.Set(ctx, strconv.FormatInt(videoId, 10), videoJson, 0).Err()
+		err = RDB.Set(ctx, videoKey, videoJson, 0).Err()
 		if err != nil {
 			servLog.Error(err)
 			return nil, err
@@ -43,6 +46,7 @@ func QueryVideoFromVideoId(ctx context.Context, videoId int64) (*Video, error) {
 	// maybe crashed.
 	err = json.Unmarshal([]byte(cacheVideo), &video)
 	if err != nil {
+		servLog.Error(err)
 		return nil, err
 	}
 	return video, nil
@@ -70,7 +74,8 @@ func QueryWorkCountFromUserId(ctx context.Context, userId int64) (int64, error) 
 	}
 
 	// query from Redis.
-	cacheWorkCount, err := RDB.Get(ctx, strconv.FormatInt(userId, 10)).Result()
+	userKey := "u" + strconv.FormatInt(userId, 10)
+	cacheWorkCount, err := RDB.Get(ctx, userKey).Result()
 	if err != nil {
 		// 缓存不存在
 		servLog.Warn("Work Count Not Found In Cache: ", userId)
@@ -84,9 +89,10 @@ func QueryWorkCountFromUserId(ctx context.Context, userId int64) (int64, error) 
 		// 写入redis缓存
 		workCountJson, err := json.Marshal(workCount)
 		if err != nil {
+			servLog.Error(err)
 			return 0, err
 		}
-		err = RDB.Set(ctx, strconv.FormatInt(userId, 10), workCountJson, 0).Err()
+		err = RDB.Set(ctx, userKey, workCountJson, 0).Err()
 		if err != nil {
 			servLog.Error(err)
 			return 0, nil
@@ -97,7 +103,51 @@ func QueryWorkCountFromUserId(ctx context.Context, userId int64) (int64, error) 
 	servLog.Info("Work Count Get From Cache: ", cacheWorkCount)
 	err = json.Unmarshal([]byte(cacheWorkCount), &workCount)
 	if err != nil {
+		servLog.Error(err)
 		return 0, err
 	}
 	return workCount, nil
+}
+
+func WriteVideoInfoIntoDB(ctx context.Context, userId int64, title string, path string) error {
+	video := &Video{
+		UserId:   userId,
+		PlayUrl:  fmt.Sprintf("http://simple-douyin-oos.test.upcdn.net/%s", path),
+		CoverUrl: fmt.Sprintf("https://picsum.photos/seed/%s/500/200", title),
+		Title:    title,
+	}
+	result := DB.Create(&video)
+	if result.Error != nil || result.RowsAffected == 0 {
+		return result.Error
+	}
+	return nil
+}
+
+func UpdateWorkCount(ctx context.Context, userId int64) error {
+	userKey := "u" + strconv.FormatInt(userId, 10)
+	cacheWorkCount, err := RDB.Get(ctx, userKey).Result()
+	if err == nil {
+		// 缓存存在
+		servLog.Info("Work Count Get From Cache: ", cacheWorkCount)
+		var workCount int64
+		// 获取count
+		err = json.Unmarshal([]byte(cacheWorkCount), &workCount)
+		if err != nil {
+			servLog.Error(err)
+			return err
+		}
+		// 更新redis缓存
+		workCountJson, err := json.Marshal(workCount + 1)
+		if err != nil {
+			servLog.Error(err)
+			return err
+		}
+		err = RDB.Set(ctx, userKey, workCountJson, 0).Err()
+		if err != nil {
+			servLog.Error(err)
+			return err
+		}
+		servLog.Info("Update work count successfully")
+	}
+	return nil
 }

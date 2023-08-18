@@ -54,6 +54,7 @@ func Init(ctx context.Context) {
 		servLog.Error(err)
 		panic(err)
 	}
+	servLog.Info("DB initialized")
 	// For Redis
 	RDB = redis.NewClient(&redis.Options{
 		Addr:     constant.RedisAddress,
@@ -65,4 +66,5 @@ func Init(ctx context.Context) {
 		servLog.Error(err)
 		panic(err)
 	}
+	servLog.Info("Redis initialized")
 }
