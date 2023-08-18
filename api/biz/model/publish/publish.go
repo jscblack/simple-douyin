@@ -11,11 +11,11 @@ import (
 
 type PublishActionRequest struct {
 	// 用户鉴权token
-	Token string `thrift:"token,1,required" json:"token,required" query:"token,required"`
+	Token string `thrift:"token,1,required" form:"token,required" json:"token,required"`
 	// 视频数据
-	Data []byte `thrift:"data,2,required" json:"data,required" query:"data,required"`
+	Data []byte `thrift:"data,2,required" form:"data,required" json:"data,required"`
 	// 视频标题
-	Title string `thrift:"title,3,required" json:"title,required" query:"title,required"`
+	Title string `thrift:"title,3,required" form:"title,required" json:"title,required"`
 }
 
 func NewPublishActionRequest() *PublishActionRequest {
