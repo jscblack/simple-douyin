@@ -12,7 +12,6 @@ type CommentServiceImpl struct{}
 // CommentAddAction implements the CommentServiceImpl interface.
 func (s *CommentServiceImpl) CommentAddAction(ctx context.Context, req *comment.CommentAddActionRequest) (resp *comment.CommentAddActionResponse, err error) {
 	// TODO: Your code here...
-	// 不要忘记更新调用publish服务的UpdateVideoCounter
 	// 更新视频的被评论总数CommentCount
 	return
 }
@@ -20,7 +19,6 @@ func (s *CommentServiceImpl) CommentAddAction(ctx context.Context, req *comment.
 // CommentDelAction implements the CommentServiceImpl interface.
 func (s *CommentServiceImpl) CommentDelAction(ctx context.Context, req *comment.CommentDelActionRequest) (resp *comment.CommentDelActionResponse, err error) {
 	// TODO: Your code here...
-	// 不要忘记更新调用publish服务的UpdateVideoCounter
 	// 更新视频的CommentCount
 	return
 }

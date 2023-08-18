@@ -27,7 +27,7 @@ func Register(r *server.Hertz) {
 			}
 			{
 				_list := _favorite.Group("/list", _listMw()...)
-				_list.POST("/", append(_favoritelistMw(), favorite.FavoriteList)...)
+				_list.GET("/", append(_favoritelistMw(), favorite.FavoriteList)...)
 			}
 		}
 	}

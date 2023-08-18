@@ -27,7 +27,7 @@ func Register(r *server.Hertz) {
 			}
 			{
 				_list := _comment.Group("/list", _listMw()...)
-				_list.POST("/", append(_commentlistMw(), comment.CommentList)...)
+				_list.GET("/", append(_commentlistMw(), comment.CommentList)...)
 			}
 		}
 	}

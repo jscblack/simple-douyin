@@ -130,6 +130,12 @@ func RelationIsFollow(ctx context.Context, req *relation.RelationIsFollowRequest
 	resp.StatusCode = 0
 	resp.StatusMsg = nil
 	resp.IsFollow = true
+	if req.UserId == req.ToUserId {
+		// servLog.Info("self follow")
+		// 直接返回True，因为不能自己关注自己
+		resp.IsFollow = true
+		return nil
+	}
 	// 首先从redis中查询
 	// int64转string
 	keyStr := strconv.FormatInt(req.UserId, 10) + " " + strconv.FormatInt(req.ToUserId, 10)
