@@ -36,9 +36,18 @@ const (
 	MessageServiceName  = "message"
 	MessageServicePort  = "7007"
 
+	MaxFeedNum   = 30
+	MaxListNum   = 30
+	MaxVideoSize = 52428800 // 50MB
+
 	UserRDB     = 0
 	PublishRDB  = 1
 	FavoriteRDB = 2
 	VideoRDB    = 3
 	RelationRDB = 4
+
+	// for upy oss
+	Bucket      = "simple-douyin-oos"
+	Operator    = "simpledouyin"
+	UpyPassword = "xbTwBs6LDtbqVSIXmim6QYu2xGSdM6Jr"
 )

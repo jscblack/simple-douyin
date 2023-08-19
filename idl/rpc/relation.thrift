@@ -31,6 +31,7 @@ struct RelationRemoveResponse {
 //get关注列表
 struct RelationFollowListRequest {
     1: required i64 user_id,
+    2: required i64 from_user_id, 
 }
 
 struct RelationFollowListResponse {
@@ -42,6 +43,7 @@ struct RelationFollowListResponse {
 //get粉丝列表
 struct RelationFollowerListRequest {
     1: required i64 user_id,
+    2: required i64 from_user_id, 
 }
 
 struct RelationFollowerListResponse {
@@ -69,6 +71,7 @@ struct FriendUser {
 //get好友列表
 struct RelationFriendListRequest {
     1: required i64 user_id,
+    2: required i64 from_user_id,
 }
 
 struct RelationFriendListResponse {
@@ -108,7 +111,6 @@ struct RelationIsFollowResponse {
     2: optional string status_msg,
     3: required bool is_follow, //是否关注
 }
-
 
 
 service RelationService {

@@ -27,6 +27,7 @@ struct FavoriteDelActionResponse {
 // 点赞列表
 struct FavoriteListRequest {
     1: required i64 user_id, // 用户id
+    2: required i64 from_user_id,
 }
 
 struct FavoriteListResponse {

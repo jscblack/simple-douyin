@@ -981,7 +981,8 @@ func (p *FavoriteDelActionResponse) Field2DeepEqual(src *string) bool {
 }
 
 type FavoriteListRequest struct {
-	UserId int64 `thrift:"user_id,1,required" frugal:"1,required,i64" json:"user_id"`
+	UserId     int64 `thrift:"user_id,1,required" frugal:"1,required,i64" json:"user_id"`
+	FromUserId int64 `thrift:"from_user_id,2,required" frugal:"2,required,i64" json:"from_user_id"`
 }
 
 func NewFavoriteListRequest() *FavoriteListRequest {
@@ -995,12 +996,20 @@ func (p *FavoriteListRequest) InitDefault() {
 func (p *FavoriteListRequest) GetUserId() (v int64) {
 	return p.UserId
 }
+
+func (p *FavoriteListRequest) GetFromUserId() (v int64) {
+	return p.FromUserId
+}
 func (p *FavoriteListRequest) SetUserId(val int64) {
 	p.UserId = val
+}
+func (p *FavoriteListRequest) SetFromUserId(val int64) {
+	p.FromUserId = val
 }
 
 var fieldIDToName_FavoriteListRequest = map[int16]string{
 	1: "user_id",
+	2: "from_user_id",
 }
 
 func (p *FavoriteListRequest) Read(iprot thrift.TProtocol) (err error) {
@@ -1008,6 +1017,7 @@ func (p *FavoriteListRequest) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetUserId bool = false
+	var issetFromUserId bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -1034,6 +1044,17 @@ func (p *FavoriteListRequest) Read(iprot thrift.TProtocol) (err error) {
 					goto SkipFieldError
 				}
 			}
+		case 2:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetFromUserId = true
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
 		default:
 			if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
@@ -1050,6 +1071,11 @@ func (p *FavoriteListRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	if !issetUserId {
 		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetFromUserId {
+		fieldId = 2
 		goto RequiredFieldNotSetError
 	}
 	return nil
@@ -1079,6 +1105,15 @@ func (p *FavoriteListRequest) ReadField1(iprot thrift.TProtocol) error {
 	return nil
 }
 
+func (p *FavoriteListRequest) ReadField2(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI64(); err != nil {
+		return err
+	} else {
+		p.FromUserId = v
+	}
+	return nil
+}
+
 func (p *FavoriteListRequest) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
 	if err = oprot.WriteStructBegin("FavoriteListRequest"); err != nil {
@@ -1087,6 +1122,10 @@ func (p *FavoriteListRequest) Write(oprot thrift.TProtocol) (err error) {
 	if p != nil {
 		if err = p.writeField1(oprot); err != nil {
 			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
 			goto WriteFieldError
 		}
 
@@ -1125,6 +1164,23 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
+func (p *FavoriteListRequest) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("from_user_id", thrift.I64, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.FromUserId); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
 func (p *FavoriteListRequest) String() string {
 	if p == nil {
 		return "<nil>"
@@ -1141,12 +1197,22 @@ func (p *FavoriteListRequest) DeepEqual(ano *FavoriteListRequest) bool {
 	if !p.Field1DeepEqual(ano.UserId) {
 		return false
 	}
+	if !p.Field2DeepEqual(ano.FromUserId) {
+		return false
+	}
 	return true
 }
 
 func (p *FavoriteListRequest) Field1DeepEqual(src int64) bool {
 
 	if p.UserId != src {
+		return false
+	}
+	return true
+}
+func (p *FavoriteListRequest) Field2DeepEqual(src int64) bool {
+
+	if p.FromUserId != src {
 		return false
 	}
 	return true
