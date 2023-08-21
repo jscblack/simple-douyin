@@ -58,12 +58,17 @@ func fillVideoInfo(ctx context.Context, dbVideo *dal.Video, fromUserId *int64) (
 	}
 
 	servLog.Info("Rpc is_favored.")
-	isFavResp, err := client.FavoriteClient.IsFavor(ctx, &favorite.IsFavorRequest{
-		UserId:  dbVideo.UserId,
-		VideoId: dbVideo.ID,
-	})
-	if err != nil {
-		return nil, err
+	isFavResp := &favorite.IsFavorResponse{
+		IsFavorite: false,
+	}
+	if fromUserId != nil {
+		isFavResp, err = client.FavoriteClient.IsFavor(ctx, &favorite.IsFavorRequest{
+			UserId:  *fromUserId,
+			VideoId: dbVideo.ID,
+		})
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return &common.Video{
