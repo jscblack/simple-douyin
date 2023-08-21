@@ -6,7 +6,7 @@ import (
 	"simple-douyin/pkg/constant"
 	"strconv"
 
-	apiLog "github.com/prometheus/common/log"
+	servLog "github.com/prometheus/common/log"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -43,12 +43,12 @@ func Init(ctx context.Context) {
 		&gorm.Config{},
 	)
 	if err != nil {
-		apiLog.Error(err)
+		servLog.Error(err)
 		panic(err)
 	}
 	err = DB.AutoMigrate(&Relation{})
 	if err != nil {
-		apiLog.Error(err)
+		servLog.Error(err)
 		panic(err)
 	}
 	// For Redis
@@ -60,7 +60,7 @@ func Init(ctx context.Context) {
 	})
 	_, err = RDB.Ping(ctx).Result()
 	if err != nil {
-		apiLog.Error(err)
+		servLog.Error(err)
 		panic(err)
 	}
 }
@@ -70,48 +70,48 @@ func RDSUpdate(ctx context.Context, UserId int64, add int64, Type int32) {
 	cacheRealtionCounter, err := RDB.Get(ctx, keyStr).Result() // 从redis中查询
 	if err != nil {
 		// 不在缓存中 DO NOTHING
-		apiLog.Info("RDSUpdate : not in cache")
+		servLog.Info("RDSUpdate : not in cache")
 		return
 	}
 	var relationCounter RelationCounter
 	err = json.Unmarshal([]byte(cacheRealtionCounter), &relationCounter) // 解析json
 	if err != nil {
-		apiLog.Error("RDSUpdate : json unmarshal error")
+		servLog.Error("RDSUpdate : json unmarshal error")
 		return
 	}
 	if Type == 1 { // follow_count
 		if relationCounter.FollowCount == -1 {
-			apiLog.Info("RDSUpdate : follow_count not init")
+			servLog.Info("RDSUpdate : follow_count not init")
 			return
 		} else {
 			relationCounter.FollowCount += add
 			relationCounterJson, err := json.Marshal(relationCounter)
 			if err != nil {
-				apiLog.Error("RDSUpdate : json marshal error")
+				servLog.Error("RDSUpdate : json marshal error")
 				return
 			}
 			// 写入redis缓存
 			err = RDB.Set(ctx, keyStr, relationCounterJson, 0).Err()
 			if err != nil {
-				apiLog.Error("RDSUpdate : redis set error")
+				servLog.Error("RDSUpdate : redis set error")
 				return
 			}
 		}
 	} else { // follower_count
 		if relationCounter.FollowerCount == -1 {
-			apiLog.Info("RDSUpdate : follower_count not init")
+			servLog.Info("RDSUpdate : follower_count not init")
 			return
 		} else {
 			relationCounter.FollowerCount += add
 			relationCounterJson, err := json.Marshal(relationCounter)
 			if err != nil {
-				apiLog.Error("RDSUpdate : json marshal error")
+				servLog.Error("RDSUpdate : json marshal error")
 				return
 			}
 			// 写入redis缓存
 			err = RDB.Set(ctx, keyStr, relationCounterJson, 0).Err()
 			if err != nil {
-				apiLog.Error("RDSUpdate : redis set error")
+				servLog.Error("RDSUpdate : redis set error")
 				return
 			}
 		}

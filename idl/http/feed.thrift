@@ -15,10 +15,10 @@ struct FeedRequest {
 struct FeedResponse {
     1: required i32 status_code,      // 状态码，0-成功，其他值-失败
     2: optional string status_msg,    // 返回状态描述
-    3: list<common.Video> video_list, // 视频列表
+    3: optional list<common.Video> video_list, // 视频列表
     4: optional i64 next_time,        // 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time
 }
 
 service FeedService {
-    FeedResponse Feed(1: FeedRequest req) (api.get = "/douyin/feed/"),
+    FeedResponse Feed(1: FeedRequest req) (api.get = "/douyin/feed"),
 }
