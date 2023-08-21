@@ -5,9 +5,10 @@ package message
 import (
 	"context"
 
+	message "simple-douyin/api/biz/model/message"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	message "simple-douyin/api/biz/model/message"
 )
 
 // MessageChat .

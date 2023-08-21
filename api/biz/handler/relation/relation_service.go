@@ -5,9 +5,10 @@ package relation
 import (
 	"context"
 
+	relation "simple-douyin/api/biz/model/relation"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	relation "simple-douyin/api/biz/model/relation"
 )
 
 // RelationAction .
@@ -15,14 +16,29 @@ import (
 func RelationAction(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req relation.RelationActionRequest
+	resp := new(relation.RelationActionResponse)
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := new(relation.RelationActionResponse)
+		resp.StatusCode = 57010
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
 		return
 	}
 
-	resp := new(relation.RelationActionResponse)
-
+	_, exist := c.Get("jwt-claims")
+	if !exist {
+		resp.StatusCode = 57010
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "Unauthorized"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
 	c.JSON(consts.StatusOK, resp)
 }
 
