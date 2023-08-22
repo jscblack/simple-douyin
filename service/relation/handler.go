@@ -25,7 +25,7 @@ func (s *RelationServiceImpl) RelationAdd(ctx context.Context, request *relation
 	// 实际业务
 	err = service.RelationAdd(ctx, request, resp)
 	if err != nil {
-		resp.StatusCode = 57010
+		resp.StatusCode = 57006
 		if resp.StatusMsg == nil {
 			resp.StatusMsg = new(string)
 		}
@@ -50,7 +50,7 @@ func (s *RelationServiceImpl) RelationRemove(ctx context.Context, request *relat
 	// 实际业务
 	err = service.RelationRemove(ctx, request, resp)
 	if err != nil {
-		resp.StatusCode = 57010
+		resp.StatusCode = 57006
 		if resp.StatusMsg == nil {
 			resp.StatusMsg = new(string)
 		}
@@ -71,7 +71,7 @@ func (s *RelationServiceImpl) RelationFollowList(ctx context.Context, request *r
 	// 实际业务
 	err = service.RelationFollowList(ctx, request, resp)
 	if err != nil {
-		resp.StatusCode = 57010
+		resp.StatusCode = 57006
 		if resp.StatusMsg == nil {
 			resp.StatusMsg = new(string)
 		}
@@ -91,7 +91,7 @@ func (s *RelationServiceImpl) RelationFollowerList(ctx context.Context, request 
 	// 实际业务
 	err = service.RelationFollowerList(ctx, request, resp)
 	if err != nil {
-		resp.StatusCode = 57010
+		resp.StatusCode = 57006
 		if resp.StatusMsg == nil {
 			resp.StatusMsg = new(string)
 		}
@@ -111,7 +111,7 @@ func (s *RelationServiceImpl) RelationFriendList(ctx context.Context, request *r
 	// 实际业务
 	err = service.RelationFriendList(ctx, request, resp)
 	if err != nil {
-		resp.StatusCode = 57010
+		resp.StatusCode = 57006
 		if resp.StatusMsg == nil {
 			resp.StatusMsg = new(string)
 		}

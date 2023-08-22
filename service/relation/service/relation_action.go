@@ -15,7 +15,7 @@ func RelationAdd(ctx context.Context, req *relation.RelationAddRequest, resp *re
 	ToUserID := req.ToUserId
 	result := dal.DB.Create(&dal.Relation{UserID: UserID, ToUserID: ToUserID})
 	if result.Error != nil || result.RowsAffected == 0 {
-		resp.StatusCode = 57010
+		resp.StatusCode = 57006
 		if resp.StatusMsg == nil {
 			resp.StatusMsg = new(string)
 		}
@@ -39,7 +39,7 @@ func RelationRemove(ctx context.Context, req *relation.RelationRemoveRequest, re
 	ToUserID := req.ToUserId
 	result := dal.DB.Where("user_id=? and to_user_id=?", UserID, ToUserID).Delete(&dal.Relation{})
 	if result.Error != nil || result.RowsAffected == 0 {
-		resp.StatusCode = 57010
+		resp.StatusCode = 57006
 		if resp.StatusMsg == nil {
 			resp.StatusMsg = new(string)
 		}

@@ -4,11 +4,14 @@ package relation
 
 import (
 	"context"
+	"strconv"
 
+	client "simple-douyin/api/biz/client"
 	relation "simple-douyin/api/biz/model/relation"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"github.com/hertz-contrib/jwt"
 )
 
 // RelationAction .
@@ -20,7 +23,7 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		resp := new(relation.RelationActionResponse)
-		resp.StatusCode = 57010
+		resp.StatusCode = 57006
 		if resp.StatusMsg == nil {
 			resp.StatusMsg = new(string)
 		}
@@ -29,13 +32,25 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	_, exist := c.Get("jwt-claims")
+	loggedClaims, exist := c.Get("JWT_PAYLOAD")
 	if !exist {
-		resp.StatusCode = 57010
+		resp.StatusCode = 57006
 		if resp.StatusMsg == nil {
 			resp.StatusMsg = new(string)
 		}
 		*resp.StatusMsg = "Unauthorized"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
+	userID := int64(loggedClaims.(jwt.MapClaims)["user_id"].(float64))
+	req.Token = strconv.FormatInt(userID, 10)
+	err = client.RelationAction(ctx, &req, resp)
+	if err != nil {
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
 		c.JSON(consts.StatusOK, resp)
 		return
 	}
@@ -47,14 +62,40 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 func RelationFollowList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req relation.RelationFollowListRequest
+	resp := new(relation.RelationFollowListResponse)
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
 		return
 	}
 
-	resp := new(relation.RelationFollowListResponse)
-
+	loggedClaims, exist := c.Get("JWT_PAYLOAD")
+	if !exist {
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "Unauthorized"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
+	userID := int64(loggedClaims.(jwt.MapClaims)["user_id"].(float64))
+	req.Token = strconv.FormatInt(userID, 10)
+	err = client.RelationFollowList(ctx, &req, resp)
+	if err != nil {
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
 	c.JSON(consts.StatusOK, resp)
 }
 
@@ -63,29 +104,82 @@ func RelationFollowList(ctx context.Context, c *app.RequestContext) {
 func RelationFollowerList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req relation.RelationFollowerListRequest
+	resp := new(relation.RelationFollowerListResponse)
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
 		return
 	}
 
-	resp := new(relation.RelationFollowerListResponse)
-
+	loggedClaims, exist := c.Get("JWT_PAYLOAD")
+	if !exist {
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "Unauthorized"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
+	userID := int64(loggedClaims.(jwt.MapClaims)["user_id"].(float64))
+	req.Token = strconv.FormatInt(userID, 10)
+	err = client.RelationFollowerList(ctx, &req, resp)
+	if err != nil {
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
 	c.JSON(consts.StatusOK, resp)
 }
 
-// RelationFriendList .
-// @router /douyin/relation/friend/list/ [GET]
+// RelationFriendList
+// @router /douyin/relation/friend/list/
+
 func RelationFriendList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req relation.RelationFriendListRequest
+	resp := new(relation.RelationFriendListResponse)
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
 		return
 	}
 
-	resp := new(relation.RelationFriendListResponse)
-
+	loggedClaims, exist := c.Get("JWT_PAYLOAD")
+	if !exist {
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "Unauthorized"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
+	userID := int64(loggedClaims.(jwt.MapClaims)["user_id"].(float64))
+	req.Token = strconv.FormatInt(userID, 10)
+	err = client.RelationFriendList(ctx, &req, resp)
+	if err != nil {
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
 	c.JSON(consts.StatusOK, resp)
 }
