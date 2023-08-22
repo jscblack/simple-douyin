@@ -27,7 +27,7 @@ func RelationFollowList(ctx context.Context, req *relation.RelationFollowListReq
 	for _, id := range followListId {
 		// get user info
 		userResp, err := client.UserClient.UserInfo(ctx, &user.UserInfoRequest{
-			UserId:   &UserID,
+			UserId:   &req.FromUserId,
 			ToUserId: id,
 		})
 		if err != nil {
@@ -55,7 +55,7 @@ func RelationFollowerList(ctx context.Context, req *relation.RelationFollowerLis
 	for _, id := range followerListId {
 		// get user info
 		userResp, err := client.UserClient.UserInfo(ctx, &user.UserInfoRequest{
-			UserId:   &UserID,
+			UserId:   &req.FromUserId,
 			ToUserId: id,
 		})
 		if err != nil {
@@ -84,9 +84,9 @@ func RelationFriendList(ctx context.Context, req *relation.RelationFriendListReq
 	for _, follow_id := range followListId {
 		//如果有 user_id = follow_id and to_user_id = req.UserId
 		var relation dal.Relation
-		err = dal.DB.Where("user_id=? and to_user_id=?", follow_id, UserID).First(&relation).Error
+		err = dal.DB.Where("user_id=? and to_user_id=?", follow_id, UserID).Limit(1).Find(&relation).Error
 		if err != nil {
-			continue
+			return err
 		}
 		if relation.ID != 0 {
 			friendListId = append(friendListId, follow_id)
@@ -155,6 +155,8 @@ func RelationFriendList(ctx context.Context, req *relation.RelationFriendListReq
 		friendListRpc = append(friendListRpc, &friendUser)
 
 	}
-
+	resp.FriendList = friendListRpc
+	resp.StatusCode = 0
+	resp.StatusMsg = nil
 	return nil
 }

@@ -5,9 +5,10 @@ import (
 	"simple-douyin/kitex_gen/message/messageservice"
 	"simple-douyin/kitex_gen/user/userservice"
 	"simple-douyin/pkg/constant"
-	"simple-douyin/service/relation/client"
+
 	"time"
 
+	"github.com/cloudwego/kitex/client"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	servLog "github.com/prometheus/common/log"
 )

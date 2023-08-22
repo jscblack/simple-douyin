@@ -118,3 +118,24 @@ func RelationFollowerList(ctx context.Context, bizReq *bizRelation.RelationFollo
 	}
 	return nil
 }
+
+func RelationFriendList(ctx context.Context, bizReq *bizRelation.RelationFriendListRequest, bizResp *bizRelation.RelationFriendListResponse) error {
+	var err error
+	kiteReq := new(kiteRelation.RelationFriendListRequest)
+	err = pack.RelationFriendListUnpack(ctx, bizReq, kiteReq)
+	if err != nil {
+		apiLog.Error(err)
+		return err
+	}
+	kiteResp, err := relationClient.RelationFriendList(ctx, kiteReq)
+	if err != nil {
+		apiLog.Error(err)
+		return err
+	}
+	err = pack.RelationFriendListPack(ctx, kiteResp, bizResp)
+	if err != nil {
+		apiLog.Error(err)
+		return err
+	}
+	return nil
+}
