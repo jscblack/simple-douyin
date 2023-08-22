@@ -64,11 +64,11 @@ func UserInfoPack(ctx context.Context, rpcResp *kiteUser.UserInfoResponse, bizRe
 	// rpcResp -> bizResp
 	bizResp.StatusCode = rpcResp.StatusCode
 	bizResp.StatusMsg = rpcResp.StatusMsg
-	bizResp.User = userPack(ctx, rpcResp.User)
+	bizResp.User = UserPack(ctx, rpcResp.User)
 	return nil
 }
 
-func userPack(ctx context.Context, rpcUser *kiteCommon.User) *bizCommon.User {
+func UserPack(ctx context.Context, rpcUser *kiteCommon.User) *bizCommon.User {
 	// rpcUser -> bizUser
 	bizUser := new(bizCommon.User)
 	bizUser.ID = rpcUser.Id
