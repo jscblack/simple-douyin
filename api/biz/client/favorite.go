@@ -82,3 +82,24 @@ func FavoriteDel(ctx context.Context, bizReq *bizFav.FavoriteActionRequest, bizR
 	}
 	return nil
 }
+
+func FavoriteList(ctx context.Context, bizReq *bizFav.FavoriteListRequest, bizResp *bizFav.FavoriteListResponse) error {
+	var err error
+	kiteReq := new(kiteFav.FavoriteListRequest)
+	err = pack.FavoriteListUnpack(ctx, bizReq, kiteReq)
+	if err != nil {
+		apiLog.Error(err)
+		return err
+	}
+	kiteResp, err := favoriteClient.FavoriteList(ctx, kiteReq)
+	if err != nil {
+		apiLog.Error(err)
+		return err
+	}
+	err = pack.FavoriteListpack(ctx, kiteResp, bizResp)
+	if err != nil {
+		apiLog.Error(err)
+		return err
+	}
+	return nil
+}

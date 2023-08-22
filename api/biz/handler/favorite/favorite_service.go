@@ -79,5 +79,30 @@ func FavoriteList(ctx context.Context, c *app.RequestContext) {
 
 	resp := new(favorite.FavoriteListResponse)
 
+	// 该接口需要登录态，但不需要确认具体身份，仅在路由时鉴权即可
+	// 通过中间件获取用户id
+	loggedClaims, exist := c.Get("JWT_PAYLOAD")
+	if !exist {
+		resp.StatusCode = 57001
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "Unauthorized"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
+	userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
+	req.Token = strconv.FormatInt(userID, 10)
+
+	err = client.FavoriteList(ctx, &req, resp)
+	if err != nil {
+		resp.StatusCode = 57004
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
 	c.JSON(consts.StatusOK, resp)
 }

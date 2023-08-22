@@ -67,7 +67,23 @@ func (s *FavoriteServiceImpl) FavoriteDelAction(ctx context.Context, req *favori
 
 // FavoriteList implements the FavoriteServiceImpl interface.
 func (s *FavoriteServiceImpl) FavoriteList(ctx context.Context, req *favorite.FavoriteListRequest) (resp *favorite.FavoriteListResponse, err error) {
-	// TODO: Your code here...
+	resp = new(favorite.FavoriteListResponse)
+	// 前处理校验请求
+	// ...
+	// 实际业务
+	err = service.FavoriteList(ctx, req, resp)
+	if err != nil {
+		resp.StatusCode = 57004
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		servLog.Error(err)
+		return resp, nil
+	}
+	// 后处理返回结果
+	// ...
+	return resp, nil
 	return
 }
 
