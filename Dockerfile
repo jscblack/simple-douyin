@@ -42,4 +42,8 @@ COPY --from=builder /app/api-gateway /app/api-gateway
 COPY start-services.sh /app/start-services.sh
 RUN chmod +x /app/start-services.sh
 
+# Add a health check on the API gateway.
+HEALTHCHECK --interval=5s --timeout=3s \
+  CMD wget -q -O /dev/null http://localhost:8888 || exit 1
+
 CMD ["/app/start-services.sh"]
