@@ -18,5 +18,8 @@ go run ./relation/. &
 # Start the comment service
 go run ./comment/. &
 
+# Start the message service
+go run ./message/. &
+
 # Wait for all background processes to finish
 wait

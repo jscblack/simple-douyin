@@ -2,7 +2,9 @@ package dal
 
 import (
 	"context"
+	"encoding/json"
 	"simple-douyin/pkg/constant"
+	"strconv"
 
 	servLog "github.com/prometheus/common/log"
 	"github.com/redis/go-redis/v9"
@@ -59,5 +61,78 @@ func Init(ctx context.Context) {
 	if err != nil {
 		servLog.Error(err)
 		panic(err)
+	}
+}
+
+func RDSUpdate(ctx context.Context, UserId int64, add int64, Type int32) {
+	keyStr := strconv.FormatInt(UserId, 10)                    // int64转string
+	cacheRealtionCounter, err := RDB.Get(ctx, keyStr).Result() // 从redis中查询
+	if err != nil {
+		// 不在缓存中 DO NOTHING
+		servLog.Info("RDSUpdate : not in cache")
+		return
+	}
+	var relationCounter RelationCounter
+	err = json.Unmarshal([]byte(cacheRealtionCounter), &relationCounter) // 解析json
+	if err != nil {
+		servLog.Error("RDSUpdate : json unmarshal error")
+		return
+	}
+	if Type == 1 { // follow_count
+		if relationCounter.FollowCount == -1 {
+			servLog.Info("RDSUpdate : follow_count not init")
+			return
+		} else {
+			relationCounter.FollowCount += add
+			relationCounterJson, err := json.Marshal(relationCounter)
+			if err != nil {
+				servLog.Error("RDSUpdate : json marshal error")
+				return
+			}
+			// 写入redis缓存
+			err = RDB.Set(ctx, keyStr, relationCounterJson, 0).Err()
+			if err != nil {
+				servLog.Error("RDSUpdate : redis set error")
+				return
+			}
+		}
+	} else { // follower_count
+		if relationCounter.FollowerCount == -1 {
+			servLog.Info("RDSUpdate : follower_count not init")
+			return
+		} else {
+			relationCounter.FollowerCount += add
+			relationCounterJson, err := json.Marshal(relationCounter)
+			if err != nil {
+				servLog.Error("RDSUpdate : json marshal error")
+				return
+			}
+			// 写入redis缓存
+			err = RDB.Set(ctx, keyStr, relationCounterJson, 0).Err()
+			if err != nil {
+				servLog.Error("RDSUpdate : redis set error")
+				return
+			}
+		}
+	}
+}
+
+func RDSRelation(ctx context.Context, UserId int64, ToUserId int64, Type int32) {
+	// type 1 follow
+	// type 0 unfollow
+	if Type == 1 {
+		keyStr := strconv.FormatInt(UserId, 10) + " " + strconv.FormatInt(ToUserId, 10)
+		err := RDB.Set(ctx, keyStr, "1", 0).Err()
+		if err != nil {
+			servLog.Error("RDSRelation : redis set error")
+			return
+		}
+	} else {
+		keyStr := strconv.FormatInt(UserId, 10) + " " + strconv.FormatInt(ToUserId, 10)
+		err := RDB.Set(ctx, keyStr, "0", 0).Err()
+		if err != nil {
+			servLog.Error("RDSRelation : redis set error")
+			return
+		}
 	}
 }

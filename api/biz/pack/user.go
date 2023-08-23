@@ -84,3 +84,12 @@ func UserPack(ctx context.Context, rpcUser *kiteCommon.User) *bizCommon.User {
 	bizUser.FavoriteCount = rpcUser.FavoriteCount
 	return bizUser
 }
+
+func userListPack(ctx context.Context, rpcUserList []*kiteCommon.User) []*bizCommon.User {
+	// rpcResp -> bizResp
+	var bizUserList []*bizCommon.User
+	for _, v := range rpcUserList {
+		bizUserList = append(bizUserList, UserPack(ctx, v))
+	}
+	return bizUserList
+}

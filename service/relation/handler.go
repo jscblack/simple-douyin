@@ -18,7 +18,23 @@ func (s *RelationServiceImpl) RelationAdd(ctx context.Context, request *relation
 	// 取出redis的dal.RelationCounter，更新FollowCount和FollowerCount
 	// 如果redis中没有对应的counter，处理逻辑参见./service/relation_count.go
 	// 先更新mysql，再更新redis，特别需要RelationCounter中有两个量，可能值为-1，表示未初始化
-	return
+
+	resp = new(relation.RelationAddResponse)
+	// 前处理校验请求
+	// ...
+	// 实际业务
+	err = service.RelationAdd(ctx, request, resp)
+	if err != nil {
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		servLog.Error(err)
+		return resp, nil
+	}
+
+	return resp, nil
 }
 
 // RelationRemove implements the RelationServiceImpl interface.
@@ -28,25 +44,82 @@ func (s *RelationServiceImpl) RelationRemove(ctx context.Context, request *relat
 	// 取出redis的dal.RelationCounter，更新FollowCount和FollowerCount
 	// 如果redis中没有对应的counter，处理逻辑参见./service/relation_count.go
 	// 先更新mysql，再更新redis，特别需要RelationCounter中有两个量，可能值为-1，表示未初始化
-	return
+	resp = new(relation.RelationRemoveResponse)
+	// 前处理校验请求
+	// ...
+	// 实际业务
+	err = service.RelationRemove(ctx, request, resp)
+	if err != nil {
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		servLog.Error(err)
+		return resp, nil
+	}
+
+	return resp, nil
 }
 
 // RelationFollowList implements the RelationServiceImpl interface.
 func (s *RelationServiceImpl) RelationFollowList(ctx context.Context, request *relation.RelationFollowListRequest) (resp *relation.RelationFollowListResponse, err error) {
 	// TODO: Your code here...
-	return
+	resp = new(relation.RelationFollowListResponse)
+	// 前处理校验请求
+	// ...
+	// 实际业务
+	err = service.RelationFollowList(ctx, request, resp)
+	if err != nil {
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		servLog.Error(err)
+		return resp, nil
+	}
+	return resp, nil
 }
 
 // RelationFollowerList implements the RelationServiceImpl interface.
 func (s *RelationServiceImpl) RelationFollowerList(ctx context.Context, request *relation.RelationFollowerListRequest) (resp *relation.RelationFollowerListResponse, err error) {
 	// TODO: Your code here...
-	return
+	resp = new(relation.RelationFollowerListResponse)
+	// 前处理校验请求
+	// ...
+	// 实际业务
+	err = service.RelationFollowerList(ctx, request, resp)
+	if err != nil {
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		servLog.Error(err)
+		return resp, nil
+	}
+	return resp, nil
 }
 
 // RelationFriendList implements the RelationServiceImpl interface.
 func (s *RelationServiceImpl) RelationFriendList(ctx context.Context, request *relation.RelationFriendListRequest) (resp *relation.RelationFriendListResponse, err error) {
 	// TODO: Your code here...
-	return
+	resp = new(relation.RelationFriendListResponse)
+	// 前处理校验请求
+	// ...
+	// 实际业务
+	err = service.RelationFriendList(ctx, request, resp)
+	if err != nil {
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		servLog.Error(err)
+		return resp, nil
+	}
+	return resp, nil
 }
 
 // RelationFollowCount implements the RelationServiceImpl interface.
