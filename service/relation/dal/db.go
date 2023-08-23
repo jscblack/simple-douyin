@@ -116,3 +116,23 @@ func RDSUpdate(ctx context.Context, UserId int64, add int64, Type int32) {
 		}
 	}
 }
+
+func RDSRelation(ctx context.Context, UserId int64, ToUserId int64, Type int32) {
+	// type 1 follow
+	// type 0 unfollow
+	if Type == 1 {
+		keyStr := strconv.FormatInt(UserId, 10) + " " + strconv.FormatInt(ToUserId, 10)
+		err := RDB.Set(ctx, keyStr, "1", 0).Err()
+		if err != nil {
+			servLog.Error("RDSRelation : redis set error")
+			return
+		}
+	} else {
+		keyStr := strconv.FormatInt(UserId, 10) + " " + strconv.FormatInt(ToUserId, 10)
+		err := RDB.Set(ctx, keyStr, "0", 0).Err()
+		if err != nil {
+			servLog.Error("RDSRelation : redis set error")
+			return
+		}
+	}
+}

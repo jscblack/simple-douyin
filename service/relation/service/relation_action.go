@@ -26,7 +26,7 @@ func RelationAdd(ctx context.Context, req *relation.RelationAddRequest, resp *re
 	//修改redis缓存
 	dal.RDSUpdate(ctx, UserID, 1, 1)
 	dal.RDSUpdate(ctx, ToUserID, 1, 2)
-
+	dal.RDSRelation(ctx, UserID, ToUserID, 1)
 	resp.StatusCode = 0
 	resp.StatusMsg = nil
 	return nil
@@ -50,6 +50,7 @@ func RelationRemove(ctx context.Context, req *relation.RelationRemoveRequest, re
 	//修改redis缓存
 	dal.RDSUpdate(ctx, UserID, -1, 1)
 	dal.RDSUpdate(ctx, ToUserID, -1, 2)
+	dal.RDSRelation(ctx, UserID, ToUserID, 0)
 	resp.StatusCode = 0
 	resp.StatusMsg = nil
 	return nil
