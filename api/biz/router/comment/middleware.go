@@ -3,6 +3,8 @@
 package comment
 
 import (
+	mw "simple-douyin/api/biz/middleware"
+
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -28,7 +30,7 @@ func _actionMw() []app.HandlerFunc {
 
 func _commentactionMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
 }
 
 func _listMw() []app.HandlerFunc {
@@ -38,5 +40,5 @@ func _listMw() []app.HandlerFunc {
 
 func _commentlistMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
 }

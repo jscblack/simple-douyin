@@ -3,6 +3,8 @@
 package message
 
 import (
+	mw "simple-douyin/api/biz/middleware"
+
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -37,11 +39,11 @@ func _chatMw() []app.HandlerFunc {
 }
 
 func _messagechatMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	// 该接口需要登录态
+	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
 }
 
 func _messageactionMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	// 该接口需要登录态
+	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
 }

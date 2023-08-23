@@ -3,6 +3,8 @@
 package relation
 
 import (
+	mw "simple-douyin/api/biz/middleware"
+
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -32,13 +34,12 @@ func _relation_ctionMw() []app.HandlerFunc {
 }
 
 func _followMw() []app.HandlerFunc {
-	// your code...
 	return nil
 }
 
 func _relationfollowlistMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
 }
 
 func _followerMw() []app.HandlerFunc {
@@ -47,8 +48,8 @@ func _followerMw() []app.HandlerFunc {
 }
 
 func _relationfollowerlistMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	// 该接口需要登录态
+	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
 }
 
 func _friendMw() []app.HandlerFunc {
@@ -57,13 +58,13 @@ func _friendMw() []app.HandlerFunc {
 }
 
 func _relationfriendlistMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	// 该接口需要登录态
+	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
 }
 
 func _relationactionMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	// 该接口需要登录态
+	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
 }
 
 func _listMw() []app.HandlerFunc {
@@ -72,7 +73,9 @@ func _listMw() []app.HandlerFunc {
 }
 
 func _list0Mw() []app.HandlerFunc {
+
 	// your code...
+	//fmt.Println("in _list0Mw")
 	return nil
 }
 

@@ -1,28 +1,21 @@
 package pack
 
 import (
-	apiLog "github.com/prometheus/common/log"
+	"context"
 	bizCommon "simple-douyin/api/biz/model/common"
 	"simple-douyin/kitex_gen/common"
+
+	apiLog "github.com/prometheus/common/log"
 )
 
-func ToVideo(video *common.Video) *bizCommon.Video {
+func ToVideo(ctx context.Context, video *common.Video) *bizCommon.Video {
 	if video == nil {
 		return nil
 	}
 
-	author := video.Author
-	user := &bizCommon.User{
-		ID:            author.Id,
-		Name:          author.Name,
-		FollowCount:   author.FollowerCount,
-		FollowerCount: author.FollowerCount,
-		IsFollow:      author.IsFollow,
-	}
-
 	return &bizCommon.Video{
 		ID:            video.Id,
-		Author:        user,
+		Author:        UserPack(ctx, video.Author),
 		PlayURL:       video.PlayUrl,
 		CoverURL:      video.CoverUrl,
 		FavoriteCount: video.FavoriteCount,
@@ -32,10 +25,10 @@ func ToVideo(video *common.Video) *bizCommon.Video {
 	}
 }
 
-func ToVideos(videos []*common.Video) []*bizCommon.Video {
+func ToVideos(ctx context.Context, videos []*common.Video) []*bizCommon.Video {
 	videoList := make([]*bizCommon.Video, 0)
 	for _, video := range videos {
-		if v := ToVideo(video); v != nil {
+		if v := ToVideo(ctx, video); v != nil {
 			videoList = append(videoList, v)
 		} else {
 			apiLog.Fatal("video is nil!")

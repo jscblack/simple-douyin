@@ -5,9 +5,10 @@ package message
 import (
 	"context"
 
+	message "simple-douyin/api/biz/model/message"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	message "simple-douyin/api/biz/model/message"
 )
 
 // MessageChat .
@@ -15,14 +16,17 @@ import (
 func MessageChat(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req message.MessageChatRequest
+	resp := new(message.MessageChatResponse)
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp.StatusCode = 57007
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
 		return
 	}
-
-	resp := new(message.MessageChatResponse)
-
 	c.JSON(consts.StatusOK, resp)
 }
 
@@ -31,13 +35,16 @@ func MessageChat(ctx context.Context, c *app.RequestContext) {
 func MessageAction(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req message.MessageActionRequest
+	resp := new(message.MessageActionResponse)
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp.StatusCode = 57007
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
 		return
 	}
-
-	resp := new(message.MessageActionResponse)
-
 	c.JSON(consts.StatusOK, resp)
 }

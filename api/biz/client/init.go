@@ -8,5 +8,8 @@ func InitClient() {
 	InitFeedClient()
 	InitPublishClient()
 	InitFavoriteClient()
+	InitCommentClient()
+	InitRelationClient()
+	InitMessaggeClient()
 	apiLog.Info("All RPC client initialized")
 }

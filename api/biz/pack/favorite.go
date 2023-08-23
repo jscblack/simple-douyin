@@ -72,6 +72,9 @@ func FavoriteListpack(ctx context.Context, rpcResp *kiteFav.FavoriteListResponse
 	// rpcResp -> bizResp
 	bizResp.StatusCode = rpcResp.StatusCode
 	bizResp.StatusMsg = rpcResp.StatusMsg
+	if rpcResp.VideoList != nil {
+		bizResp.VideoList = make([]*bizCommon.Video, 0, len(rpcResp.VideoList))
+	}
 	for _, rpcVideo := range rpcResp.VideoList {
 		bizVideo := videoPack(ctx, rpcVideo)
 		bizResp.VideoList = append(bizResp.VideoList, bizVideo)

@@ -2,13 +2,14 @@ package client
 
 import (
 	"context"
-	apiLog "github.com/prometheus/common/log"
 	bizPublish "simple-douyin/api/biz/model/publish"
 	"simple-douyin/api/biz/pack"
 	kitexPublish "simple-douyin/kitex_gen/publish"
 	"simple-douyin/kitex_gen/publish/publishservice"
 	"simple-douyin/pkg/constant"
 	"time"
+
+	apiLog "github.com/prometheus/common/log"
 
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
@@ -47,7 +48,7 @@ func PublishAction(ctx context.Context, req *kitexPublish.PublishActionRequest) 
 		apiLog.Error(err)
 		return nil, err
 	}
-	return pack.PublishActionPack(resp)
+	return pack.PublishActionPack(ctx, resp)
 }
 
 func PublishList(ctx context.Context, req *kitexPublish.PublishListRequest) (*bizPublish.PublishListResponse, error) {
@@ -56,5 +57,5 @@ func PublishList(ctx context.Context, req *kitexPublish.PublishListRequest) (*bi
 		apiLog.Error(err)
 		return nil, err
 	}
-	return pack.PublishListPack(resp)
+	return pack.PublishListPack(ctx, resp)
 }

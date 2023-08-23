@@ -5,6 +5,7 @@ import (
 	"net"
 	comment "simple-douyin/kitex_gen/comment/commentservice"
 	"simple-douyin/pkg/constant"
+	"simple-douyin/service/comment/client"
 	"simple-douyin/service/comment/dal"
 
 	"github.com/cloudwego/kitex/pkg/limit"
@@ -17,6 +18,7 @@ import (
 func main() {
 	// init db
 	dal.Init(context.Background())
+	client.Init(context.Background())
 	r, err := etcd.NewEtcdRegistry([]string{constant.EtcdAddressWithPort})
 	if err != nil {
 		servLog.Fatal(err)

@@ -25,18 +25,6 @@ services:
     volumes:
       - redis_data:/data
 
-  mongodb:
-    image: mongo:latest
-    container_name: simple-douyin-mongodb
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: simple_douyin
-      MONGO_INITDB_ROOT_PASSWORD: 1qaz0plm
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
-
   etcd:
     image: bitnami/etcd:latest
     container_name: simple-douyin-etcd
@@ -49,8 +37,15 @@ services:
     volumes: 
       - etcd_data:/bitnami
 
+  sakura-frp:
+    image: natfrp/frpc:latest
+    container_name: simple-douyin-frp
+    restart: always
+    command: '-f' 'lc28c5p96ar95kgga6hkxx9vpifksqai:10415888' '--remote_control' '7203223kjl'
+
+  # simple-douyin:
+    
 volumes:
   postgres_data:
   redis_data:
-  mongodb_data:
   etcd_data:
