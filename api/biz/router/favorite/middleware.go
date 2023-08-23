@@ -3,6 +3,8 @@
 package favorite
 
 import (
+	mw "simple-douyin/api/biz/middleware"
+
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -28,7 +30,8 @@ func _actionMw() []app.HandlerFunc {
 
 func _favoriteactionMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
+	// return nil
 }
 
 func _listMw() []app.HandlerFunc {
@@ -38,5 +41,6 @@ func _listMw() []app.HandlerFunc {
 
 func _favoritelistMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
+	// return nil
 }
