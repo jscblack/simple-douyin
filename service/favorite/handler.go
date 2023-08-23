@@ -84,7 +84,6 @@ func (s *FavoriteServiceImpl) FavoriteList(ctx context.Context, req *favorite.Fa
 	// 后处理返回结果
 	// ...
 	return resp, nil
-	return
 }
 
 // UserFavorCount implements the FavoriteServiceImpl interface.
