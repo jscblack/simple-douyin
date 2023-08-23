@@ -34,13 +34,12 @@ func _relation_ctionMw() []app.HandlerFunc {
 }
 
 func _followMw() []app.HandlerFunc {
-	// 该接口需要登录态
-	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
+	return nil
 }
 
 func _relationfollowlistMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
 }
 
 func _followerMw() []app.HandlerFunc {

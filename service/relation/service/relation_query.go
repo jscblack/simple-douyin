@@ -18,7 +18,7 @@ func RelationFollowList(ctx context.Context, req *relation.RelationFollowListReq
 	servLog.Info("Relation FollowList Get: ", req)
 	// 实际业务
 	var followListId []int64
-	err = dal.DB.Where("user_id=?", UserID).Pluck("to_user_id", &followListId).Error
+	err = dal.DB.Model(&dal.Relation{}).Where("user_id=?", UserID).Pluck("to_user_id", &followListId).Error
 	if err != nil {
 		return err
 	}
@@ -46,7 +46,7 @@ func RelationFollowerList(ctx context.Context, req *relation.RelationFollowerLis
 	servLog.Info("Relation FollowedList Get: ", req)
 	// 实际业务
 	var followerListId []int64
-	err = dal.DB.Where("to_user_id=?", UserID).Pluck("user_id", &followerListId).Error
+	err = dal.DB.Model(&dal.Relation{}).Where("to_user_id=?", UserID).Pluck("user_id", &followerListId).Error
 	if err != nil {
 		return err
 	}
@@ -76,7 +76,7 @@ func RelationFriendList(ctx context.Context, req *relation.RelationFriendListReq
 	// 实际业务
 	var followListId []int64
 	var friendListId []int64 //交集
-	err = dal.DB.Where("user_id=?", UserID).Pluck("to_user_id", &followListId).Error
+	err = dal.DB.Model(&dal.Relation{}).Where("user_id=?", UserID).Pluck("to_user_id", &followListId).Error
 	if err != nil {
 		return err
 	}

@@ -55,8 +55,7 @@ func Init(ctx context.Context) {
 	RDB = redis.NewClient(&redis.Options{
 		Addr:     constant.RedisAddress,
 		Password: constant.RedisPassword, // 没有密码，默认值
-		// DB:       constant.RelationRDB,
-		DB: 0,
+		DB:       constant.RelationRDB,
 	})
 	_, err = RDB.Ping(ctx).Result()
 	if err != nil {

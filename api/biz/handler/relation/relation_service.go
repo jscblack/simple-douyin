@@ -58,7 +58,26 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 	}
 	apiLog.Info("RelationAction6")
 	userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
-	apiLog.Info("RelationAction6.1")
+	if userID == req.ToUserID {
+		apiLog.Error("RelationAction", "err", "can't follow yourself")
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "can't follow yourself"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
+	if req.ToUserID <= 0 {
+		apiLog.Error("RelationAction", "err", "invalid to_user_id")
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "invalid to_user_id"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
 	req.Token = strconv.FormatInt(userID, 10)
 	apiLog.Info("RelationAction6.2")
 	err = client.RelationAction(ctx, &req, resp)

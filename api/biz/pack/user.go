@@ -89,7 +89,7 @@ func userListPack(ctx context.Context, rpcUserList []*kiteCommon.User) []*bizCom
 	// rpcResp -> bizResp
 	var bizUserList []*bizCommon.User
 	for _, v := range rpcUserList {
-		bizUserList = append(bizUserList, userPack(ctx, v))
+		bizUserList = append(bizUserList, UserPack(ctx, v))
 	}
 	return bizUserList
 }
