@@ -9,19 +9,19 @@ import (
 type MessageServiceImpl struct{}
 
 // MessageChat implements the MessageServiceImpl interface.
-func (s *MessageServiceImpl) MessageChat(ctx context.Context, request *message.MessageChatRequest) (resp *message.MessageChatResponse, err error) {
+func (s *MessageServiceImpl) MessageChat(ctx context.Context, req *message.MessageChatRequest) (resp *message.MessageChatResponse, err error) {
 	// TODO: Your code here...
 	return
 }
 
 // MessageSend implements the MessageServiceImpl interface.
-func (s *MessageServiceImpl) MessageSend(ctx context.Context, request *message.MessageSendRequest) (resp *message.MessageSendResponse, err error) {
+func (s *MessageServiceImpl) MessageSend(ctx context.Context, req *message.MessageSendRequest) (resp *message.MessageSendResponse, err error) {
 	// TODO: Your code here...
 	return
 }
 
 // MessageGetUserLastMessage implements the MessageServiceImpl interface.
-func (s *MessageServiceImpl) MessageGetUserLastMessage(ctx context.Context, request *message.MessageGetUserLastMessageRequest) (resp *message.MessageGetUserLastMessageResponse, err error) {
+func (s *MessageServiceImpl) MessageGetUserLastMessage(ctx context.Context, req *message.MessageGetUserLastMessageRequest) (resp *message.MessageGetUserLastMessageResponse, err error) {
 	// TODO: Your code here...
 	return
 }
