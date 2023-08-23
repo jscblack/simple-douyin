@@ -9,8 +9,10 @@ services:
       POSTGRES_USER: simple_douyin
       POSTGRES_PASSWORD: 1qaz0plm
       POSTGRES_DB: simple_douyin_db
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"
+    # ports:
+    #   - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -20,8 +22,10 @@ services:
     restart: always
     environment:
       REDIS_PASSWORD: 1qaz0plm
-    ports:
-      - "6379:6379"
+    expose:
+      - "6379"
+    # ports:
+    #   - "6379:6379"
     volumes:
       - redis_data:/data
 
@@ -31,19 +35,27 @@ services:
     restart: always
     environment:
       - ALLOW_NONE_AUTHENTICATION=yes
-    ports:
-      - "2379:2379" 
-      - "2380:2380"
-    volumes: 
+    expose:
+      - "2379"
+      - "2380"
+    # ports:
+    #   - "2379:2379"
+    #   - "2380:2380"
+    volumes:
       - etcd_data:/bitnami
 
-  sakura-frp:
+  sakura-frp: # frp port 18080 for use
     image: natfrp/frpc:latest
     container_name: simple-douyin-frp
     restart: always
     command: '-f' 'lc28c5p96ar95kgga6hkxx9vpifksqai:10415888' '--remote_control' '7203223kjl'
 
-  # simple-douyin:
+  simple-douyin:
+    image: jscblack/simple-douyin:latest
+    container_name: simple-douyin
+    restart: always
+    ports:
+      - "18080:8080"
     
 volumes:
   postgres_data:
