@@ -18,6 +18,7 @@ func Feed(ctx context.Context, req *feed.FeedRequest) (*feed.FeedResponse, error
 	servLog.Info("Feed rpc.")
 
 	var videoList []*common.Video
+
 	dbVideoList, err := dal.QueryVideoFromLatestTime(ctx, req.GetLatestTime())
 	servLog.Info("after query.")
 	if err != nil {
@@ -57,6 +58,7 @@ func fillVideoInfo(ctx context.Context, dbVideo *dal.Video, userId *int64) (*com
 		ToUserId: dbVideo.UserId,
 	})
 	servLog.Info(userResp)
+	servLog.Info(userResp.User.WorkCount)
 	if err != nil {
 		return nil, err
 	}
