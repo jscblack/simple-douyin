@@ -17,7 +17,7 @@ import (
 
 var messageClient messageservice.Client
 
-func InitMessagge() {
+func InitMessaggeClient() {
 	r, err := etcd.NewEtcdResolver([]string{constant.EtcdAddressWithPort})
 	if err != nil {
 		apiLog.Fatal(err)

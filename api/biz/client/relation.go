@@ -16,7 +16,7 @@ import (
 
 var relationClient relationservice.Client
 
-func InitRelation() {
+func InitRelationClient() {
 	r, err := etcd.NewEtcdResolver([]string{constant.EtcdAddressWithPort})
 	if err != nil {
 		apiLog.Fatal(err)
@@ -43,6 +43,10 @@ func RelationAction(ctx context.Context, bizReq *bizRelation.RelationActionReque
 		err = pack.RelationAddUnpack(ctx, bizReq, kiteReq)
 		if err != nil {
 			apiLog.Error(err)
+			return err
+		}
+		if relationClient == nil {
+			apiLog.Error("client/relation :NIL !!!!")
 			return err
 		}
 		kiteResp, err := relationClient.RelationAdd(ctx, kiteReq)

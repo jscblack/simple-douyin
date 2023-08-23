@@ -7,7 +7,10 @@ import (
 	"strconv"
 
 	client "simple-douyin/api/biz/client"
+	mw "simple-douyin/api/biz/middleware"
 	relation "simple-douyin/api/biz/model/relation"
+
+	apiLog "github.com/prometheus/common/log"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -17,11 +20,17 @@ import (
 // RelationAction .
 // @router /douyin/relation/action/ [POST]
 func RelationAction(ctx context.Context, c *app.RequestContext) {
+	apiLog.Info("RelationAction")
 	var err error
 	var req relation.RelationActionRequest
+	apiLog.Info("RelationAction2")
 	resp := new(relation.RelationActionResponse)
+	apiLog.Info("RelationAction3")
 	err = c.BindAndValidate(&req)
+	apiLog.Info("RelationAction4")
 	if err != nil {
+		apiLog.Info("RelationAction4-e")
+		apiLog.Error("RelationAction", "err", err.Error())
 		resp := new(relation.RelationActionResponse)
 		resp.StatusCode = 57006
 		if resp.StatusMsg == nil {
@@ -31,21 +40,30 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, resp)
 		return
 	}
-
+	apiLog.Info("RelationAction5")
 	loggedClaims, exist := c.Get("JWT_PAYLOAD")
 	if !exist {
+		apiLog.Error("RelationAction", "err", "Unauthorized")
 		resp.StatusCode = 57006
-		if resp.StatusMsg == nil {
-			resp.StatusMsg = new(string)
-		}
-		*resp.StatusMsg = "Unauthorized"
+		// if resp.StatusMsg == nil {
+		// 	resp.StatusMsg = new(string)
+		// }
+		// *resp.StatusMsg = "Unauthorized"
+		apiLog.Info("RelationAction5.1")
+		str := "Unauthorized"
+		resp.StatusMsg = &str
+		apiLog.Info("RelationAction5.2")
 		c.JSON(consts.StatusOK, resp)
 		return
 	}
-	userID := int64(loggedClaims.(jwt.MapClaims)["user_id"].(float64))
+	apiLog.Info("RelationAction6")
+	userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
+	apiLog.Info("RelationAction6.1")
 	req.Token = strconv.FormatInt(userID, 10)
+	apiLog.Info("RelationAction6.2")
 	err = client.RelationAction(ctx, &req, resp)
 	if err != nil {
+		apiLog.Error("RelationAction", "err", err.Error())
 		resp.StatusCode = 57006
 		if resp.StatusMsg == nil {
 			resp.StatusMsg = new(string)
@@ -54,6 +72,7 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, resp)
 		return
 	}
+	apiLog.Info("RelationActio7")
 	c.JSON(consts.StatusOK, resp)
 }
 
@@ -84,7 +103,7 @@ func RelationFollowList(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, resp)
 		return
 	}
-	userID := int64(loggedClaims.(jwt.MapClaims)["user_id"].(float64))
+	userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
 	req.Token = strconv.FormatInt(userID, 10)
 	err = client.RelationFollowList(ctx, &req, resp)
 	if err != nil {
@@ -126,7 +145,7 @@ func RelationFollowerList(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, resp)
 		return
 	}
-	userID := int64(loggedClaims.(jwt.MapClaims)["user_id"].(float64))
+	userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
 	req.Token = strconv.FormatInt(userID, 10)
 	err = client.RelationFollowerList(ctx, &req, resp)
 	if err != nil {
@@ -169,7 +188,7 @@ func RelationFriendList(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, resp)
 		return
 	}
-	userID := int64(loggedClaims.(jwt.MapClaims)["user_id"].(float64))
+	userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
 	req.Token = strconv.FormatInt(userID, 10)
 	err = client.RelationFriendList(ctx, &req, resp)
 	if err != nil {
