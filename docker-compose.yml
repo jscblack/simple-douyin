@@ -52,7 +52,7 @@ services:
 
   simple-douyin:
     image: jscblack/simple-douyin:latest
-    container_name: simple-douyin
+    container_name: simple-douyin-main
     restart: always
     ports:
       - "18080:8080"
