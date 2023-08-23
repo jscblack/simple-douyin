@@ -19,7 +19,23 @@ func (s *FavoriteServiceImpl) FavoriteAddAction(ctx context.Context, req *favori
 	// 取出redis的dal.VideoCounter，更新FavoredCount
 	// 如果redis中没有对应的counter，直接略过更新redis的过程
 	// 先更新mysql，再更新redis，特别需要UserCounter中有两个量，可能值为-1，表示未初始化
-	return
+	resp = new(favorite.FavoriteAddActionResponse)
+	// 前处理校验请求
+	// ...
+	// 实际业务
+	err = service.FavoriteAddAction(ctx, req, resp)
+	if err != nil {
+		resp.StatusCode = 57004
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		servLog.Error(err)
+		return resp, nil
+	}
+	// 后处理返回结果
+	// ...
+	return resp, nil
 }
 
 // FavoriteDelAction implements the FavoriteServiceImpl interface.
@@ -30,12 +46,44 @@ func (s *FavoriteServiceImpl) FavoriteDelAction(ctx context.Context, req *favori
 	// 取出redis的dal.VideoCounter，更新FavoredCount
 	// 如果redis中没有对应的counter，直接略过更新redis的过程
 	// 先更新mysql，再更新redis，特别需要UserCounter中有两个量，可能值为-1，表示未初始化
-	return
+	resp = new(favorite.FavoriteDelActionResponse)
+	// 前处理校验请求
+	// ...
+	// 实际业务
+	err = service.FavoriteDelAction(ctx, req, resp)
+	if err != nil {
+		resp.StatusCode = 57004
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		servLog.Error(err)
+		return resp, nil
+	}
+	// 后处理返回结果
+	// ...
+	return resp, nil
 }
 
 // FavoriteList implements the FavoriteServiceImpl interface.
 func (s *FavoriteServiceImpl) FavoriteList(ctx context.Context, req *favorite.FavoriteListRequest) (resp *favorite.FavoriteListResponse, err error) {
-	// TODO: Your code here...
+	resp = new(favorite.FavoriteListResponse)
+	// 前处理校验请求
+	// ...
+	// 实际业务
+	err = service.FavoriteList(ctx, req, resp)
+	if err != nil {
+		resp.StatusCode = 57004
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		servLog.Error(err)
+		return resp, nil
+	}
+	// 后处理返回结果
+	// ...
+	return resp, nil
 	return
 }
 

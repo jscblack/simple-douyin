@@ -190,6 +190,10 @@ func IsFavored(ctx context.Context, req *favorite.IsFavorRequest, resp *favorite
 	resp.StatusCode = 0
 	resp.StatusMsg = nil
 	resp.IsFavorite = true
+	if req.UserId == 0 || req.VideoId == 0 {
+		resp.IsFavorite = false
+		return nil
+	}
 	// 首先从redis中查询
 	// int64转string
 	keyStr := strconv.FormatInt(req.UserId, 10) + " " + strconv.FormatInt(req.VideoId, 10)

@@ -5,6 +5,7 @@ import (
 	"net"
 	favorite "simple-douyin/kitex_gen/favorite/favoriteservice"
 	"simple-douyin/pkg/constant"
+	"simple-douyin/service/favorite/client"
 	"simple-douyin/service/favorite/dal"
 
 	"github.com/cloudwego/kitex/pkg/limit"
@@ -17,6 +18,7 @@ import (
 func main() {
 	// init db
 	dal.Init(context.Background())
+	client.Init(context.Background())
 	r, err := etcd.NewEtcdRegistry([]string{constant.EtcdAddressWithPort})
 	if err != nil {
 		servLog.Fatal(err)

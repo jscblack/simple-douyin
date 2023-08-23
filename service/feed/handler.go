@@ -2,9 +2,10 @@ package main
 
 import (
 	"context"
-	apiLog "github.com/prometheus/common/log"
 	feed "simple-douyin/kitex_gen/feed"
 	"simple-douyin/service/feed/service"
+
+	apiLog "github.com/prometheus/common/log"
 )
 
 // FeedServiceImpl implements the last service interface defined in the IDL.

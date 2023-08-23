@@ -2,15 +2,16 @@ package client
 
 import (
 	"context"
-	"github.com/cloudwego/kitex/client"
-	etcd "github.com/kitex-contrib/registry-etcd"
-	apiLog "github.com/prometheus/common/log"
 	bizFeed "simple-douyin/api/biz/model/feed"
 	"simple-douyin/api/biz/pack"
 	"simple-douyin/kitex_gen/feed"
 	"simple-douyin/kitex_gen/feed/feedservice"
 	"simple-douyin/pkg/constant"
 	"time"
+
+	"github.com/cloudwego/kitex/client"
+	etcd "github.com/kitex-contrib/registry-etcd"
+	apiLog "github.com/prometheus/common/log"
 )
 
 var feedClient feedservice.Client // interface from RPC IDL
@@ -44,5 +45,5 @@ func Feed(ctx context.Context, req *feed.FeedRequest) (*bizFeed.FeedResponse, er
 		apiLog.Error(err)
 		return nil, err
 	}
-	return pack.FeedPack(resp)
+	return pack.FeedPack(ctx, resp)
 }
