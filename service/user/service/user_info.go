@@ -48,21 +48,21 @@ func fillUserInfo(ctx context.Context, comUser *common.User, req *user.UserInfoR
 	if err != nil {
 		return err
 	}
-	// comUser.FollowCount = followCountResp.FollowCount
-	// comUser.FollowerCount = followerCountResp.FollowerCount
-	// comUser.FavoriteCount = favoriteCountResp.FavorCount
-	// comUser.TotalFavorited = totalFavoritedResp.FavoredCount
-	// comUser.WorkCount = workCountResp.WorkCount
-	comUser.FollowCount = new(int64)
-	*comUser.FollowCount = *followCountResp.FollowCount
-	comUser.FollowerCount = new(int64)
-	*comUser.FollowerCount = *followerCountResp.FollowerCount
-	comUser.FavoriteCount = new(int64)
-	*comUser.FavoriteCount = *favoriteCountResp.FavorCount
-	comUser.TotalFavorited = new(int64)
-	*comUser.TotalFavorited = *totalFavoritedResp.FavoredCount
-	comUser.WorkCount = new(int64)
-	*comUser.WorkCount = *workCountResp.WorkCount
+	comUser.FollowCount = followCountResp.FollowCount
+	comUser.FollowerCount = followerCountResp.FollowerCount
+	comUser.FavoriteCount = favoriteCountResp.FavorCount
+	comUser.TotalFavorited = totalFavoritedResp.FavoredCount
+	comUser.WorkCount = workCountResp.WorkCount
+	// comUser.FollowCount = new(int64)
+	// *comUser.FollowCount = *followCountResp.FollowCount
+	// comUser.FollowerCount = new(int64)
+	// *comUser.FollowerCount = *followerCountResp.FollowerCount
+	// comUser.FavoriteCount = new(int64)
+	// *comUser.FavoriteCount = *favoriteCountResp.FavorCount
+	// comUser.TotalFavorited = new(int64)
+	// *comUser.TotalFavorited = *totalFavoritedResp.FavoredCount
+	// comUser.WorkCount = new(int64)
+	// *comUser.WorkCount = *workCountResp.WorkCount
 
 	// 获取关注信息
 	if req.UserId == nil {
