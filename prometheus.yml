@@ -112,3 +112,7 @@ scrape_configs:
     metrics_path: /messageclient
     static_configs:
       - targets: ['simple-douyin-main:9115']
+
+  - job_name: "ETCD"
+    static_configs:
+      - targets: ['simple-douyin-etcd:2379']
