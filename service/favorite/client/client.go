@@ -31,7 +31,10 @@ func Init(ctx context.Context) {
 		client.WithRPCTimeout(3*time.Second),           // rpc timeout
 		client.WithConnectTimeout(50*time.Millisecond), // conn timeout
 		// client.WithFailureRetry(retry.NewFailurePolicy()), // retry
-		// client.WithSuite(trace.NewDefaultClientSuite()),   // tracer
+		// client.WithTracer(
+		// 	prometheus.NewClientTracer(
+		// 		constant.FavoriteClientTracerPort,
+		// 		constant.FavoriteClientTracerPath)), // tracer
 		client.WithResolver(r), // resolver
 	)
 	if err != nil {
@@ -48,7 +51,10 @@ func Init(ctx context.Context) {
 		client.WithRPCTimeout(3*time.Second),           // rpc timeout
 		client.WithConnectTimeout(50*time.Millisecond), // conn timeout
 		// client.WithFailureRetry(retry.NewFailurePolicy()), // retry
-		// client.WithSuite(trace.NewDefaultClientSuite()),   // tracer
+		// client.WithTracer(
+		// 	prometheus.NewClientTracer(
+		// 		constant.RelationClientTracerPort,
+		// 		constant.RelationClientTracerPath)), // tracer
 		client.WithResolver(r), // resolver
 	)
 	if err != nil {
@@ -65,7 +71,10 @@ func Init(ctx context.Context) {
 		client.WithRPCTimeout(3*time.Second),           // rpc timeout
 		client.WithConnectTimeout(50*time.Millisecond), // conn timeout
 		// client.WithFailureRetry(retry.NewFailurePolicy()), // retry
-		// client.WithSuite(trace.NewDefaultClientSuite()),   // tracer
+		// client.WithTracer(
+		// 	prometheus.NewClientTracer(
+		// 		constant.PublishClientTracerPort,
+		// 		constant.PublishClientTracerPath)), // tracer
 		client.WithResolver(r), // resolver
 	)
 	if err != nil {

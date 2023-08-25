@@ -30,13 +30,17 @@ func Init(ctx context.Context) {
 		client.WithRPCTimeout(3*time.Second),           // rpc timeout
 		client.WithConnectTimeout(50*time.Millisecond), // conn timeout
 		// client.WithFailureRetry(retry.NewFailurePolicy()), // retry
-		// client.WithSuite(trace.NewDefaultClientSuite()),   // tracer
+		// client.WithTracer(
+		// 	prometheus.NewClientTracer(
+		// 		constant.UserClientTracerPort,
+		// 		constant.UserClientTracerPath)), // tracer
 		client.WithResolver(r), // resolver
 	)
 	if err != nil {
 		servLog.Fatal(err)
 	}
 	UserClient = c1
+	servLog.Info("User client initialized")
 
 	c2, err := messageservice.NewClient(
 		constant.MessageServiceName,
@@ -46,6 +50,10 @@ func Init(ctx context.Context) {
 		client.WithRPCTimeout(3*time.Second),           // rpc timeout
 		client.WithConnectTimeout(50*time.Millisecond), // conn timeout
 		// client.WithFailureRetry(retry.NewFailurePolicy()), // retry
+		// client.WithTracer(
+		// 	prometheus.NewClientTracer(
+		// 		constant.MessageClientTracerPort,
+		// 		constant.MessageClientTracerPath)), // tracer
 		client.WithResolver(r), // resolver
 	)
 	if err != nil {
@@ -54,6 +62,6 @@ func Init(ctx context.Context) {
 
 	MessageClient = c2
 
-	servLog.Info("User client initialized")
+	servLog.Info("Message client initialized")
 
 }

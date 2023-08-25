@@ -33,83 +33,82 @@ scrape_configs:
     scrape_interval: 1s
     metrics_path: /userserver
     static_configs:
-      - targets: ['localhost:9102']
+      - targets: ['simple-douyin-main:9102']
   
   - job_name: "Kitex_User_Client"
     scrape_interval: 1s
     metrics_path: /userclient
     static_configs:
-      - targets: ['localhost:9103']
+      - targets: ['simple-douyin-main:9103']
 
   - job_name: "Kitex_Feed_Server"
     scrape_interval: 1s
     metrics_path: /feedserver
     static_configs:
-      - targets: ['localhost:9104']
+      - targets: ['simple-douyin-main:9104']
   
   - job_name: "Kitex_Feed_Client"
     scrape_interval: 1s
     metrics_path: /feedclient
     static_configs:
-      - targets: ['localhost:9105']
+      - targets: ['simple-douyin-main:9105']
 
   - job_name: "Kitex_Publish_Server"
     scrape_interval: 1s
     metrics_path: /publishserver
     static_configs:
-      - targets: ['localhost:9106']
+      - targets: ['simple-douyin-main:9106']
   
   - job_name: "Kitex_Publish_Client"
     scrape_interval: 1s
     metrics_path: /publishclient
     static_configs:
-      - targets: ['localhost:9107']
+      - targets: ['simple-douyin-main:9107']
 
   - job_name: "Kitex_Favorite_Server"
     scrape_interval: 1s
     metrics_path: /favoriteserver
     static_configs:
-      - targets: ['localhost:9108']
+      - targets: ['simple-douyin-main:9108']
   
   - job_name: "Kitex_Favorite_Client"
     scrape_interval: 1s
     metrics_path: /favoriteclient
     static_configs:
-      - targets: ['localhost:9109']
+      - targets: ['simple-douyin-main:9109']
 
   - job_name: "Kitex_Comment_Server"
     scrape_interval: 1s
     metrics_path: /commentserver
     static_configs:
-      - targets: ['localhost:9110']
+      - targets: ['simple-douyin-main:9110']
   
   - job_name: "Kitex_Comment_Client"
     scrape_interval: 1s
     metrics_path: /commentclient
     static_configs:
-      - targets: ['localhost:9111']
-
+      - targets: ['simple-douyin-main:9111']
 
   - job_name: "Kitex_Relation_Server"
     scrape_interval: 1s
     metrics_path: /relationserver
     static_configs:
-      - targets: ['localhost:9112']
+      - targets: ['simple-douyin-main:9112']
   
   - job_name: "Kitex_Relation_Client"
     scrape_interval: 1s
     metrics_path: /relationclient
     static_configs:
-      - targets: ['localhost:9113']
+      - targets: ['simple-douyin-main:9113']
 
   - job_name: "Kitex_Message_Server"
     scrape_interval: 1s
     metrics_path: /messageserver
     static_configs:
-      - targets: ['localhost:9114']
+      - targets: ['simple-douyin-main:9114']
   
   - job_name: "Kitex_Message_Client"
     scrape_interval: 1s
     metrics_path: /messageclient
     static_configs:
-      - targets: ['localhost:9115']
+      - targets: ['simple-douyin-main:9115']

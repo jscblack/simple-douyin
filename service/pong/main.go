@@ -31,10 +31,10 @@ func main() {
 		server.WithServiceAddr(addr),                                       // address
 		server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 100}), // limit
 		server.WithMuxTransport(),                                          // Multiplex
-		// server.WithSuite(trace.NewDefaultServerSuite()),                    // tracer
 		// server.WithBoundHandler(bound.NewCpuLimitHandler()),                // BoundHandler
 		server.WithRegistry(r), // registry
 	)
+	servLog.Warn("Ping service started")
 	err = svr.Run()
 
 	if err != nil {

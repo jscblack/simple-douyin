@@ -12,7 +12,7 @@ import (
 	apiLog "github.com/sirupsen/logrus"
 
 	"github.com/cloudwego/kitex/client"
-
+	prometheus "github.com/kitex-contrib/monitor-prometheus"
 	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
@@ -31,7 +31,10 @@ func InitFavoriteClient() {
 		client.WithRPCTimeout(3*time.Second),           // rpc timeout
 		client.WithConnectTimeout(50*time.Millisecond), // conn timeout
 		// client.WithFailureRetry(retry.NewFailurePolicy()), // retry
-		// client.WithSuite(trace.NewDefaultClientSuite()),   // tracer
+		client.WithTracer(
+			prometheus.NewClientTracer(
+				constant.FavoriteClientTracerPort,
+				constant.FavoriteClientTracerPath)), // tracer
 		client.WithResolver(r), // resolver
 	)
 	if err != nil {

@@ -24,7 +24,7 @@ func main() {
 	Init()
 	h := server.New(
 		server.WithMaxRequestBodySize(constant.MaxVideoSize),
-		server.WithTracer(prometheus.NewServerTracer(":9091", "/hertz")),
+		server.WithTracer(prometheus.NewServerTracer(":9101", "/hertz")),
 	)
 	h.NoRoute(handler.Default)
 	h.NoMethod(handler.Default)

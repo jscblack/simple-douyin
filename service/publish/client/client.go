@@ -2,15 +2,16 @@ package client
 
 import (
 	"context"
-	"github.com/cloudwego/kitex/client"
-	etcd "github.com/kitex-contrib/registry-etcd"
-	servLog "github.com/sirupsen/logrus"
-	"github.com/upyun/go-sdk/v3/upyun"
 	"simple-douyin/kitex_gen/comment/commentservice"
 	"simple-douyin/kitex_gen/favorite/favoriteservice"
 	"simple-douyin/kitex_gen/user/userservice"
 	"simple-douyin/pkg/constant"
 	"time"
+
+	"github.com/cloudwego/kitex/client"
+	etcd "github.com/kitex-contrib/registry-etcd"
+	servLog "github.com/sirupsen/logrus"
+	"github.com/upyun/go-sdk/v3/upyun"
 )
 
 var UserClient userservice.Client // interface from RPC IDL
@@ -33,7 +34,10 @@ func Init(ctx context.Context) {
 		client.WithRPCTimeout(3*time.Second),           // rpc timeout
 		client.WithConnectTimeout(50*time.Millisecond), // conn timeout
 		// client.WithFailureRetry(retry.NewFailurePolicy()), // retry
-		// client.WithSuite(trace.NewDefaultClientSuite()),   // tracer
+		// client.WithTracer(
+		// 	prometheus.NewClientTracer(
+		// 		constant.UserClientTracerPort,
+		// 		constant.UserClientTracerPath)), // tracer
 		client.WithResolver(r), // resolver
 	)
 	if err != nil {
@@ -50,7 +54,10 @@ func Init(ctx context.Context) {
 		client.WithRPCTimeout(3*time.Second),           // rpc timeout
 		client.WithConnectTimeout(50*time.Millisecond), // conn timeout
 		// client.WithFailureRetry(retry.NewFailurePolicy()), // retry
-		// client.WithSuite(trace.NewDefaultClientSuite()),   // tracer
+		// client.WithTracer(
+		// 	prometheus.NewClientTracer(
+		// 		constant.FavoriteClientTracerPort,
+		// 		constant.FavoriteClientTracerPath)), // tracer
 		client.WithResolver(r), // resolver
 	)
 	if err != nil {
@@ -67,7 +74,10 @@ func Init(ctx context.Context) {
 		client.WithRPCTimeout(3*time.Second),           // rpc timeout
 		client.WithConnectTimeout(50*time.Millisecond), // conn timeout
 		// client.WithFailureRetry(retry.NewFailurePolicy()), // retry
-		// client.WithSuite(trace.NewDefaultClientSuite()),   // tracer
+		// client.WithTracer(
+		// 	prometheus.NewClientTracer(
+		// 		constant.CommentClientTracerPort,
+		// 		constant.CommentClientTracerPath)), // tracer
 		client.WithResolver(r), // resolver
 	)
 	if err != nil {
