@@ -40,7 +40,7 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, resp)
 		return
 	}
-	apiLog.Info("RelationAction5")
+	apiLog.Info("RelationAction", "req", req)
 	loggedClaims, exist := c.Get("JWT_PAYLOAD")
 	if !exist {
 		apiLog.Error("RelationAction", "err", "Unauthorized")
@@ -49,15 +49,14 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 		// 	resp.StatusMsg = new(string)
 		// }
 		// *resp.StatusMsg = "Unauthorized"
-		apiLog.Info("RelationAction5.1")
 		str := "Unauthorized"
 		resp.StatusMsg = &str
-		apiLog.Info("RelationAction5.2")
 		c.JSON(consts.StatusOK, resp)
 		return
 	}
-	apiLog.Info("RelationAction6")
 	userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
+	apiLog.Info("RelationAction", "userID", userID)
+	apiLog.Info("RelationAction", "req.ToUserID", req.ToUserID)
 	if userID == req.ToUserID {
 		apiLog.Error("RelationAction", "err", "can't follow yourself")
 		resp.StatusCode = 57006
@@ -69,7 +68,7 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	if req.ToUserID <= 0 {
-		apiLog.Error("RelationAction", "err", "invalid to_user_id")
+		apiLog.Error("RelationAction", "err", "invalid to_user_id : ", req.ToUserID)
 		resp.StatusCode = 57006
 		if resp.StatusMsg == nil {
 			resp.StatusMsg = new(string)
@@ -79,7 +78,6 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	req.Token = strconv.FormatInt(userID, 10)
-	apiLog.Info("RelationAction6.2")
 	err = client.RelationAction(ctx, &req, resp)
 	if err != nil {
 		apiLog.Error("RelationAction", "err", err.Error())

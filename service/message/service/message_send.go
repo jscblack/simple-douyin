@@ -6,7 +6,7 @@ import (
 	"simple-douyin/service/message/dal"
 )
 
-func MessagegSend(ctx context.Context, req *message.MessageSendRequest, resp *message.MessageSendResponse) (err error) {
+func MessageSend(ctx context.Context, req *message.MessageSendRequest, resp *message.MessageSendResponse) (err error) {
 	//业务逻辑
 	FromUserID := req.UserId
 	ToUserID := req.ToUserId
@@ -19,7 +19,7 @@ func MessagegSend(ctx context.Context, req *message.MessageSendRequest, resp *me
 	}
 	result := dal.DB.Create(&newMsg)
 	if result.Error != nil || result.RowsAffected == 0 {
-		resp.StatusCode = 57011
+		resp.StatusCode = 57007
 		if resp.StatusMsg == nil {
 			resp.StatusMsg = new(string)
 		}
