@@ -84,6 +84,11 @@ func UserInfo(ctx context.Context, req *user.UserInfoRequest, resp *user.UserInf
 	// 实际业务
 	servLog.Info("User Info Get: ", req.UserId, req.ToUserId)
 
+	// 处理userid以兼容部分接口可以不传userid
+	if req.UserId != nil && *req.UserId <= 0 {
+		req.UserId = nil
+	}
+
 	// 检查redis缓存
 	cacheUser, err := dal.RDB.Get(ctx, strconv.FormatInt(req.ToUserId, 10)).Result()
 	if err != nil {

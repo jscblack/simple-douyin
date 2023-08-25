@@ -12,7 +12,7 @@ struct MessageChatRequest {
 struct MessageChatResponse {
     1: required i32 status_code,               //状态码: 0:成功 other:失败
     2: optional string status_msg,             //错误信息
-    3: optional list<common.Message> messages, //消息列表
+    3: optional list<common.Message> message_list, //消息列表
 }
 
 //

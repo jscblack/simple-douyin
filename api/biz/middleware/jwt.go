@@ -25,8 +25,8 @@ func InitJwt() {
 	JwtMiddleware, err = jwt.New(&jwt.HertzJWTMiddleware{
 		Realm:         "simple-douyin-jwt",
 		Key:           []byte("1qaz0plm"),
-		Timeout:       12 * time.Hour,
-		MaxRefresh:    12 * time.Hour,
+		Timeout:       72 * time.Hour,
+		MaxRefresh:    72 * time.Hour,
 		TokenLookup:   "header: Authorization, query: token, cookie: jwt, form: token",
 		TokenHeadName: "Bearer",
 		IdentityKey:   IdentityKey,

@@ -4,6 +4,8 @@ import (
 	"context"
 	"simple-douyin/kitex_gen/message"
 	"simple-douyin/service/message/dal"
+
+	servLog "github.com/prometheus/common/log"
 )
 
 func MessageSend(ctx context.Context, req *message.MessageSendRequest, resp *message.MessageSendResponse) (err error) {
@@ -17,6 +19,7 @@ func MessageSend(ctx context.Context, req *message.MessageSendRequest, resp *mes
 		ToUserID:   ToUserID,
 		Msg:        Content,
 	}
+	servLog.Info("message send: ", newMsg)
 	result := dal.DB.Create(&newMsg)
 	if result.Error != nil || result.RowsAffected == 0 {
 		resp.StatusCode = 57007
@@ -26,7 +29,5 @@ func MessageSend(ctx context.Context, req *message.MessageSendRequest, resp *mes
 		*resp.StatusMsg = "发送失败"
 		return nil
 	}
-	resp.StatusCode = 0
-	resp.StatusMsg = nil
 	return nil
 }

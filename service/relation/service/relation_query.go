@@ -118,7 +118,8 @@ func RelationFriendList(ctx context.Context, req *relation.RelationFriendListReq
 		// FavoriteCount   *int64  `thrift:"favorite_count,11,optional" frugal:"11,optional,i64" json:"favorite_count,omitempty"`
 		// Message         *string `thrift:"message,12,optional" frugal:"12,optional,string" json:"message,omitempty"`
 		// MsgType         int64   `thrift:"msg_type,13,required" frugal:"13,required,i64" json:"msg_type"`
-		var friendUser relation.FriendUser
+		// var friendUser relation.FriendUser
+		friendUser := new(relation.FriendUser)
 		//new 指针
 
 		friendUser.Id = userResp.User.Id
@@ -152,7 +153,7 @@ func RelationFriendList(ctx context.Context, req *relation.RelationFriendListReq
 			friendUser.MsgType = 2
 		}
 
-		friendListRpc = append(friendListRpc, &friendUser)
+		friendListRpc = append(friendListRpc, friendUser)
 
 	}
 	resp.FriendList = friendListRpc

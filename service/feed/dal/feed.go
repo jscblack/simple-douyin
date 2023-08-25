@@ -3,11 +3,12 @@ package dal
 import (
 	"context"
 	"encoding/json"
-	servLog "github.com/prometheus/common/log"
 	"simple-douyin/kitex_gen/common"
 	"simple-douyin/pkg/constant"
 	"strconv"
 	"time"
+
+	servLog "github.com/prometheus/common/log"
 )
 
 func QueryVideoFromLatestTime(ctx context.Context, latestTime int64) ([]*Video, error) {
@@ -18,9 +19,10 @@ func QueryVideoFromLatestTime(ctx context.Context, latestTime int64) ([]*Video, 
 		return videoList, nil
 	}
 	if latestTime == 0 {
-		latestTime = time.Now().Unix()
+		latestTime = time.Now().UnixMilli()
 	}
-	if err := DB.Where("created_at < ?", time.Unix(latestTime, 0)).Order("id desc").Limit(constant.MaxFeedNum).Find(&videoList).Error; err != nil {
+	servLog.Info("latestTime: ", time.UnixMilli(latestTime))
+	if err := DB.Where("created_at < ?", time.UnixMilli(latestTime)).Order("id desc").Limit(constant.MaxFeedNum).Find(&videoList).Error; err != nil {
 		servLog.Error("QueryVideoFromLatestTime err", err)
 		return videoList, err
 	}
@@ -57,12 +59,12 @@ func QueryEarliestTimeFromVideoList(ctx context.Context, videoList []*common.Vid
 			servLog.Error(err)
 			return 0, err
 		}
-		return video.CreatedAt.Unix(), nil
+		return video.CreatedAt.UnixMilli(), nil
 	}
 	err = json.Unmarshal([]byte(cacheVideo), &video)
 	if err != nil {
 		return 0, err
 	}
 	servLog.Info("QueryEarliestTimeFromVideoList success.")
-	return video.CreatedAt.Unix(), nil
+	return video.CreatedAt.UnixMilli(), nil
 }
