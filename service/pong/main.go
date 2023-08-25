@@ -2,7 +2,7 @@ package main
 
 import (
 	"net"
-	pong "simple-douyin/kitex_gen/pong/pongservice"
+	"simple-douyin/kitex_gen/pong/pongservice"
 
 	"simple-douyin/pkg/constant"
 
@@ -19,13 +19,12 @@ func main() {
 		servLog.Fatal(err)
 	}
 
-	addr, err := net.ResolveTCPAddr("tcp",
-		constant.ServiceAddress+":"+constant.PingServicePort)
+	addr, err := net.ResolveTCPAddr("tcp", constant.ServiceAddress+":"+constant.PingServicePort)
 	if err != nil {
 		servLog.Fatal(err)
 		return
 	}
-	svr := pong.NewServer(new(PongServiceImpl),
+	svr := pongservice.NewServer(new(PongServiceImpl),
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: constant.PingServiceName}), // server name
 		// server.WithMiddleware(middleware.CommonMiddleware),                                            // middleWare
 		// server.WithMiddleware(middleware.ServerMiddleware),

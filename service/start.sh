@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Start the pong service
+go run ./pong/. &
+
 # Start the user service
 go run ./user/. &
 

@@ -13,9 +13,9 @@ const (
 	// UserServiceName         = "demouser"
 	// CPURateLimit    float64 = 80.0
 	// DefaultLimit            = 10
-	EtcdAddressWithPort = "ub.yilantingfeng.site" + ":2379"
-	PostgresDSN         = "host=ub.yilantingfeng.site user=simple_douyin password=1qaz0plm dbname=simple_douyin_db port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-	RedisAddress        = "ub.yilantingfeng.site" + ":6379"
+	EtcdAddressWithPort = "simple-douyin-etcd" + ":2379"
+	PostgresDSN         = "host=simple-douyin-postgres user=simple_douyin password=1qaz0plm dbname=simple_douyin_db port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	RedisAddress        = "simple-douyin-redis" + ":6379"
 	RedisPassword       = "1qaz0plm"
 	ServiceAddress      = "127.0.0.1"
 

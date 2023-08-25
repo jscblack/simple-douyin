@@ -4,10 +4,15 @@ package comment
 
 import (
 	"context"
+	"strconv"
+
+	client "simple-douyin/api/biz/client"
+	mw "simple-douyin/api/biz/middleware"
+	comment "simple-douyin/api/biz/model/comment"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	comment "simple-douyin/api/biz/model/comment"
+	"github.com/hertz-contrib/jwt"
 )
 
 // CommentAction .
@@ -23,6 +28,43 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 
 	resp := new(comment.CommentActionResponse)
 
+	// 该接口需要登录态，但不需要确认具体身份，仅在路由时鉴权即可
+	// 通过中间件获取用户id
+	loggedClaims, exist := c.Get("JWT_PAYLOAD")
+	if !exist {
+		resp.StatusCode = 57001
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "Unauthorized"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
+	userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
+	req.Token = strconv.FormatInt(userID, 10)
+
+	if req.ActionType == 1 {
+		err = client.CommentAdd(ctx, &req, resp)
+	} else if req.ActionType == 2 {
+		err = client.CommentDel(ctx, &req, resp)
+	} else {
+		resp.StatusCode = 7005
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "请求操作错误"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
+	if err != nil {
+		resp.StatusCode = 7005
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
 	c.JSON(consts.StatusOK, resp)
 }
 
@@ -38,6 +80,32 @@ func CommentList(ctx context.Context, c *app.RequestContext) {
 	}
 
 	resp := new(comment.CommentListResponse)
+
+	// 该接口需要登录态，但不需要确认具体身份，仅在路由时鉴权即可
+	// 通过中间件获取用户id
+	loggedClaims, exist := c.Get("JWT_PAYLOAD")
+	if !exist {
+		resp.StatusCode = 57001
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "Unauthorized"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
+	userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
+	req.Token = strconv.FormatInt(userID, 10)
+
+	err = client.CommentList(ctx, &req, resp)
+	if err != nil {
+		resp.StatusCode = 7005
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
 
 	c.JSON(consts.StatusOK, resp)
 }

@@ -17,7 +17,8 @@ struct CommentAddActionResponse {
 
 // 销评操作
 struct CommentDelActionRequest {
-    1: optional i64 comment_id, // 要删除的评论id
+    1: required i64 user_id,    // 用户id
+    2: required i64 comment_id, // 要删除的评论id
 }
 
 struct CommentDelActionResponse {
@@ -46,7 +47,7 @@ struct CommentCountRequest {
 struct CommentCountResponse {
     1: required i32 status_code,   // 0:成功 other:失败
     2: optional string status_msg,
-    3: optional i64 comment_count,   //被评论数
+    3: optional i64 comment_count, //被评论数
 }
 
 service CommentService {

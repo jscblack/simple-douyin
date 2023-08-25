@@ -9,8 +9,10 @@ services:
       POSTGRES_USER: simple_douyin
       POSTGRES_PASSWORD: 1qaz0plm
       POSTGRES_DB: simple_douyin_db
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"
+    # ports:
+    #   - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -20,22 +22,12 @@ services:
     restart: always
     environment:
       REDIS_PASSWORD: 1qaz0plm
-    ports:
-      - "6379:6379"
+    expose:
+      - "6379"
+    # ports:
+    #   - "6379:6379"
     volumes:
       - redis_data:/data
-
-  mongodb:
-    image: mongo:latest
-    container_name: simple-douyin-mongodb
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: simple_douyin
-      MONGO_INITDB_ROOT_PASSWORD: 1qaz0plm
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
 
   etcd:
     image: bitnami/etcd:latest
@@ -43,14 +35,29 @@ services:
     restart: always
     environment:
       - ALLOW_NONE_AUTHENTICATION=yes
-    ports:
-      - "2379:2379" 
-      - "2380:2380"
-    volumes: 
+    expose:
+      - "2379"
+      - "2380"
+    # ports:
+    #   - "2379:2379"
+    #   - "2380:2380"
+    volumes:
       - etcd_data:/bitnami
 
+  sakura-frp: # frp port 18080 for use
+    image: natfrp/frpc:latest
+    container_name: simple-douyin-frp
+    restart: always
+    command: '-f' 'lc28c5p96ar95kgga6hkxx9vpifksqai:10415888' '--remote_control' '7203223kjl'
+
+  simple-douyin:
+    image: jscblack/simple-douyin:latest
+    container_name: simple-douyin-main
+    restart: always
+    ports:
+      - "18080:8080"
+    
 volumes:
   postgres_data:
   redis_data:
-  mongodb_data:
   etcd_data:
