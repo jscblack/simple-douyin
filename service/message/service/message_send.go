@@ -5,7 +5,7 @@ import (
 	"simple-douyin/kitex_gen/message"
 	"simple-douyin/service/message/dal"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 func MessageSend(ctx context.Context, req *message.MessageSendRequest, resp *message.MessageSendResponse) (err error) {

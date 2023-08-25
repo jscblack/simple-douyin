@@ -1,6 +1,6 @@
 package client
 
-import apiLog "github.com/prometheus/common/log"
+import apiLog "github.com/sirupsen/logrus"
 
 func InitClient() {
 	InitPingClient()

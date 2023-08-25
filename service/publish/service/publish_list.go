@@ -6,7 +6,7 @@ import (
 	publish "simple-douyin/kitex_gen/publish"
 	"simple-douyin/service/publish/dal"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 // PublishList implements the PublishServiceImpl interface.

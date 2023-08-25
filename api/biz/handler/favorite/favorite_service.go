@@ -13,7 +13,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/hertz-contrib/jwt"
-	apiLog "github.com/prometheus/common/log"
+	apiLog "github.com/sirupsen/logrus"
 )
 
 // FavoriteAction .

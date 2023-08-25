@@ -8,7 +8,7 @@ import (
 	"simple-douyin/pkg/constant"
 	"time"
 
-	apiLog "github.com/prometheus/common/log"
+	apiLog "github.com/sirupsen/logrus"
 
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"

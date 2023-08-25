@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 	"simple-douyin/kitex_gen/publish"
 	"simple-douyin/service/publish/dal"
 )

@@ -5,7 +5,7 @@ import (
 	"simple-douyin/kitex_gen/relation"
 	"simple-douyin/service/relation/dal"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 func RelationAdd(ctx context.Context, req *relation.RelationAddRequest, resp *relation.RelationAddResponse) (err error) {

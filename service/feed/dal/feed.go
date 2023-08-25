@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 func QueryVideoFromLatestTime(ctx context.Context, latestTime int64) ([]*Video, error) {

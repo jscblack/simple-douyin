@@ -9,6 +9,7 @@ import (
 	"simple-douyin/pkg/constant"
 
 	"github.com/cloudwego/hertz/pkg/app/server"
+	prometheus "github.com/hertz-contrib/monitor-prometheus"
 )
 
 func Init() {
@@ -23,6 +24,7 @@ func main() {
 	Init()
 	h := server.New(
 		server.WithMaxRequestBodySize(constant.MaxVideoSize),
+		server.WithTracer(prometheus.NewServerTracer(":9091", "/hertz")),
 	)
 	h.NoRoute(handler.Default)
 	h.NoMethod(handler.Default)

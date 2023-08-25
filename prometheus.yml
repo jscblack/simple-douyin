@@ -1,0 +1,115 @@
+# my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "Hertz_API_Gateway"
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+    scrape_interval: 1s
+    metrics_path: /hertz
+    static_configs:
+      - targets: ['simple-douyin-main:9101']
+  
+  - job_name: "Kitex_User_Server"
+    scrape_interval: 1s
+    metrics_path: /userserver
+    static_configs:
+      - targets: ['localhost:9102']
+  
+  - job_name: "Kitex_User_Client"
+    scrape_interval: 1s
+    metrics_path: /userclient
+    static_configs:
+      - targets: ['localhost:9103']
+
+  - job_name: "Kitex_Feed_Server"
+    scrape_interval: 1s
+    metrics_path: /feedserver
+    static_configs:
+      - targets: ['localhost:9104']
+  
+  - job_name: "Kitex_Feed_Client"
+    scrape_interval: 1s
+    metrics_path: /feedclient
+    static_configs:
+      - targets: ['localhost:9105']
+
+  - job_name: "Kitex_Publish_Server"
+    scrape_interval: 1s
+    metrics_path: /publishserver
+    static_configs:
+      - targets: ['localhost:9106']
+  
+  - job_name: "Kitex_Publish_Client"
+    scrape_interval: 1s
+    metrics_path: /publishclient
+    static_configs:
+      - targets: ['localhost:9107']
+
+  - job_name: "Kitex_Favorite_Server"
+    scrape_interval: 1s
+    metrics_path: /favoriteserver
+    static_configs:
+      - targets: ['localhost:9108']
+  
+  - job_name: "Kitex_Favorite_Client"
+    scrape_interval: 1s
+    metrics_path: /favoriteclient
+    static_configs:
+      - targets: ['localhost:9109']
+
+  - job_name: "Kitex_Comment_Server"
+    scrape_interval: 1s
+    metrics_path: /commentserver
+    static_configs:
+      - targets: ['localhost:9110']
+  
+  - job_name: "Kitex_Comment_Client"
+    scrape_interval: 1s
+    metrics_path: /commentclient
+    static_configs:
+      - targets: ['localhost:9111']
+
+
+  - job_name: "Kitex_Relation_Server"
+    scrape_interval: 1s
+    metrics_path: /relationserver
+    static_configs:
+      - targets: ['localhost:9112']
+  
+  - job_name: "Kitex_Relation_Client"
+    scrape_interval: 1s
+    metrics_path: /relationclient
+    static_configs:
+      - targets: ['localhost:9113']
+
+  - job_name: "Kitex_Message_Server"
+    scrape_interval: 1s
+    metrics_path: /messageserver
+    static_configs:
+      - targets: ['localhost:9114']
+  
+  - job_name: "Kitex_Message_Client"
+    scrape_interval: 1s
+    metrics_path: /messageclient
+    static_configs:
+      - targets: ['localhost:9115']

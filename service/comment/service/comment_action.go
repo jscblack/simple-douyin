@@ -10,7 +10,7 @@ import (
 	"simple-douyin/service/comment/dal"
 	"strconv"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 func CommentAdd(ctx context.Context, req *comment.CommentAddActionRequest, resp *comment.CommentAddActionResponse) (err error) {

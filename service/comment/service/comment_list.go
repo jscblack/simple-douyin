@@ -8,7 +8,7 @@ import (
 	"simple-douyin/service/comment/client"
 	"simple-douyin/service/comment/dal"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 func CommentList(ctx context.Context, req *comment.CommentListRequest, resp *comment.CommentListResponse) (err error) {

@@ -6,7 +6,7 @@ import (
 	"simple-douyin/pkg/constant"
 	"time"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 	"github.com/redis/go-redis/v9"
 )
 

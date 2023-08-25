@@ -5,7 +5,7 @@ import (
 	bizCommon "simple-douyin/api/biz/model/common"
 	"simple-douyin/kitex_gen/common"
 
-	apiLog "github.com/prometheus/common/log"
+	apiLog "github.com/sirupsen/logrus"
 )
 
 func ToVideo(ctx context.Context, video *common.Video) *bizCommon.Video {

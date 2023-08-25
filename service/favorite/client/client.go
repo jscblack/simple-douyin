@@ -10,7 +10,7 @@ import (
 
 	"github.com/cloudwego/kitex/client"
 	etcd "github.com/kitex-contrib/registry-etcd"
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 var FavoriteClient favoriteservice.Client // interface from RPC IDL

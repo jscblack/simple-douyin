@@ -8,7 +8,7 @@ import (
 	"simple-douyin/kitex_gen/relation"
 	"simple-douyin/service/relation/dal"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 // 下面的三个函数是内部rpc

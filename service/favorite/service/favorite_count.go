@@ -8,7 +8,7 @@ import (
 	"simple-douyin/kitex_gen/favorite"
 	"simple-douyin/service/favorite/dal"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 // 内部rpc

@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/cloudwego/kitex/client"
 	etcd "github.com/kitex-contrib/registry-etcd"
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 	"github.com/upyun/go-sdk/v3/upyun"
 	"simple-douyin/kitex_gen/comment/commentservice"
 	"simple-douyin/kitex_gen/favorite/favoriteservice"

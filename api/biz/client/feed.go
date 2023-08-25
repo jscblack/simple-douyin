@@ -11,7 +11,7 @@ import (
 
 	"github.com/cloudwego/kitex/client"
 	etcd "github.com/kitex-contrib/registry-etcd"
-	apiLog "github.com/prometheus/common/log"
+	apiLog "github.com/sirupsen/logrus"
 )
 
 var feedClient feedservice.Client // interface from RPC IDL

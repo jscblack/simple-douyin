@@ -10,7 +10,7 @@ import (
 	mw "simple-douyin/api/biz/middleware"
 	relation "simple-douyin/api/biz/model/relation"
 
-	apiLog "github.com/prometheus/common/log"
+	apiLog "github.com/sirupsen/logrus"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"

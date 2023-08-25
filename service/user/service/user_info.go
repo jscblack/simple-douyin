@@ -12,7 +12,7 @@ import (
 	"simple-douyin/service/user/dal"
 	"strconv"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 func fillUserInfo(ctx context.Context, comUser *common.User, req *user.UserInfoRequest) error {

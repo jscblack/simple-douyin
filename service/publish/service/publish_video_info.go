@@ -10,7 +10,7 @@ import (
 	"simple-douyin/service/publish/client"
 	"simple-douyin/service/publish/dal"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 func PublishVideoInfo(ctx context.Context, req *publish.PublishVideoInfoRequest) (resp *publish.PublishVideoInfoResponse, err error) {

@@ -8,7 +8,7 @@ import (
 	"simple-douyin/service/message/dal"
 	"strconv"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 

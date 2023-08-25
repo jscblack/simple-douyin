@@ -4,7 +4,7 @@ import (
 	"context"
 	"simple-douyin/pkg/constant"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

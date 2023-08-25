@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 func MessageChat(ctx context.Context, req *message.MessageChatRequest, resp *message.MessageChatResponse) (err error) {

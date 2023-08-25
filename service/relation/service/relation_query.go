@@ -10,7 +10,7 @@ import (
 	"simple-douyin/service/relation/dal"
 
 	// common
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 func RelationFollowList(ctx context.Context, req *relation.RelationFollowListRequest, resp *relation.RelationFollowListResponse) (err error) {
