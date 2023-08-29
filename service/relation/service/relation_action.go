@@ -13,15 +13,24 @@ func RelationAdd(ctx context.Context, req *relation.RelationAddRequest, resp *re
 	// 实际业务
 	UserID := req.UserId
 	ToUserID := req.ToUserId
-	result := dal.DB.Create(&dal.Relation{UserID: UserID, ToUserID: ToUserID})
-	if result.Error != nil || result.RowsAffected == 0 {
+	dalRelation := dal.Relation{
+		UserID:   UserID,
+		ToUserID: ToUserID,
+	}
+	// 如果存在则不创建
+	result := dal.DB.Model(&dal.Relation{}).Where(&dalRelation).First(&dalRelation)
+	if result.Error == nil {
+		// 存在该记录，不创建
 		resp.StatusCode = 57006
 		if resp.StatusMsg == nil {
 			resp.StatusMsg = new(string)
 		}
-		*resp.StatusMsg = "关注失败"
-		servLog.Error("关注失败")
+		*resp.StatusMsg = "alreay followed"
 		return nil
+	}
+	result = dal.DB.Create(&dal.Relation{UserID: UserID, ToUserID: ToUserID})
+	if result.Error != nil || result.RowsAffected == 0 {
+		return result.Error
 	}
 	//修改redis缓存
 	dal.RDSUpdate(ctx, UserID, 1, 1)
