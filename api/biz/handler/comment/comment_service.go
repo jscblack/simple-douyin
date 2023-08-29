@@ -46,7 +46,7 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 
 	if req.ActionType == 1 {
 		err = client.CommentAdd(ctx, &req, resp)
-	} else if req.ActionType == 2 {
+	} else if req.ActionType == 2 && req.CommentID != nil {
 		err = client.CommentDel(ctx, &req, resp)
 	} else {
 		resp.StatusCode = 7005

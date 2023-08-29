@@ -8,7 +8,7 @@ struct CommentActionRequest {
     2: required i64 video_id (api.query = "video_id"),            // 视频id
     3: required i32 action_type (api.query = "action_type"),      // 1-发布评论，2-删除评论
     4: optional string comment_text (api.query = "comment_text"), // 用户填写的评论内容，在action_type=1的时候使用
-    5: optional i64 comment_id (api.query = "commrnt_id"),        // 要删除的评论id，在action_type=2的时候使用
+    5: optional i64 comment_id (api.query = "comment_id"),        // 要删除的评论id，在action_type=2的时候使用
 }
 
 struct CommentActionResponse {

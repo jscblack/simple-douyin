@@ -20,7 +20,7 @@ type CommentActionRequest struct {
 	// 用户填写的评论内容，在action_type=1的时候使用
 	CommentText *string `thrift:"comment_text,4,optional" json:"comment_text,omitempty" query:"comment_text"`
 	// 要删除的评论id，在action_type=2的时候使用
-	CommentID *int64 `thrift:"comment_id,5,optional" json:"comment_id,omitempty" query:"commrnt_id"`
+	CommentID *int64 `thrift:"comment_id,5,optional" json:"comment_id,omitempty" query:"comment_id"`
 }
 
 func NewCommentActionRequest() *CommentActionRequest {
