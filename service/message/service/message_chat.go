@@ -26,10 +26,10 @@ func MessageChat(ctx context.Context, req *message.MessageChatRequest, resp *mes
 	}
 	// 后处理messageListDb，将其中时间与preTime过于接近的给他排除
 	//将messageListDb转换为messageListResp
-	for _, messageDb := range messageListDb {
+	for idx, messageDb := range messageListDb {
 		// servLog.Info("check", messageDb.CreatedAt, preTime)
-
-		if (messageDb.CreatedAt.UnixMilli() - preTime.UnixMilli()) <= 1500 {
+		// 处理因网络延时带来的消息重复
+		if idx == 0 && messageDb.FromUserID == req.UserId && (messageDb.CreatedAt.UnixMilli()-preTime.UnixMilli()) <= 2000 {
 			servLog.Info("same found", messageDb.CreatedAt, preTime)
 			continue
 		}
