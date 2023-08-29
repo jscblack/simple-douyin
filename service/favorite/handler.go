@@ -5,7 +5,7 @@ import (
 	favorite "simple-douyin/kitex_gen/favorite"
 	service "simple-douyin/service/favorite/service"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 // FavoriteServiceImpl implements the last service interface defined in the IDL.

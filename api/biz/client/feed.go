@@ -10,8 +10,9 @@ import (
 	"time"
 
 	"github.com/cloudwego/kitex/client"
+	prometheus "github.com/kitex-contrib/monitor-prometheus"
 	etcd "github.com/kitex-contrib/registry-etcd"
-	apiLog "github.com/prometheus/common/log"
+	apiLog "github.com/sirupsen/logrus"
 )
 
 var feedClient feedservice.Client // interface from RPC IDL
@@ -29,7 +30,10 @@ func InitFeedClient() {
 		client.WithRPCTimeout(3*time.Second),           // rpc timeout
 		client.WithConnectTimeout(50*time.Millisecond), // conn timeout
 		// client.WithFailureRetry(retry.NewFailurePolicy()), // retry
-		// client.WithSuite(trace.NewDefaultClientSuite()),   // tracer
+		client.WithTracer(
+			prometheus.NewClientTracer(
+				constant.FeedClientTracerPort,
+				constant.FeedClientTracerPath)), // tracer
 		client.WithResolver(r), // resolver
 	)
 	if err != nil {

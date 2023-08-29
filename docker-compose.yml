@@ -9,8 +9,10 @@ services:
       POSTGRES_USER: simple_douyin
       POSTGRES_PASSWORD: 1qaz0plm
       POSTGRES_DB: simple_douyin_db
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"
+    # ports:
+    #   - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -20,8 +22,10 @@ services:
     restart: always
     environment:
       REDIS_PASSWORD: 1qaz0plm
-    ports:
-      - "6379:6379"
+    expose:
+      - "6379"
+    # ports:
+    #   - "6379:6379"
     volumes:
       - redis_data:/data
 
@@ -31,21 +35,66 @@ services:
     restart: always
     environment:
       - ALLOW_NONE_AUTHENTICATION=yes
-    ports:
-      - "2379:2379" 
-      - "2380:2380"
-    volumes: 
+    expose:
+      - "2379"
+      - "2380"
+    # ports:
+    #   - "2379:2379"
+    #   - "2380:2380"
+    volumes:
       - etcd_data:/bitnami
 
-  sakura-frp:
+  simple-douyin:
+    image: jscblack/simple-douyin:latest
+    container_name: simple-douyin-main
+    restart: always
+    ports:
+      - "18080:8888"
+    depends_on:
+      - postgres
+      - redis
+      - etcd
+    
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: simple-douyin-prometheus
+    restart: always
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./alert.rules:/etc/prometheus/alert.rules
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    expose:
+      - '9090'
+    depends_on:
+      - simple-douyin
+  
+  grafana:
+    image: grafana/grafana:latest
+    container_name: simple-douyin-grafana
+    restart: always
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+    ports:
+      - '13000:3000'
+
+  sakura-frp: # frp port 18080 for use
     image: natfrp/frpc:latest
     container_name: simple-douyin-frp
     restart: always
-    command: '-f' 'lc28c5p96ar95kgga6hkxx9vpifksqai:10415888' '--remote_control' '7203223kjl'
+    command: '-f lc28c5p96ar95kgga6hkxx9vpifksqai:10415888,10546909'
+    depends_on:
+      - simple-douyin
 
-  # simple-douyin:
-    
+
 volumes:
   postgres_data:
   redis_data:
   etcd_data:
+  grafana_data:
+  prometheus_data:

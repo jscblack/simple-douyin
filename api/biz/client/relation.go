@@ -10,8 +10,9 @@ import (
 	"time"
 
 	"github.com/cloudwego/kitex/client"
+	prometheus "github.com/kitex-contrib/monitor-prometheus"
 	etcd "github.com/kitex-contrib/registry-etcd"
-	apiLog "github.com/prometheus/common/log"
+	apiLog "github.com/sirupsen/logrus"
 )
 
 var relationClient relationservice.Client
@@ -26,6 +27,10 @@ func InitRelationClient() {
 		client.WithMuxConnection(1),
 		client.WithRPCTimeout(3*time.Second),
 		client.WithConnectTimeout(50*time.Millisecond),
+		client.WithTracer(
+			prometheus.NewClientTracer(
+				constant.RelationClientTracerPort,
+				constant.RelationClientTracerPath)),
 		client.WithResolver(r),
 	)
 	if err != nil {

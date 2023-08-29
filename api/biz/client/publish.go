@@ -9,11 +9,11 @@ import (
 	"simple-douyin/pkg/constant"
 	"time"
 
-	apiLog "github.com/prometheus/common/log"
+	apiLog "github.com/sirupsen/logrus"
 
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
-
+	prometheus "github.com/kitex-contrib/monitor-prometheus"
 	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
@@ -32,7 +32,10 @@ func InitPublishClient() {
 		client.WithRPCTimeout(3*time.Second),           // rpc timeout
 		client.WithConnectTimeout(50*time.Millisecond), // conn timeout
 		// client.WithFailureRetry(retry.NewFailurePolicy()), // retry
-		// client.WithSuite(trace.NewDefaultClientSuite()),   // tracer
+		client.WithTracer(
+			prometheus.NewClientTracer(
+				constant.PublishClientTracerPort,
+				constant.PublishClientTracerPath)), // tracer
 		client.WithResolver(r), // resolver
 	)
 	if err != nil {

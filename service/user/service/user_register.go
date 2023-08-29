@@ -7,7 +7,7 @@ import (
 	"simple-douyin/kitex_gen/user"
 	"simple-douyin/service/user/dal"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
 

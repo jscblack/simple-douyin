@@ -9,7 +9,7 @@ import (
 	"simple-douyin/service/publish/dal"
 	"time"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 	"github.com/upyun/go-sdk/v3/upyun"
 )
 

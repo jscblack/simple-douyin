@@ -13,32 +13,67 @@ const (
 	// UserServiceName         = "demouser"
 	// CPURateLimit    float64 = 80.0
 	// DefaultLimit            = 10
-	EtcdAddressWithPort = "172.19.0.1" + ":2379"
-	PostgresDSN         = "host=172.19.0.1 user=simple_douyin password=1qaz0plm dbname=simple_douyin_db port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-	RedisAddress        = "172.19.0.1" + ":6379"
+	EtcdAddressWithPort = "simple-douyin-etcd" + ":2379"
+	PostgresDSN         = "host=simple-douyin-postgres user=simple_douyin password=1qaz0plm dbname=simple_douyin_db port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	RedisAddress        = "simple-douyin-redis" + ":6379"
 	RedisPassword       = "1qaz0plm"
 	ServiceAddress      = "127.0.0.1"
 
-	PingServiceName     = "ping_pong"
-	PingServicePort     = "7000"
-	UserServiceName     = "user"
-	UserServicePort     = "7001"
-	FeedServiceName     = "feed"
-	FeedServicePort     = "7002"
-	PublishServiceName  = "publish"
-	PublishServicePort  = "7003"
-	FavoriteServiceName = "favorite"
-	FavoriteServicePort = "7004"
-	CommentServiceName  = "comment"
-	CommentServicePort  = "7005"
-	RelationServiceName = "relation"
-	RelationServicePort = "7006"
-	MessageServiceName  = "message"
-	MessageServicePort  = "7007"
+	PingServiceName = "ping_pong"
+	PingServicePort = "7000"
+
+	UserServiceName      = "user"
+	UserServicePort      = "7001"
+	UserServerTracerPort = ":9102"
+	UserServerTracerPath = "/userserver"
+	UserClientTracerPort = ":9103"
+	UserClientTracerPath = "/userclient"
+
+	FeedServiceName      = "feed"
+	FeedServicePort      = "7002"
+	FeedServerTracerPort = ":9104"
+	FeedServerTracerPath = "/feedserver"
+	FeedClientTracerPort = ":9105"
+	FeedClientTracerPath = "/feedclient"
+
+	PublishServiceName      = "publish"
+	PublishServicePort      = "7003"
+	PublishServerTracerPort = ":9106"
+	PublishServerTracerPath = "/publishserver"
+	PublishClientTracerPort = ":9107"
+	PublishClientTracerPath = "/publishclient"
+
+	FavoriteServiceName      = "favorite"
+	FavoriteServicePort      = "7004"
+	FavoriteServerTracerPort = ":9108"
+	FavoriteServerTracerPath = "/favoriteserver"
+	FavoriteClientTracerPort = ":9109"
+	FavoriteClientTracerPath = "/favoriteclient"
+
+	CommentServiceName      = "comment"
+	CommentServicePort      = "7005"
+	CommentServerTracerPort = ":9110"
+	CommentServerTracerPath = "/commentserver"
+	CommentClientTracerPort = ":9111"
+	CommentClientTracerPath = "/commentclient"
+
+	RelationServiceName      = "relation"
+	RelationServicePort      = "7006"
+	RelationServerTracerPort = ":9112"
+	RelationServerTracerPath = "/relationserver"
+	RelationClientTracerPort = ":9113"
+	RelationClientTracerPath = "/relationclient"
+
+	MessageServiceName      = "message"
+	MessageServicePort      = "7007"
+	MessageServerTracerPort = ":9114"
+	MessageServerTracerPath = "/messageserver"
+	MessageClientTracerPort = ":9115"
+	MessageClientTracerPath = "/messageclient"
 
 	MaxFeedNum   = 30
 	MaxListNum   = 30
-	MaxVideoSize = 52428800 // 50MB
+	MaxVideoSize = 100 * 1024 * 1024 // 100MB
 
 	UserRDB     = 0
 	PublishRDB  = 1

@@ -28,18 +28,14 @@ func _actionMw() []app.HandlerFunc {
 	return nil
 }
 
-func _relation_ctionMw() []app.HandlerFunc {
-	// your code...
-	return nil
-}
-
 func _followMw() []app.HandlerFunc {
 	return nil
 }
 
 func _relationfollowlistMw() []app.HandlerFunc {
 	// your code...
-	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
+	// return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
+	return nil
 }
 
 func _followerMw() []app.HandlerFunc {
@@ -49,7 +45,8 @@ func _followerMw() []app.HandlerFunc {
 
 func _relationfollowerlistMw() []app.HandlerFunc {
 	// 该接口需要登录态
-	return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
+	// return []app.HandlerFunc{mw.JwtMiddleware.MiddlewareFunc()}
+	return nil
 }
 
 func _friendMw() []app.HandlerFunc {

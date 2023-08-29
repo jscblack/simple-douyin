@@ -8,7 +8,7 @@ import (
 
 	"github.com/cloudwego/kitex/client"
 	etcd "github.com/kitex-contrib/registry-etcd"
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 var UserClient userservice.Client
@@ -28,7 +28,10 @@ func Init(ctx context.Context) {
 		client.WithRPCTimeout(3*time.Second),           // rpc timeout
 		client.WithConnectTimeout(50*time.Millisecond), // conn timeout
 		// client.WithFailureRetry(retry.NewFailurePolicy()), // retry
-		// client.WithSuite(trace.NewDefaultClientSuite()),   // tracer
+		// client.WithTracer(
+		// 	prometheus.NewClientTracer(
+		// 		constant.UserClientTracerPort,
+		// 		constant.UserClientTracerPath)), // tracer
 		client.WithResolver(r), // resolver
 	)
 	if err != nil {

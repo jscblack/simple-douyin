@@ -10,7 +10,7 @@ import (
 	"simple-douyin/service/favorite/client"
 	"simple-douyin/service/favorite/dal"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 func FavoriteAddAction(ctx context.Context, req *favorite.FavoriteAddActionRequest, resp *favorite.FavoriteAddActionResponse) (err error) {

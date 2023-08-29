@@ -6,7 +6,7 @@ import (
 	"simple-douyin/pkg/constant"
 	"strconv"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

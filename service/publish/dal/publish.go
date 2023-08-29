@@ -7,7 +7,7 @@ import (
 	"simple-douyin/service/feed/dal"
 	"strconv"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 func QueryVideoFromVideoId(ctx context.Context, videoId int64) (*Video, error) {

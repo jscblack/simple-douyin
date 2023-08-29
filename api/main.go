@@ -4,10 +4,12 @@ package main
 
 import (
 	"simple-douyin/api/biz/client"
+	"simple-douyin/api/biz/handler"
 	"simple-douyin/api/biz/middleware"
 	"simple-douyin/pkg/constant"
 
 	"github.com/cloudwego/hertz/pkg/app/server"
+	prometheus "github.com/hertz-contrib/monitor-prometheus"
 )
 
 func Init() {
@@ -20,8 +22,12 @@ func Init() {
 func main() {
 	// for non-framework part
 	Init()
-
-	h := server.New(server.WithMaxRequestBodySize(constant.MaxVideoSize))
+	h := server.New(
+		server.WithMaxRequestBodySize(constant.MaxVideoSize),
+		server.WithTracer(prometheus.NewServerTracer(":9101", "/hertz")),
+	)
+	h.NoRoute(handler.Default)
+	h.NoMethod(handler.Default)
 	register(h)
 	h.Spin()
 }

@@ -5,7 +5,7 @@ import (
 	relation "simple-douyin/kitex_gen/relation"
 	"simple-douyin/service/relation/service"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 // RelationServiceImpl implements the last service interface defined in the IDL.

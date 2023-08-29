@@ -5,7 +5,7 @@ import (
 	user "simple-douyin/kitex_gen/user"
 	"simple-douyin/service/user/service"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 // UserServiceImpl implements the last service interface defined in the IDL.

@@ -10,7 +10,7 @@ import (
 	"simple-douyin/service/feed/client"
 	"simple-douyin/service/feed/dal"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 func Feed(ctx context.Context, req *feed.FeedRequest) (*feed.FeedResponse, error) {

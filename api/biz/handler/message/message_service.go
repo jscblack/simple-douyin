@@ -4,11 +4,16 @@ package message
 
 import (
 	"context"
+	"strconv"
 
+	"simple-douyin/api/biz/client"
 	message "simple-douyin/api/biz/model/message"
+
+	mw "simple-douyin/api/biz/middleware"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"github.com/hertz-contrib/jwt"
 )
 
 // MessageChat .
@@ -16,8 +21,27 @@ import (
 func MessageChat(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req message.MessageChatRequest
-	resp := new(message.MessageChatResponse)
 	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+	resp := new(message.MessageChatResponse)
+	// 该接口需要登录态，但不需要确认具体身份，仅在路由时鉴权即可
+	// 通过中间件获取用户id
+	loggedClaims, exist := c.Get("JWT_PAYLOAD")
+	if !exist {
+		resp.StatusCode = 57001
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "Unauthorized"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
+	userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
+	req.Token = strconv.FormatInt(userID, 10)
+	err = client.MessageChat(ctx, &req, resp)
 	if err != nil {
 		resp.StatusCode = 57007
 		if resp.StatusMsg == nil {
@@ -35,8 +59,45 @@ func MessageChat(ctx context.Context, c *app.RequestContext) {
 func MessageAction(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req message.MessageActionRequest
-	resp := new(message.MessageActionResponse)
 	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+	resp := new(message.MessageActionResponse)
+	// 该接口需要登录态，但不需要确认具体身份，仅在路由时鉴权即可
+	// 通过中间件获取用户id
+	loggedClaims, exist := c.Get("JWT_PAYLOAD")
+	if !exist {
+		resp.StatusCode = 57001
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "Unauthorized"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
+	userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
+	req.Token = strconv.FormatInt(userID, 10)
+	if req.ActionType != 1 {
+		resp.StatusCode = 57007
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "请求操作错误"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
+	if len(req.Content) == 0 {
+		resp.StatusCode = 57007
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "消息不可为空"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
+	err = client.MessageSend(ctx, &req, resp)
 	if err != nil {
 		resp.StatusCode = 57007
 		if resp.StatusMsg == nil {

@@ -267,7 +267,7 @@ type MessageChatResponse struct {
 	//错误信息
 	StatusMsg *string `thrift:"status_msg,2,optional" form:"status_msg" json:"status_msg,omitempty" query:"status_msg"`
 	//消息列表
-	Messages []*common.Message `thrift:"messages,3,optional" form:"messages" json:"messages,omitempty" query:"messages"`
+	MessageList []*common.Message `thrift:"message_list,3,optional" form:"message_list" json:"message_list,omitempty" query:"message_list"`
 }
 
 func NewMessageChatResponse() *MessageChatResponse {
@@ -287,27 +287,27 @@ func (p *MessageChatResponse) GetStatusMsg() (v string) {
 	return *p.StatusMsg
 }
 
-var MessageChatResponse_Messages_DEFAULT []*common.Message
+var MessageChatResponse_MessageList_DEFAULT []*common.Message
 
-func (p *MessageChatResponse) GetMessages() (v []*common.Message) {
-	if !p.IsSetMessages() {
-		return MessageChatResponse_Messages_DEFAULT
+func (p *MessageChatResponse) GetMessageList() (v []*common.Message) {
+	if !p.IsSetMessageList() {
+		return MessageChatResponse_MessageList_DEFAULT
 	}
-	return p.Messages
+	return p.MessageList
 }
 
 var fieldIDToName_MessageChatResponse = map[int16]string{
 	1: "status_code",
 	2: "status_msg",
-	3: "messages",
+	3: "message_list",
 }
 
 func (p *MessageChatResponse) IsSetStatusMsg() bool {
 	return p.StatusMsg != nil
 }
 
-func (p *MessageChatResponse) IsSetMessages() bool {
-	return p.Messages != nil
+func (p *MessageChatResponse) IsSetMessageList() bool {
+	return p.MessageList != nil
 }
 
 func (p *MessageChatResponse) Read(iprot thrift.TProtocol) (err error) {
@@ -420,14 +420,14 @@ func (p *MessageChatResponse) ReadField3(iprot thrift.TProtocol) error {
 	if err != nil {
 		return err
 	}
-	p.Messages = make([]*common.Message, 0, size)
+	p.MessageList = make([]*common.Message, 0, size)
 	for i := 0; i < size; i++ {
 		_elem := common.NewMessage()
 		if err := _elem.Read(iprot); err != nil {
 			return err
 		}
 
-		p.Messages = append(p.Messages, _elem)
+		p.MessageList = append(p.MessageList, _elem)
 	}
 	if err := iprot.ReadListEnd(); err != nil {
 		return err
@@ -509,14 +509,14 @@ WriteFieldEndError:
 }
 
 func (p *MessageChatResponse) writeField3(oprot thrift.TProtocol) (err error) {
-	if p.IsSetMessages() {
-		if err = oprot.WriteFieldBegin("messages", thrift.LIST, 3); err != nil {
+	if p.IsSetMessageList() {
+		if err = oprot.WriteFieldBegin("message_list", thrift.LIST, 3); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Messages)); err != nil {
+		if err := oprot.WriteListBegin(thrift.STRUCT, len(p.MessageList)); err != nil {
 			return err
 		}
-		for _, v := range p.Messages {
+		for _, v := range p.MessageList {
 			if err := v.Write(oprot); err != nil {
 				return err
 			}

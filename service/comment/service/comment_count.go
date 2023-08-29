@@ -8,7 +8,7 @@ import (
 	"simple-douyin/kitex_gen/comment"
 	"simple-douyin/service/comment/dal"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 // 这是内部rpc

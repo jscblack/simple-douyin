@@ -5,7 +5,7 @@ import (
 	comment "simple-douyin/kitex_gen/comment"
 	"simple-douyin/service/comment/service"
 
-	servLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 // CommentServiceImpl implements the last service interface defined in the IDL.

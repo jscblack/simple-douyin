@@ -9,9 +9,11 @@ require (
 	github.com/cloudwego/hertz v0.6.6
 	github.com/cloudwego/kitex v0.6.2
 	github.com/hertz-contrib/jwt v1.0.2
+	github.com/hertz-contrib/monitor-prometheus v0.0.0-20221109015426-47eab4e08245
+	github.com/kitex-contrib/monitor-prometheus v0.1.0
 	github.com/kitex-contrib/registry-etcd v0.1.0
-	github.com/prometheus/common v0.26.0
 	github.com/redis/go-redis/v9 v9.0.5
+	github.com/sirupsen/logrus v1.9.0
 	github.com/upyun/go-sdk/v3 v3.0.4
 	golang.org/x/crypto v0.8.0
 	gorm.io/driver/postgres v1.5.2
@@ -19,8 +21,7 @@ require (
 )
 
 require (
-	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
-	github.com/alecthomas/units v0.0.0-20190924025748-f65c72e2690d // indirect
+	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bytedance/go-tagexpr/v2 v2.9.2 // indirect
 	github.com/bytedance/gopkg v0.0.0-20230531144706-a12972768317 // indirect
 	github.com/bytedance/sonic v1.8.8 // indirect
@@ -51,12 +52,16 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.4 // indirect
+	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/nyaruka/phonenumbers v1.0.55 // indirect
 	github.com/oleiade/lane v1.0.1 // indirect
+	github.com/prometheus/client_golang v1.14.0 // indirect
+	github.com/prometheus/client_model v0.3.0 // indirect
+	github.com/prometheus/common v0.37.0 // indirect
+	github.com/prometheus/procfs v0.8.0 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
-	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/tidwall/gjson v1.14.3 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
@@ -75,6 +80,5 @@ require (
 	google.golang.org/genproto v0.0.0-20210602131652-f16073e35f0c // indirect
 	google.golang.org/grpc v1.41.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
-	gopkg.in/alecthomas/kingpin.v2 v2.2.6 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

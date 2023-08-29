@@ -13,7 +13,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/hertz-contrib/jwt"
-	apiLog "github.com/prometheus/common/log"
+	apiLog "github.com/sirupsen/logrus"
 )
 
 // PublishAction .
@@ -99,7 +99,7 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 	apiLog.Info("Getting userId")
 	loggedClaims, exist := c.Get("JWT_PAYLOAD")
 	if !exist {
-		resp.StatusCode = 57003
+		resp.StatusCode = 57001
 		if resp.StatusMsg == nil {
 			resp.StatusMsg = new(string)
 		}
@@ -151,19 +151,58 @@ func PublishList(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusBadRequest, resp)
 		return
 	}
-	// 通过中间件获取用户id
-	loggedClaims, exist := c.Get("JWT_PAYLOAD")
-	if !exist {
-		resp.StatusCode = 57001
-		if resp.StatusMsg == nil {
-			resp.StatusMsg = new(string)
+
+	// // 通过中间件获取用户id
+	// loggedClaims, exist := c.Get("JWT_PAYLOAD")
+	// if !exist {
+	// 	resp.StatusCode = 57001
+	// 	if resp.StatusMsg == nil {
+	// 		resp.StatusMsg = new(string)
+	// 	}
+	// 	*resp.StatusMsg = "Unauthorized"
+	// 	c.JSON(consts.StatusOK, resp)
+	// 	return
+	// }
+	// userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
+	// // 该接口需要登录态，需要确认具体身份，仅在路由时鉴权即可
+	var userID int64 = -1
+	if bizReq.Token != "" {
+		_, err := mw.JwtMiddleware.ParseTokenString(bizReq.Token)
+		if err != nil {
+			apiLog.Info(err)
+			resp.StatusCode = 57001
+			if resp.StatusMsg == nil {
+				resp.StatusMsg = new(string)
+			}
+			*resp.StatusMsg = "Unauthorized"
+			c.JSON(consts.StatusBadRequest, resp)
+			return
 		}
-		*resp.StatusMsg = "Unauthorized"
-		c.JSON(consts.StatusOK, resp)
-		return
+		// 用户token失效了也能用feed
+		_, err = mw.JwtMiddleware.CheckIfTokenExpire(ctx, c)
+		if err != nil {
+			apiLog.Info(err)
+			resp.StatusCode = 0
+			if resp.StatusMsg == nil {
+				resp.StatusMsg = new(string)
+			}
+			*resp.StatusMsg = "token expired"
+			c.JSON(consts.StatusOK, resp)
+		}
+		claims, err := mw.JwtMiddleware.GetClaimsFromJWT(ctx, c)
+		if err != nil {
+			apiLog.Info(err)
+			resp.StatusCode = 57001
+			if resp.StatusMsg == nil {
+				resp.StatusMsg = new(string)
+			}
+			*resp.StatusMsg = "Unauthorized"
+			c.JSON(consts.StatusBadRequest, resp)
+			return
+		}
+		userID = int64(claims[mw.IdentityKey].(float64))
 	}
-	userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
-	// 该接口需要登录态，需要确认具体身份，仅在路由时鉴权即可
+
 	req := kitexPublish.PublishListRequest{
 		UserId:     bizReq.UserID,
 		FromUserId: userID,

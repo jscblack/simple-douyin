@@ -5,7 +5,7 @@ import (
 	feed "simple-douyin/kitex_gen/feed"
 	"simple-douyin/service/feed/service"
 
-	apiLog "github.com/prometheus/common/log"
+	servLog "github.com/sirupsen/logrus"
 )
 
 // FeedServiceImpl implements the last service interface defined in the IDL.
@@ -18,7 +18,7 @@ func (s *FeedServiceImpl) Feed(ctx context.Context, req *feed.FeedRequest) (*fee
 
 	resp, err := service.Feed(ctx, req)
 	if err != nil {
-		apiLog.Error(err)
+		servLog.Error(err)
 		return nil, err
 	}
 
