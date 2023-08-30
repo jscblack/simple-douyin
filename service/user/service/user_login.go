@@ -17,7 +17,7 @@ func UserLogin(ctx context.Context, req *user.UserLoginRequest, resp *user.UserL
 		Name: req.Username,
 	}
 	servLog.Info("dalUser: ", dalUser)
-	result := dal.DB.Where(dalUser).Take(&dalUser)
+	result := dal.DB.Where(dalUser).First(&dalUser)
 	if result.Error != nil || result.RowsAffected == 0 {
 		resp.StatusCode = 57001
 		if resp.StatusMsg == nil {

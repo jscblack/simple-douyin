@@ -44,7 +44,7 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 	userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
 	req.Token = strconv.FormatInt(userID, 10)
 
-	if req.ActionType == 1 {
+	if req.ActionType == 1 && req.CommentText != nil && len(*req.CommentText) > 0 {
 		err = client.CommentAdd(ctx, &req, resp)
 	} else if req.ActionType == 2 && req.CommentID != nil {
 		err = client.CommentDel(ctx, &req, resp)

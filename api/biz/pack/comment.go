@@ -29,7 +29,9 @@ func CommentAddpack(ctx context.Context, rpcResp *kiteComment.CommentAddActionRe
 	// rpcResp -> bizResp
 	bizResp.StatusCode = rpcResp.StatusCode
 	bizResp.StatusMsg = rpcResp.StatusMsg
-	bizResp.Comment = commentPack(ctx, rpcResp.Comment)
+	if rpcResp.Comment != nil {
+		bizResp.Comment = commentPack(ctx, rpcResp.Comment)
+	}
 	return nil
 }
 
@@ -76,6 +78,7 @@ func CommentListpack(ctx context.Context, rpcResp *kiteComment.CommentListRespon
 	bizResp.StatusMsg = rpcResp.StatusMsg
 	if rpcResp.CommentList == nil {
 		bizResp.CommentList = make([]*bizCommon.Comment, 0, len(rpcResp.CommentList))
+		return nil
 	}
 	for _, rpcComment := range rpcResp.CommentList {
 		bizResp.CommentList = append(bizResp.CommentList, commentPack(ctx, rpcComment))

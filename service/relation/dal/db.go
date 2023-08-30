@@ -6,10 +6,12 @@ import (
 	"simple-douyin/pkg/constant"
 	"strconv"
 
-	servLog "github.com/sirupsen/logrus"
 	"github.com/redis/go-redis/v9"
+	servLog "github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	userDal "simple-douyin/service/user/dal"
 )
 
 var DB *gorm.DB
@@ -25,8 +27,10 @@ type Relation struct {
 	// CreatedAt time.Time
 	// UpdatedAt time.Time
 	// DeletedAt gorm.DeletedAt `gorm:"index"`
-	UserID   int64 `gorm:"index" json:"user_id"`
-	ToUserID int64 `gorm:"index" json:"to_user_id"`
+	UserID   int64        `gorm:"index" json:"user_id"`
+	ToUserID int64        `gorm:"index" json:"to_user_id"`
+	User     userDal.User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	ToUser   userDal.User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 // Redis缓存结构

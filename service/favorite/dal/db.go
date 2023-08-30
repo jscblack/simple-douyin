@@ -4,8 +4,11 @@ import (
 	"context"
 	"simple-douyin/pkg/constant"
 
-	servLog "github.com/sirupsen/logrus"
+	videoDal "simple-douyin/service/publish/dal"
+	userDal "simple-douyin/service/user/dal"
+
 	"github.com/redis/go-redis/v9"
+	servLog "github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -24,9 +27,12 @@ type Favorite struct {
 	// CreatedAt time.Time
 	// UpdatedAt time.Time
 	// DeletedAt gorm.DeletedAt `gorm:"index"`
-	UserID   int64 `gorm:"index" json:"user_id"`
-	VideoID  int64 `gorm:"index" json:"video_id"`
-	AuthorID int64 `gorm:"index" json:"author_id"` // 作者ID，以加快查找被赞数
+	UserID   int64          `gorm:"index" json:"user_id"`
+	VideoID  int64          `gorm:"index" json:"video_id"`
+	AuthorID int64          `gorm:"index" json:"author_id"` // 作者ID，以加快查找被赞数
+	User     userDal.User   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Video    videoDal.Video `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Author   userDal.User   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 // Redis缓存结构

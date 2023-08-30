@@ -56,6 +56,15 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	bizReq.Title = string(title)
+	if len(bizReq.Title) == 0 {
+		resp.StatusCode = 57003
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "Empty video title"
+		c.JSON(consts.StatusBadRequest, resp)
+		return
+	}
 	apiLog.Info("title: ", string(title))
 
 	fileHeader, err := c.FormFile("data")

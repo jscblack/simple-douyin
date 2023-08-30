@@ -97,7 +97,7 @@ func UserInfo(ctx context.Context, req *user.UserInfoRequest, resp *user.UserInf
 		dalUser := &dal.User{
 			ID: req.ToUserId,
 		}
-		result := dal.DB.Where(dalUser).Take(&dalUser)
+		result := dal.DB.Where("id = ?", req.ToUserId).First(dalUser)
 		if result.Error != nil || result.RowsAffected == 0 {
 			resp.StatusCode = 57001
 			if resp.StatusMsg == nil {

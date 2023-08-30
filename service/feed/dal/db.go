@@ -2,29 +2,19 @@ package dal
 
 import (
 	"context"
-	servLog "github.com/sirupsen/logrus"
-	"github.com/redis/go-redis/v9"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"simple-douyin/pkg/constant"
 	"time"
+
+	"github.com/redis/go-redis/v9"
+	servLog "github.com/sirupsen/logrus"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+
+	userDal "simple-douyin/service/user/dal"
 )
 
 var DB *gorm.DB
 var RDB *redis.Client
-
-// User 数据库表结构
-type User struct {
-	ID              int64          `gorm:"primaryKey;autoIncrement" json:"id"`                  //用户唯一标志符号
-	Name            string         `gorm:"type:varchar(128);not null;unique;index" json:"name"` //用户名
-	Password        string         `gorm:"type:varchar(128);not null" json:"password"`          //用户密码HMAC
-	Avatar          string         `json:"avatar"`                                              //用户头像
-	BackgroundImage string         `json:"background_image"`                                    //用户背景图
-	Signature       string         `json:"signature"`                                           //用户签名
-	CreatedAt       time.Time      //AutoCreateTime
-	UpdatedAt       time.Time      //AutoUpdateTime
-	DeletedAt       gorm.DeletedAt `gorm:"index"` //AutoDeleteTime
-}
 
 // Video 数据库表结构
 type Video struct {
@@ -36,7 +26,7 @@ type Video struct {
 	CreatedAt time.Time      `gorm:"index"` //AutoCreateTime
 	UpdatedAt time.Time      //AutoUpdateTime
 	DeletedAt gorm.DeletedAt `gorm:"index"` //AutoDeleteTime
-	User      User           `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	User      userDal.User   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 // 初始化，创建数据库连接

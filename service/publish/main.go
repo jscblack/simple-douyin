@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"net"
+	"os"
 	publish "simple-douyin/kitex_gen/publish/publishservice"
 	"simple-douyin/pkg/constant"
 	"simple-douyin/service/publish/client"
@@ -17,6 +18,9 @@ import (
 )
 
 func main() {
+	if os.Getenv("RUN_MODE") == "Production" {
+		servLog.SetLevel(servLog.WarnLevel)
+	}
 	// init db
 	dal.Init(context.Background())
 	// init rpc client

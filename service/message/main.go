@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"net"
+	"os"
 	message "simple-douyin/kitex_gen/message/messageservice"
 	"simple-douyin/pkg/constant"
+	"simple-douyin/service/message/client"
 	"simple-douyin/service/message/dal"
 
 	"github.com/cloudwego/kitex/pkg/limit"
@@ -16,8 +18,11 @@ import (
 )
 
 func main() {
+	if os.Getenv("RUN_MODE") == "Production" {
+		servLog.SetLevel(servLog.WarnLevel)
+	}
 	dal.Init(context.Background())
-	// client.Init(context.Background())
+	client.Init(context.Background())
 	r, err := etcd.NewEtcdRegistry([]string{constant.EtcdAddressWithPort})
 	if err != nil {
 		servLog.Fatal(err)

@@ -4,6 +4,8 @@ import (
 	"context"
 	"simple-douyin/pkg/constant"
 
+	userDal "simple-douyin/service/user/dal"
+
 	servLog "github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -21,9 +23,11 @@ type Message struct {
 	// CreatedAt time.Time
 	// UpdatedAt time.Time
 	// DeletedAt gorm.DeletedAt `gorm:"index"`
-	FromUserID int64  `gorm:"index" json:"user_id"`
-	ToUserID   int64  `gorm:"index" json:"to_user_id"`
-	Msg        string `json:"msg"`
+	FromUserID int64        `gorm:"index" json:"user_id"`
+	ToUserID   int64        `gorm:"index" json:"to_user_id"`
+	Msg        string       `json:"msg"`
+	FromUser   userDal.User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	ToUser     userDal.User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 // 初始化，创建数据库连接

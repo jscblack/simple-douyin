@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"net"
+	"os"
 	comment "simple-douyin/kitex_gen/comment/commentservice"
 	"simple-douyin/pkg/constant"
 	"simple-douyin/service/comment/client"
@@ -17,6 +18,9 @@ import (
 )
 
 func main() {
+	if os.Getenv("RUN_MODE") == "Production" {
+		servLog.SetLevel(servLog.WarnLevel)
+	}
 	// init db
 	dal.Init(context.Background())
 	client.Init(context.Background())

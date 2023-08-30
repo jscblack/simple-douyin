@@ -3,6 +3,7 @@
 package main
 
 import (
+	"os"
 	"simple-douyin/api/biz/client"
 	"simple-douyin/api/biz/handler"
 	"simple-douyin/api/biz/middleware"
@@ -10,9 +11,13 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app/server"
 	prometheus "github.com/hertz-contrib/monitor-prometheus"
+	apiLog "github.com/sirupsen/logrus"
 )
 
 func Init() {
+	if os.Getenv("RUN_MODE") == "Production" {
+		apiLog.SetLevel(apiLog.WarnLevel)
+	}
 	// init rpc client
 	client.InitClient()
 	// init jwt middleware
@@ -20,6 +25,7 @@ func Init() {
 }
 
 func main() {
+
 	// for non-framework part
 	Init()
 	h := server.New(

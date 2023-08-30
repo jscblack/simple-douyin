@@ -77,6 +77,16 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, resp)
 		return
 	}
+	if req.ActionType != 1 && req.ActionType != 2 {
+		apiLog.Error("RelationAction", "err", "invalid action_type : ", req.ActionType)
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "invalid action_type"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
 	req.Token = strconv.FormatInt(userID, 10)
 	err = client.RelationAction(ctx, &req, resp)
 	if err != nil {
@@ -284,6 +294,15 @@ func RelationFriendList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	userID := int64(loggedClaims.(jwt.MapClaims)[mw.JwtMiddleware.IdentityKey].(float64))
+	if req.UserID != userID {
+		resp.StatusCode = 57006
+		if resp.StatusMsg == nil {
+			resp.StatusMsg = new(string)
+		}
+		*resp.StatusMsg = "Unauthorized"
+		c.JSON(consts.StatusOK, resp)
+		return
+	}
 	req.Token = strconv.FormatInt(userID, 10)
 	err = client.RelationFriendList(ctx, &req, resp)
 	if err != nil {

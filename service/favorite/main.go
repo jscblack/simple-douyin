@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"net"
+	"os"
 	favorite "simple-douyin/kitex_gen/favorite/favoriteservice"
 	"simple-douyin/pkg/constant"
 	"simple-douyin/service/favorite/client"
@@ -18,6 +19,9 @@ import (
 
 func main() {
 	// init db
+	if os.Getenv("RUN_MODE") == "Production" {
+		servLog.SetLevel(servLog.WarnLevel)
+	}
 	dal.Init(context.Background())
 	client.Init(context.Background())
 	r, err := etcd.NewEtcdRegistry([]string{constant.EtcdAddressWithPort})

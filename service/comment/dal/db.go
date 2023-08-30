@@ -5,8 +5,11 @@ import (
 	"simple-douyin/pkg/constant"
 	"time"
 
-	servLog "github.com/sirupsen/logrus"
+	videoDal "simple-douyin/service/publish/dal"
+	userDal "simple-douyin/service/user/dal"
+
 	"github.com/redis/go-redis/v9"
+	servLog "github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -24,6 +27,8 @@ type Comment struct {
 	CreatedAt time.Time      //AutoCreateTime
 	UpdatedAt time.Time      //AutoUpdateTime
 	DeletedAt gorm.DeletedAt `gorm:"index"` //AutoDeleteTime
+	User      userDal.User   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Video     videoDal.Video `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 // redis缓存结构
