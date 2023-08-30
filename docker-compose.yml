@@ -50,6 +50,8 @@ services:
     restart: always
     ports:
       - "18080:8888"
+    environment:
+      - RUN_MODE=Production
     depends_on:
       - postgres
       - redis
