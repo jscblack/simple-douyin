@@ -11,7 +11,7 @@
 /app/message &
 
 # Wait a bit to ensure microservices are up before the API gateway.
-sleep 5
+sleep 10
 
 # Start the API gateway
 /app/api-gateway

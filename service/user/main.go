@@ -39,9 +39,9 @@ func main() {
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: constant.UserServiceName}), // server name
 		// server.WithMiddleware(middleware.CommonMiddleware),                                            // middleWare
 		// server.WithMiddleware(middleware.ServerMiddleware),
-		server.WithServiceAddr(addr),                                       // address
-		server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 100}), // limit
-		server.WithMuxTransport(),                                          // Multiplex
+		server.WithServiceAddr(addr),                                        // address
+		server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 1000}), // limit
+		server.WithMuxTransport(),                                           // Multiplex
 		server.WithTracer(
 			prometheus.NewServerTracer(
 				constant.UserServerTracerPort,
