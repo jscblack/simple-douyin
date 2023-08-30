@@ -21,6 +21,7 @@ func main() {
 	if os.Getenv("RUN_MODE") == "Production" {
 		servLog.SetLevel(servLog.WarnLevel)
 	}
+
 	// init db
 	dal.Init(context.Background())
 	client.Init(context.Background())
@@ -34,20 +35,39 @@ func main() {
 		servLog.Fatal(err)
 		return
 	}
-	svr := comment.NewServer(new(CommentServiceImpl),
-		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: constant.CommentServiceName}), // server name
-		// server.WithMiddleware(middleware.CommonMiddleware),                                            // middleWare
-		// server.WithMiddleware(middleware.ServerMiddleware),
-		server.WithServiceAddr(addr),                                        // address
-		server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 1000}), // limit
-		server.WithMuxTransport(),                                           // Multiplex
-		server.WithTracer(
-			prometheus.NewServerTracer(
-				constant.CommentServerTracerPort,
-				constant.CommentServerTracerPath)), // Tracer
-		// server.WithBoundHandler(bound.NewCpuLimitHandler()),                // BoundHandler
-		server.WithRegistry(r), // registry
-	)
+	var svr server.Server
+	if os.Getenv("BENCHMARK_MODE") == "True" {
+		svr = comment.NewServer(new(CommentServiceImpl),
+			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: constant.CommentServiceName}), // server name
+			// server.WithMiddleware(middleware.CommonMiddleware),                                            // middleWare
+			// server.WithMiddleware(middleware.ServerMiddleware),
+			server.WithServiceAddr(addr), // address
+			// server.WithLimit(&limit.Option{MaxConnections: 10000, MaxQPS: 1000}), // limit
+			server.WithMuxTransport(), // Multiplex
+			server.WithTracer(
+				prometheus.NewServerTracer(
+					constant.CommentServerTracerPort,
+					constant.CommentServerTracerPath)), // Tracer
+			// server.WithBoundHandler(bound.NewCpuLimitHandler()),                // BoundHandler
+			server.WithRegistry(r), // registry
+		)
+	} else {
+		svr = comment.NewServer(new(CommentServiceImpl),
+			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: constant.CommentServiceName}), // server name
+			// server.WithMiddleware(middleware.CommonMiddleware),                                            // middleWare
+			// server.WithMiddleware(middleware.ServerMiddleware),
+			server.WithServiceAddr(addr),                                         // address
+			server.WithLimit(&limit.Option{MaxConnections: 10000, MaxQPS: 1000}), // limit
+			server.WithMuxTransport(),                                            // Multiplex
+			server.WithTracer(
+				prometheus.NewServerTracer(
+					constant.CommentServerTracerPort,
+					constant.CommentServerTracerPath)), // Tracer
+			// server.WithBoundHandler(bound.NewCpuLimitHandler()),                // BoundHandler
+			server.WithRegistry(r), // registry
+		)
+	}
+
 	servLog.Warn("Comment service started")
 	err = svr.Run()
 

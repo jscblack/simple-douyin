@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"sync"
 
 	"simple-douyin/kitex_gen/common"
 	"simple-douyin/kitex_gen/favorite"
@@ -21,17 +22,39 @@ func FavoriteList(ctx context.Context, req *favorite.FavoriteListRequest, resp *
 		return result.Error
 	}
 	// 补全Video信息
-	resp.VideoList = make([]*common.Video, 0, len(dalFavs))
-	for _, dalFav := range dalFavs {
-		publishResp, err := client.PublishClient.PublishVideoInfo(ctx, &publish.PublishVideoInfoRequest{
-			UserId:  &req.FromUserId,
-			VideoId: dalFav.VideoID,
-		})
-		if err != nil {
-			servLog.Error(err)
-			return err
-		}
-		resp.VideoList = append(resp.VideoList, publishResp.Video)
+
+	// for _, dalFav := range dalFavs {
+	// 	publishResp, err := client.PublishClient.PublishVideoInfo(ctx, &publish.PublishVideoInfoRequest{
+	// 		UserId:  &req.FromUserId,
+	// 		VideoId: dalFav.VideoID,
+	// 	})
+	// 	if err != nil {
+	// 		servLog.Error(err)
+	// 		return err
+	// 	}
+	// 	resp.VideoList = append(resp.VideoList, publishResp.Video)
+	// }
+	resp.VideoList = make([]*common.Video, len(dalFavs))
+	var mu sync.Mutex
+	var wg sync.WaitGroup
+	for idx, dalFav := range dalFavs {
+		wg.Add(1)
+		go func(idx int, dalFav dal.Favorite) {
+			defer wg.Done()
+			publishResp, err := client.PublishClient.PublishVideoInfo(ctx, &publish.PublishVideoInfoRequest{
+				UserId:  &req.FromUserId,
+				VideoId: dalFav.VideoID,
+			})
+			if err != nil {
+				servLog.Error(err)
+				return
+			}
+			mu.Lock()
+			resp.VideoList[idx] = publishResp.Video
+			mu.Unlock()
+		}(idx, dalFav)
 	}
+	wg.Wait() // Wait for all goroutines to complete
+
 	return nil
 }

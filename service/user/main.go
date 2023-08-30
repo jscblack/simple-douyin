@@ -35,20 +35,38 @@ func main() {
 		servLog.Fatal(err)
 		return
 	}
-	svr := user.NewServer(new(UserServiceImpl),
-		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: constant.UserServiceName}), // server name
-		// server.WithMiddleware(middleware.CommonMiddleware),                                            // middleWare
-		// server.WithMiddleware(middleware.ServerMiddleware),
-		server.WithServiceAddr(addr),                                        // address
-		server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 1000}), // limit
-		server.WithMuxTransport(),                                           // Multiplex
-		server.WithTracer(
-			prometheus.NewServerTracer(
-				constant.UserServerTracerPort,
-				constant.UserServerTracerPath)), // Tracer
-		// server.WithBoundHandler(bound.NewCpuLimitHandler()),                // BoundHandler
-		server.WithRegistry(r), // registry
-	)
+	var svr server.Server
+	if os.Getenv("BENCHMARK_MODE") == "True" {
+		svr = user.NewServer(new(UserServiceImpl),
+			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: constant.UserServiceName}), // server name
+			// server.WithMiddleware(middleware.CommonMiddleware),                                            // middleWare
+			// server.WithMiddleware(middleware.ServerMiddleware),
+			server.WithServiceAddr(addr), // address
+			// server.WithLimit(&limit.Option{MaxConnections: 10000, MaxQPS: 1000}), // limit
+			server.WithMuxTransport(), // Multiplex
+			server.WithTracer(
+				prometheus.NewServerTracer(
+					constant.UserServerTracerPort,
+					constant.UserServerTracerPath)), // Tracer
+			// server.WithBoundHandler(bound.NewCpuLimitHandler()),                // BoundHandler
+			server.WithRegistry(r), // registry
+		)
+	} else {
+		svr = user.NewServer(new(UserServiceImpl),
+			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: constant.UserServiceName}), // server name
+			// server.WithMiddleware(middleware.CommonMiddleware),                                            // middleWare
+			// server.WithMiddleware(middleware.ServerMiddleware),
+			server.WithServiceAddr(addr),                                         // address
+			server.WithLimit(&limit.Option{MaxConnections: 10000, MaxQPS: 1000}), // limit
+			server.WithMuxTransport(),                                            // Multiplex
+			server.WithTracer(
+				prometheus.NewServerTracer(
+					constant.UserServerTracerPort,
+					constant.UserServerTracerPath)), // Tracer
+			// server.WithBoundHandler(bound.NewCpuLimitHandler()),                // BoundHandler
+			server.WithRegistry(r), // registry
+		)
+	}
 	servLog.Warn("User service started")
 	err = svr.Run()
 

@@ -9,6 +9,7 @@ import (
 	"simple-douyin/kitex_gen/user"
 	"simple-douyin/service/feed/client"
 	"simple-douyin/service/feed/dal"
+	"sync"
 
 	servLog "github.com/sirupsen/logrus"
 )
@@ -17,8 +18,6 @@ func Feed(ctx context.Context, req *feed.FeedRequest) (*feed.FeedResponse, error
 	// query from db according to req.LatestTime.
 	servLog.Info("Feed rpc.")
 
-	var videoList []*common.Video
-
 	dbVideoList, err := dal.QueryVideoFromLatestTime(ctx, req.GetLatestTime())
 	servLog.Info("after query.")
 	if err != nil {
@@ -26,13 +25,35 @@ func Feed(ctx context.Context, req *feed.FeedRequest) (*feed.FeedResponse, error
 		return nil, err
 	}
 
-	for _, dbVideo := range dbVideoList {
-		video, err := fillVideoInfo(ctx, dbVideo, req.UserId)
-		if err != nil {
-			return nil, err
-		}
-		videoList = append(videoList, video)
+	// for _, dbVideo := range dbVideoList {
+	// 	video, err := fillVideoInfo(ctx, dbVideo, req.UserId)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	videoList = append(videoList, video)
+	// }
+	// use go routine to fill each video info concurrently
+	// and use channel to receive the result
+	// keep the order of videoList
+	videoList := make([]*common.Video, len(dbVideoList))
+	var mu sync.Mutex
+	var wg sync.WaitGroup
+	for idx, dbVideo := range dbVideoList {
+		wg.Add(1)
+		go func(idx int, dbVideo *dal.Video) {
+			defer wg.Done()
+			video, err := fillVideoInfo(ctx, dbVideo, req.UserId)
+			if err != nil {
+				servLog.Error("fillVideoInfo err", err)
+				return
+			}
+			mu.Lock()
+			videoList[idx] = video
+			mu.Unlock()
+
+		}(idx, dbVideo)
 	}
+	wg.Wait() // Wait for all goroutines to complete
 
 	servLog.Info("success info.")
 	// 取返回视频中最早的时间作为next time

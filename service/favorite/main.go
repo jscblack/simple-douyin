@@ -34,20 +34,38 @@ func main() {
 		servLog.Fatal(err)
 		return
 	}
-	svr := favorite.NewServer(new(FavoriteServiceImpl),
-		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: constant.FavoriteServiceName}), // server name
-		// server.WithMiddleware(middleware.CommonMiddleware),                                            // middleWare
-		// server.WithMiddleware(middleware.ServerMiddleware),
-		server.WithServiceAddr(addr),                                       // address
-		server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 1000}), // limit
-		server.WithMuxTransport(),                                          // Multiplex
-		server.WithTracer(
-			prometheus.NewServerTracer(
-				constant.FavoriteServerTracerPort,
-				constant.FavoriteServerTracerPath)), // Tracer
-		// server.WithBoundHandler(bound.NewCpuLimitHandler()),                // BoundHandler
-		server.WithRegistry(r), // registry
-	)
+	var svr server.Server
+	if os.Getenv("BENCHMARK_MODE") == "True" {
+		svr = favorite.NewServer(new(FavoriteServiceImpl),
+			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: constant.FavoriteServiceName}), // server name
+			// server.WithMiddleware(middleware.CommonMiddleware),                                            // middleWare
+			// server.WithMiddleware(middleware.ServerMiddleware),
+			server.WithServiceAddr(addr), // address
+			// server.WithLimit(&limit.Option{MaxConnections: 10000, MaxQPS: 1000}), // limit
+			server.WithMuxTransport(), // Multiplex
+			server.WithTracer(
+				prometheus.NewServerTracer(
+					constant.FavoriteServerTracerPort,
+					constant.FavoriteServerTracerPath)), // Tracer
+			// server.WithBoundHandler(bound.NewCpuLimitHandler()),                // BoundHandler
+			server.WithRegistry(r), // registry
+		)
+	} else {
+		svr = favorite.NewServer(new(FavoriteServiceImpl),
+			server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: constant.FavoriteServiceName}), // server name
+			// server.WithMiddleware(middleware.CommonMiddleware),                                            // middleWare
+			// server.WithMiddleware(middleware.ServerMiddleware),
+			server.WithServiceAddr(addr),                                         // address
+			server.WithLimit(&limit.Option{MaxConnections: 10000, MaxQPS: 1000}), // limit
+			server.WithMuxTransport(),                                            // Multiplex
+			server.WithTracer(
+				prometheus.NewServerTracer(
+					constant.FavoriteServerTracerPort,
+					constant.FavoriteServerTracerPath)), // Tracer
+			// server.WithBoundHandler(bound.NewCpuLimitHandler()),                // BoundHandler
+			server.WithRegistry(r), // registry
+		)
+	}
 	servLog.Warn("Favorite service started")
 	err = svr.Run()
 
