@@ -9,6 +9,7 @@
 ## 快速部署
 ```bash
 docker pull jscblack/simple-douyin:latest
+cd simple-douyin
 git clone https://github.com/jscblack/simple-douyin
 bash run-docker.sh
 ```
